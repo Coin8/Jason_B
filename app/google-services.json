@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "486333543311",
+    "firebase_url": "https://coin8-1d448.firebaseio.com",
+    "project_id": "coin8-1d448",
+    "storage_bucket": "coin8-1d448.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:486333543311:android:b99e763dcfd68ecb",
+        "android_client_info": {
+          "package_name": "com.coin.b8"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "486333543311-mg9t59rrec7cul8hdkrljkm97pcd523o.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "486333543311-mg9t59rrec7cul8hdkrljkm97pcd523o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAi2DZ-eYjXhwLOGC79YPiARnPsW1HQoiw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

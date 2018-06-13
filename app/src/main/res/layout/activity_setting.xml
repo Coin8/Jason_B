@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar"/>
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/lineColor"/>
+
+    <com.coin.b8.ui.view.SettingItemView
+        android:id="@+id/item_about_us"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:background="@drawable/ripple_one_item_bg"
+        app:setting_red_dot="false"
+        app:setting_right_text=""
+        app:setting_title="关于我们"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="16dp"
+        android:background="@color/lineColor"/>
+
+    <com.coin.b8.ui.view.SettingItemView
+        android:id="@+id/item_clean_cache"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:background="@drawable/ripple_one_item_bg"
+        app:setting_red_dot="false"
+        app:setting_right_text="0M"
+        app:setting_title="清理缓存"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="16dp"
+        android:background="@color/lineColor"/>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:background="@drawable/ripple_one_item_bg">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/setting_text_color"
+            android:textSize="14sp"
+            android:text="推送管理"/>
+        <com.coin.b8.ui.view.SwitchButton
+            android:id="@+id/switch_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="6dp"
+            app:sb_show_indicator="false"
+            app:sb_checked="true"
+            app:sb_checked_color="#fdc951"/>
+    </RelativeLayout>
+
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentTop="true"
+        android:background="@color/lineColor"/>
+
+
+
+
+</LinearLayout>

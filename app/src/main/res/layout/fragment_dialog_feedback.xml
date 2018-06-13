@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/feedback_title_height"
+        android:text="用户反馈"
+        android:textSize="@dimen/feedback_text_size_16"
+        android:gravity="center"
+        android:textColor="#191919"/>
+
+    <LinearLayout
+        android:id="@+id/question_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/lineColor"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请选择您的问题分类"
+            android:textColor="#191919"
+            android:textSize="@dimen/feedback_text_size_14"
+            android:layout_marginLeft="@dimen/feedback_marin_15"
+            android:layout_marginTop="@dimen/feedback_marin_12"/>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/feedback_marin_17"
+            android:layout_marginBottom="@dimen/feedback_marin_17"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <RadioButton
+                android:id="@+id/radio_btn_func_suggestion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="功能建议"
+                android:textColor="#191919"
+                android:textSize="@dimen/feedback_text_size_13"/>
+
+            <RadioButton
+                android:id="@+id/radio_btn_tucao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="吐槽一下"
+                android:textColor="#191919"
+                android:textSize="@dimen/feedback_text_size_13"/>
+
+        </RadioGroup>
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/lineColor"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/other_layout"
+        android:layout_below="@id/question_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/feedback_marin_15"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="问题描述（限10～200字）"
+            android:layout_marginLeft="@dimen/feedback_marin_15"
+            android:textColor="#191919"
+            android:textSize="@dimen/feedback_text_size_14"/>
+
+        <EditText
+            android:id="@+id/content_edit"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginLeft="@dimen/feedback_marin_15"
+            android:layout_marginRight="@dimen/feedback_marin_15"
+            android:layout_marginTop="@dimen/feedback_marin_15"
+            android:maxLength="200"
+            android:hint="请输入具体的描述，我们将尽快为您解决"
+            android:gravity="left"
+            android:background="#f3f6fa"
+            android:textColor="#728bae"
+            android:textColorHint="#728bae"
+            android:textSize="@dimen/feedback_text_size_12"/>
+
+
+        <EditText
+            android:id="@+id/contact_edit"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="@dimen/feedback_marin_10"
+            android:layout_marginLeft="@dimen/feedback_marin_15"
+            android:layout_marginRight="@dimen/feedback_marin_15"
+            android:maxLength="40"
+            android:gravity="left"
+            android:hint="请输入您的邮箱或QQ号，以方便我们给您答复"
+            android:background="#f3f6fa"
+            android:textColor="#728bae"
+            android:textColorHint="#728bae"
+            android:textSize="@dimen/feedback_text_size_12"/>
+
+
+        <TextView
+            android:id="@+id/post_button"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="@dimen/feedback_marin_20"
+            android:layout_marginBottom="@dimen/feedback_marin_25"
+            android:layout_marginLeft="@dimen/feedback_marin_15"
+            android:layout_marginRight="@dimen/feedback_marin_15"
+            android:background="#4263ba"
+            android:text="提交反馈"
+            android:textSize="@dimen/feedback_text_size_16"
+            android:textColor="#ffffff"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

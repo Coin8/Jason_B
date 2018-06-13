@@ -1,0 +1,16 @@
+<resources>
+
+    <dimen name="feedback_title_height">46dp</dimen>
+    <dimen name="feedback_text_size_16">16sp</dimen>
+    <dimen name="feedback_text_size_14">14sp</dimen>
+    <dimen name="feedback_text_size_12">12sp</dimen>
+    <dimen name="feedback_text_size_13">13sp</dimen>
+    <dimen name="feedback_marin_10">10dp</dimen>
+    <dimen name="feedback_marin_12">12dp</dimen>
+    <dimen name="feedback_marin_15">15dp</dimen>
+    <dimen name="feedback_marin_17">17dp</dimen>
+    <dimen name="feedback_marin_20">20dp</dimen>
+    <dimen name="feedback_marin_25">25dp</dimen>
+
+
+</resources>

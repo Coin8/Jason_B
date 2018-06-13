@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="gray">#494949</color>
+    <color name="gray_trance">#c2b3b3b3</color>
+    <color name="red">#ff0000</color>
+    <color name="gray_light">#9b9b9b</color>
+    <color name="yellow">#f39c12</color>
+
+    <color name="setting_text_color">#3b3b3b</color>     <!--二级字体颜色日间-->
+    <color name="setting_small_text_color">#464c61</color>
+    <color name="lineColor">#cccccc</color>
+
+    <color name="comment_text">#5b5d5c</color>
+
+    <!--item的水波纹颜色，灰色1-->
+    <color name="itemBackground">#DD7D7D7D</color>
+
+    <!-- 偏白色大背景 -->
+    <color name="whiteBg">#f5f5f7</color>
+    <!--背景 页面背景的颜色-->
+    <color name="colorPageBg">#f2f4f5</color>
+    <!--背景 item的5.0一下版本选择器颜色-->
+    <color name="colorWhiteBg">#d9d9d9</color>
+
+    <!--侧边栏分割线-->
+    <color name="colorNavLine">#E0E0E0</color>
+</resources>
