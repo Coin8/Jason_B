@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.TextPaint;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -12,10 +13,11 @@ import com.coin.b8.R;
 /**
  * Created by zhangyi on 2018/6/8.
  */
-public class UserProtocolActivity extends BaseActivity{
+public class UserProtocolActivity extends BaseActivity {
     private TextView mToolbarTitle;
     private Toolbar mToolbar;
     private TextView mUserProtocolContent;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +39,10 @@ public class UserProtocolActivity extends BaseActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    private void initToolBar(){
-        initToolBar(mToolbar,"",R.drawable.b8_ic_back_black);
+    private void initToolBar() {
+        initToolBar(mToolbar, "");
         mToolbarTitle.setText("用户协议");
+        TextPaint tp = mToolbarTitle.getPaint();
+        tp.setFakeBoldText(true);
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.text.TextPaint;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -47,7 +48,9 @@ public class AboutUsActivity extends BaseActivity {
     }
 
     private void initToolBar() {
-        initToolBar(mToolbar, "", R.drawable.b8_ic_back_black);
+        initToolBar(mToolbar, "");
         mToolbarTitle.setText("关于我们");
+        TextPaint tp = mToolbarTitle.getPaint();
+        tp.setFakeBoldText(true);
     }
 }

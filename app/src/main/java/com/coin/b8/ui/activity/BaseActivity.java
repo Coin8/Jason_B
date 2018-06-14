@@ -49,9 +49,9 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
-    public void initToolBar(Toolbar toolbar, String title, int icon) {
+    public void initToolBar(Toolbar toolbar, String title) {
         toolbar.setTitle(title);// 标题的文字需在setSupportActionBar之前，不然会无效
-        toolbar.setNavigationIcon(icon);
+        toolbar.setNavigationIcon(R.drawable.icon_back);
         setSupportActionBar(toolbar);
         toolbar.setPopupTheme(R.style.ToolBarPopupThemeDay);
     }

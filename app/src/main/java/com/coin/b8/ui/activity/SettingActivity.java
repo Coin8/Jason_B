@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.text.TextPaint;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -19,7 +20,7 @@ import com.coin.b8.utils.MyToast;
 /**
  * Created by zhangyi on 2018/6/7.
  */
-public class SettingActivity extends BaseActivity implements View.OnClickListener,ISettingView{
+public class SettingActivity extends BaseActivity implements View.OnClickListener, ISettingView {
 
     private Toolbar mToolbar;
     private TextView mToolbarTitle;
@@ -54,7 +55,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         mSetttingPresenter.onDetach();
     }
 
-    private void initView(){
+    private void initView() {
         mToolbar = findViewById(R.id.toolbar);
         mToolbarTitle = mToolbar.findViewById(R.id.toolbar_title);
         mAboutUs = findViewById(R.id.item_about_us);
@@ -64,8 +65,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         mCleanCache.setOnClickListener(this);
     }
 
-    private void initData(){
-        mSetttingPresenter = new SetttingPresenterImpl(this,this);
+    private void initData() {
+        mSetttingPresenter = new SetttingPresenterImpl(this, this);
         mPushMangerSwitchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
@@ -74,32 +75,34 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         });
     }
 
-    private void initToolBar(){
-        initToolBar(mToolbar,"",R.drawable.b8_ic_back_black);
+    private void initToolBar() {
+        initToolBar(mToolbar, "");
         mToolbarTitle.setText("系统设置");
+        TextPaint tp = mToolbarTitle.getPaint();
+        tp.setFakeBoldText(true);
     }
 
 
     @Override
     public void onClick(View v) {
-        if(v == null){
+        if (v == null) {
             return;
         }
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.item_clean_cache:
                 cleanCache();
                 break;
             case R.id.item_about_us:
-                startActivity(new Intent(this,AboutUsActivity.class));
+                startActivity(new Intent(this, AboutUsActivity.class));
                 break;
-                default:
-                    break;
+            default:
+                break;
         }
 
     }
 
 
-    private void cleanCache(){
+    private void cleanCache() {
 
         mSetttingPresenter.cleanCache();
 //        DialogUtil.showMyDialog(this, "缓存清理", "确定要清除图片的缓存吗？", "确定", "取消", new DialogUtil.OnDialogClickListener() {
