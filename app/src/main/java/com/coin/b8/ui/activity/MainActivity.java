@@ -107,6 +107,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     class JSInterface {
 
         @JavascriptInterface
+        public void startBrowse(String url) {
+            Uri uri = Uri.parse(url);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+        }
+
+        @JavascriptInterface
         public void logout() {
             startLogout();
         }
