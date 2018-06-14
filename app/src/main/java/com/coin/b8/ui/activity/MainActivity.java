@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.coin.b8.R;
 import com.coin.b8.constant.Constants;
+import com.coin.b8.help.DemoHelper;
 import com.coin.b8.http.B8Api;
 import com.coin.b8.model.B8UpdateInfo;
 import com.coin.b8.model.FeedBackParameter;
@@ -77,6 +78,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private View mPersonInfoLayout;
     private View mVersionInfoLayout;
     private View mAboutInfoLayout;
+    private View mTestView1;
+    private View mTestView2;
+    private View mTestView3;
     private MainPresenterImpl mMainPresenter;
     private String mCacheZize = "0.00B";
 
@@ -102,6 +106,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     class JSInterface {
 
+        @JavascriptInterface
+        public void logout() {
+            startLogout();
+        }
         @JavascriptInterface
         public void login(String loginName,String password) {
             startLogin(loginName,password);
@@ -455,6 +463,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mPersonInfoLayout.setOnClickListener(this);
         mVersionInfoLayout.setOnClickListener(this);
         mAboutInfoLayout.setOnClickListener(this);
+
+        mTestView1 = headView.findViewById(R.id.test1);
+        mTestView2 = headView.findViewById(R.id.test2);
+        mTestView3 = headView.findViewById(R.id.test3);
+        mTestView1.setOnClickListener(this);
+        mTestView2.setOnClickListener(this);
+        mTestView3.setOnClickListener(this);
     }
 
 
@@ -499,7 +514,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
         switch (v.getId()){
             case R.id.personal_info:
-                startFeedBack();
+//                startLogin("CJu9Br2lwqnsY","awa2o1fs34ha8i19y39i91g24e25ybbaf0n6f|e4y50aa3n4");
+//                startLogin("xiaoming","123456");
+//                startFeedBack();
 //                startShare();
 //                Intent intent = new Intent(this, SettingActivity.class);
 //                startActivity(intent);
@@ -512,6 +529,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.about_info:
 //                mDrawerLayout.closeDrawers();
                 DialogUtil.showWelcomeDialog(this);
+                break;
+            case R.id.test1:
+                startLogin("xiaoming","123456");
+                break;
+            case R.id.test2:
+                startLogin("CJu9Br2lwqnsY","awa2o1fs34ha8i19y39i91g24e25ybbaf0n6f|e4y50aa3n4");
+                break;
+            case R.id.test3:
+                startLogout();
                 break;
         }
     }
@@ -570,7 +596,32 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         feedBackFragment.show(getSupportFragmentManager(),"feedback");
     }
 
+    private void startLogout(){
+
+        DemoHelper.getInstance().logout(true, new EMCallBack() {
+            @Override
+            public void onSuccess() {
+                MySnackbar.makeSnackBarBlack(mNavigationView,"退出登录成功");
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                MySnackbar.makeSnackBarBlack(mNavigationView,"退出登录失败：" + s);
+            }
+
+            @Override
+            public void onProgress(int i, String s) {
+
+            }
+        });
+    }
+
+
     private void startLogin(String loginName,String password){
+        if(DemoHelper.getInstance().isLoggedIn()){
+            MySnackbar.makeSnackBarBlack(mNavigationView,"已登录，请先退出登录");
+            return;
+        }
 
         EMClient.getInstance().login(loginName, password, new EMCallBack() {
 
@@ -594,8 +645,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
             @Override
             public void onError(final int code, final String message) {
-                Log.d(TAG, "login: onError: " + code);
-                MySnackbar.makeSnackBarBlack(mNavigationView,"登录失败");
+                Log.d(TAG, "login: onError: " + code + "msg = " + message);
+                MySnackbar.makeSnackBarBlack(mNavigationView,"登录失败：" + message);
 //                MyToast.showShortToast("登录失败");
             }
         });

@@ -7,6 +7,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.coin.b8.R;
+import com.hyphenate.EMCallBack;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
@@ -399,6 +400,79 @@ public class DemoHelper {
 
         EMClient.getInstance().chatManager().addMessageListener(messageListener);
     }
+
+    synchronized void reset(){
+        isSyncingGroupsWithServer = false;
+        isSyncingContactsWithServer = false;
+        isSyncingBlackListWithServer = false;
+
+//        demoModel.setGroupsSynced(false);
+//        demoModel.setContactSynced(false);
+//        demoModel.setBlacklistSynced(false);
+
+        isGroupsSyncedWithServer = false;
+        isContactsSyncedWithServer = false;
+        isBlackListSyncedWithServer = false;
+
+        isGroupAndContactListenerRegisted = false;
+
+//        setContactList(null);
+//        setRobotList(null);
+//        getUserProfileManager().reset();
+//        DemoDBManager.getInstance().closeDB();
+    }
+
+
+    void endCall() {
+        try {
+            EMClient.getInstance().callManager().endCall();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * if ever logged in
+     *
+     * @return
+     */
+    public boolean isLoggedIn() {
+        return EMClient.getInstance().isLoggedInBefore();
+    }
+
+    public void logout(boolean unbindDeviceToken, final EMCallBack callback) {
+        endCall();
+        Log.d(TAG, "logout: " + unbindDeviceToken);
+        EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
+
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "logout: onSuccess");
+                reset();
+                if (callback != null) {
+                    callback.onSuccess();
+                }
+
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+                if (callback != null) {
+                    callback.onProgress(progress, status);
+                }
+            }
+
+            @Override
+            public void onError(int code, String error) {
+                Log.d(TAG, "logout: onSuccess");
+                reset();
+                if (callback != null) {
+                    callback.onError(code, error);
+                }
+            }
+        });
+    }
+
 
 
 }

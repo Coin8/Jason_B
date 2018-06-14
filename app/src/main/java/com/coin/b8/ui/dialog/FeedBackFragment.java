@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +24,7 @@ import com.coin.b8.utils.MyToast;
 public class FeedBackFragment extends DialogFragment{
 
     private TextView mPosButton;
-    private RadioButton mFuncRadioButton;
-    private RadioButton mTuCaoRadioButton;
+    private AppCompatRadioButton mFuncRadioButton;
     private FeedBackInterface mFeedBackInterface;
     private EditText mContentEdit;
     private EditText mContactEdit;
@@ -42,7 +42,7 @@ public class FeedBackFragment extends DialogFragment{
         super.onCreate(savedInstanceState);
         int style = DialogFragment.STYLE_NO_TITLE;
         int theme = R.style.FeedbackDialog;
-        setStyle(style,0);
+        setStyle(style,theme);
     }
 
     @Nullable
@@ -52,7 +52,6 @@ public class FeedBackFragment extends DialogFragment{
 
         View v = inflater.inflate(R.layout.fragment_dialog_feedback, container, false);
         mFuncRadioButton = v.findViewById(R.id.radio_btn_func_suggestion);
-        mTuCaoRadioButton = v.findViewById(R.id.radio_btn_tucao);
         mContentEdit = v.findViewById(R.id.content_edit);
         mContactEdit = v.findViewById(R.id.contact_edit);
         mPosButton = v.findViewById(R.id.post_button);

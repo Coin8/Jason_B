@@ -37,26 +37,23 @@
     </style>
 
 
-    <style name="ShareDialog">
-        <item name="android:windowBackground">@color/white</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.2</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item> <!--Activity切换动画效果-->
+    <style name="ShareDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@color/translate</item>
+        <item name="android:windowTitleStyle">@null</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <!--<item name="android:windowBackground">@android:color/transparent</item>-->
+        <!--<item name="android:windowFullscreen">false</item>-->
+        <!--<item name="android:backgroundDimEnabled">true</item>-->
+        <!--<item name="android:backgroundDimAmount">0.2</item>-->
+        <!--<item name="android:windowIsTranslucent">true</item>-->
+        <!--<item name="android:layout_width">match_parent</item>-->
+        <!--<item name="android:layout_height">match_parent</item>-->
+        <!--<item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item> &lt;!&ndash;Activity切换动画效果&ndash;&gt;-->
     </style>
 
-    <style name="FeedbackDialog">
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.2</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">fill_parent</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item> <!--Activity切换动画效果-->
+    <style name="FeedbackDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@drawable/feedback_bg</item>
     </style>
 
 
@@ -71,6 +68,11 @@
         <item name="android:windowIsFloating">true</item>
         <!--是否模糊-->
         <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="FeebackRadioButton" parent="Theme.AppCompat.Light">
+        <!--<item name="colorControlNormal">@color/white</item>-->
+        <item name="colorControlActivated">#426ab3</item>
     </style>
 
 </resources>

@@ -7,6 +7,9 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.coin.b8.R;
@@ -17,6 +20,7 @@ import com.coin.b8.R;
 public class ShareDialogFragment extends DialogFragment{
 
     private TextView mBtnCancel;
+    private ImageView mImageView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,11 +35,21 @@ public class ShareDialogFragment extends DialogFragment{
         super.onViewCreated(view, savedInstanceState);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Window window = getDialog().getWindow();
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(params);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 //        return super.onCreateView(inflater, container, savedInstanceState);
-        View v = inflater.inflate(R.layout.fragment_dialog_share, container, false);
+        View v = inflater.inflate(R.layout.dialog_share, container, false);
         mBtnCancel = v.findViewById(R.id.button_cancel);
         mBtnCancel.setOnClickListener(new View.OnClickListener() {
             @Override

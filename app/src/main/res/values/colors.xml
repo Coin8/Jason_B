@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="translate">#00000000</color>
+
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="gray">#494949</color>
@@ -14,7 +16,7 @@
 
     <color name="setting_text_color">#3b3b3b</color>     <!--二级字体颜色日间-->
     <color name="setting_small_text_color">#464c61</color>
-    <color name="lineColor">#cccccc</color>
+    <color name="lineColor">#F3F6FA</color>
 
     <color name="comment_text">#5b5d5c</color>
 

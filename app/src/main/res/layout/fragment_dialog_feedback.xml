@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@drawable/feedback_bg">
 
     <TextView
         android:id="@+id/title"
@@ -22,7 +22,7 @@
         android:orientation="vertical">
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="1px"
+            android:layout_height="1dp"
             android:background="@color/lineColor"/>
 
         <TextView
@@ -42,30 +42,32 @@
             android:orientation="horizontal"
             android:gravity="center">
 
-            <RadioButton
+            <android.support.v7.widget.AppCompatRadioButton
                 android:id="@+id/radio_btn_func_suggestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:text="功能建议"
                 android:textColor="#191919"
-                android:textSize="@dimen/feedback_text_size_13"/>
+                android:textSize="@dimen/feedback_text_size_13"
+                android:theme="@style/FeebackRadioButton" />
 
-            <RadioButton
+            <android.support.v7.widget.AppCompatRadioButton
                 android:id="@+id/radio_btn_tucao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:text="吐槽一下"
                 android:textColor="#191919"
-                android:textSize="@dimen/feedback_text_size_13"/>
+                android:textSize="@dimen/feedback_text_size_13"
+                android:theme="@style/FeebackRadioButton"/>
 
         </RadioGroup>
 
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="1px"
+            android:layout_height="1dp"
             android:background="@color/lineColor"/>
     </LinearLayout>
 
@@ -87,14 +89,17 @@
         <EditText
             android:id="@+id/content_edit"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="75dp"
             android:layout_marginLeft="@dimen/feedback_marin_15"
             android:layout_marginRight="@dimen/feedback_marin_15"
             android:layout_marginTop="@dimen/feedback_marin_15"
+            android:paddingTop="7dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:maxLength="200"
-            android:hint="请输入具体的描述，我们将尽快为您解决"
+            android:hint="请输入具体的问题描述，我们将尽快为您解决"
             android:gravity="left"
-            android:background="#f3f6fa"
+            android:background="@drawable/feedback_edit_bg"
             android:textColor="#728bae"
             android:textColorHint="#728bae"
             android:textSize="@dimen/feedback_text_size_12"/>
@@ -103,14 +108,16 @@
         <EditText
             android:id="@+id/contact_edit"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="32dp"
             android:layout_marginTop="@dimen/feedback_marin_10"
             android:layout_marginLeft="@dimen/feedback_marin_15"
             android:layout_marginRight="@dimen/feedback_marin_15"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:maxLength="40"
-            android:gravity="left"
-            android:hint="请输入您的邮箱或QQ号，以方便我们给您答复"
-            android:background="#f3f6fa"
+            android:gravity="center_vertical"
+            android:hint="请输入您的邮箱或QQ，以方便我们给您答复"
+            android:background="@drawable/feedback_edit_bg"
             android:textColor="#728bae"
             android:textColorHint="#728bae"
             android:textSize="@dimen/feedback_text_size_12"/>
@@ -124,7 +131,7 @@
             android:layout_marginBottom="@dimen/feedback_marin_25"
             android:layout_marginLeft="@dimen/feedback_marin_15"
             android:layout_marginRight="@dimen/feedback_marin_15"
-            android:background="#4263ba"
+            android:background="@drawable/feedback_btn_bg"
             android:text="提交反馈"
             android:textSize="@dimen/feedback_text_size_16"
             android:textColor="#ffffff"
