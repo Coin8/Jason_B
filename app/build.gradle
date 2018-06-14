@@ -7,8 +7,8 @@ android {
         applicationId "com.coin.b8"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 1000002
-        versionName "1.0.0.2"
+        versionCode 1000003
+        versionName "1.0.0.3"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
@@ -50,6 +50,19 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            //def date = new Date().format("yyyyMMdd" , TimeZone.getTimeZone("Asia/Shanghai"))
+            def date = new Date().format("yyyyMMdd" , TimeZone.getTimeZone("GMT+08"))
+            if(variant.buildType.name.equals('debug')){
+                outputFileName = "B8_${date}_${versionName}.apk"
+            }
+            if(variant.buildType.name.equals('release')){
+                outputFileName = "B8_${date}_${versionName}.apk"
+            }
+        }
     }
 }
 
