@@ -227,6 +227,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                Log.e(TAG,"url = " + url);
                 view.loadUrl(url);
                 return true;
             }
@@ -237,7 +238,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 /**
                  * 开始加载
                  */
-                Log.e(TAG,"onPageStarted");
+                Log.e(TAG,"onPageStarted url = " + url);
             }
 
             //设置结束加载函数
@@ -246,7 +247,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 /**
                  * 结束加载了
                  */
-                Log.e(TAG,"onPageFinished");
+                Log.e(TAG,"onPageFinished url = " + url);
             }
         });
         //设置WebChromeClient类
