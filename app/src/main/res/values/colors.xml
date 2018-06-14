@@ -13,6 +13,7 @@
     <color name="red">#ff0000</color>
     <color name="gray_light">#9b9b9b</color>
     <color name="yellow">#f39c12</color>
+    <color name="blue">#426ab3</color>
 
     <color name="setting_text_color">#3b3b3b</color>     <!--二级字体颜色日间-->
     <color name="setting_small_text_color">#464c61</color>
