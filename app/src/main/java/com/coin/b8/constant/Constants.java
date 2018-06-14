@@ -5,7 +5,7 @@ package com.coin.b8.constant;
  */
 public class Constants {
     public static boolean DEBUG = true;
-    public static final String BASEURL = "https://rd.be8.io/";
+    public static final String BASEURL = "http://app.diyli.cn/";
     public static final int NOTIFY_ID = 998;
 
 

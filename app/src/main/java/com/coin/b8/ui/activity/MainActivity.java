@@ -183,7 +183,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         initView();
         initNavigationView();
         initWebView();
-        requestPhonePermission(0,Permission.READ_PHONE_STATE);
+//        requestPhonePermission(0,Permission.READ_PHONE_STATE);
         mMainPresenter.getUpdateInfo();
         printScreen();
 //        B8Api.getTest();
@@ -219,7 +219,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         mWebView.addJavascriptInterface(new JSInterface(), "AndroidWebView");
 
-        mWebView.loadUrl("https://rd.be8.io/#/market");
+        mWebView.loadUrl(Constants.BASEURL + "#/market");
 //        mWebView.loadUrl("https://test.doraemoney.com/newCube/SourceTestPage.html");
 //        mWebView.loadUrl("file:///android_asset/index4.html");
 
