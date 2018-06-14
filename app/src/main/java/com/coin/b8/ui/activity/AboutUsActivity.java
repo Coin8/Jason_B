@@ -13,7 +13,7 @@ import com.coin.b8.R;
 /**
  * Created by zhangyi on 2018/6/8.
  */
-public class AboutUsActivity extends BaseActivity{
+public class AboutUsActivity extends BaseActivity {
 
     private TextView mUerProtocol;
     private TextView mToolbarTitle;
@@ -31,7 +31,7 @@ public class AboutUsActivity extends BaseActivity{
         mUerProtocol.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(AboutUsActivity.this,UserProtocolActivity.class));
+                startActivity(new Intent(AboutUsActivity.this, UserProtocolActivity.class));
             }
         });
     }
@@ -46,8 +46,8 @@ public class AboutUsActivity extends BaseActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    private void initToolBar(){
-        initToolBar(mToolbar,"",R.drawable.b8_ic_back_black);
+    private void initToolBar() {
+        initToolBar(mToolbar, "", R.drawable.b8_ic_back_black);
         mToolbarTitle.setText("关于我们");
     }
 }

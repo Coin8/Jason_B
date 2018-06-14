@@ -3,12 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="54dp"
+    android:layout_height="44dp"
     android:background="@color/white"
     android:fitsSystemWindows="true"
     app:contentInsetStart="0.0dp"
     app:layout_collapseMode="pin">
-
 
     <TextView
         android:id="@+id/toolbar_title"
@@ -17,7 +16,7 @@
         android:layout_gravity="center"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textColor="@color/black"
+        android:textColor="@color/title_text_color"
         android:textSize="18sp" />
 
 </android.support.v7.widget.Toolbar>  
