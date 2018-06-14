@@ -26,7 +26,7 @@
     <!-- 偏白色大背景 -->
     <color name="whiteBg">#f5f5f7</color>
     <!--背景 页面背景的颜色-->
-    <color name="colorPageBg">#f2f4f5</color>
+    <color name="colorPageBg">#ffffff</color>
     <!--背景 item的5.0一下版本选择器颜色-->
     <color name="colorWhiteBg">#d9d9d9</color>
 

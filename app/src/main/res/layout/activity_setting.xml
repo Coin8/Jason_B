@@ -3,49 +3,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#f3f6fa">
 
     <include layout="@layout/toolbar"/>
 
-
-    <ImageView
+    <View
         android:layout_width="match_parent"
-        android:layout_height="1px"
+        android:layout_height="1dp"
         android:background="@color/lineColor"/>
 
     <com.coin.b8.ui.view.SettingItemView
         android:id="@+id/item_about_us"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
+        android:layout_height="56dp"
         android:background="@drawable/ripple_one_item_bg"
         app:setting_red_dot="false"
         app:setting_right_text=""
         app:setting_title="关于我们"/>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
+    <View
+        android:layout_width="16dp"
+        android:layout_height="1dp"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="16dp"
-        android:background="@color/lineColor"/>
+        android:background="@color/white"/>
 
     <com.coin.b8.ui.view.SettingItemView
         android:id="@+id/item_clean_cache"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
+        android:layout_height="56dp"
         android:background="@drawable/ripple_one_item_bg"
         app:setting_red_dot="false"
         app:setting_right_text="0M"
         app:setting_title="清理缓存"/>
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="16dp"
-        android:background="@color/lineColor"/>
-
-
+        android:layout_width="16dp"
+        android:layout_height="1dp"
+        android:background="@color/white" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -68,18 +63,12 @@
             android:layout_marginRight="6dp"
             app:sb_show_indicator="false"
             app:sb_checked="true"
-            app:sb_checked_color="#fdc951"/>
+            app:sb_checked_color="#426ab3"/>
     </RelativeLayout>
-
-
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_alignParentTop="true"
+        android:layout_height="1dp"
         android:background="@color/lineColor"/>
-
-
-
 
 </LinearLayout>
