@@ -73,6 +73,7 @@
     <style name="FeebackRadioButton" parent="Theme.AppCompat.Light">
         <!--<item name="colorControlNormal">@color/white</item>-->
         <item name="colorControlActivated">#426ab3</item>
+        <item name="colorControlNormal">#A3B7DD</item>
     </style>
 
 </resources>
