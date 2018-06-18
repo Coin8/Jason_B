@@ -30,6 +30,8 @@ public class FeedBackFragment extends DialogFragment {
     private EditText mContactEdit;
     private ImageView mBackImageView;
 
+    private MyToast mToast;
+
     public interface FeedBackInterface {
         void onPostQuestion(FeedBackParameter feedBackParameter);
     }
@@ -41,6 +43,7 @@ public class FeedBackFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mToast = new MyToast(this.getActivity());
         int style = DialogFragment.STYLE_NO_TITLE;
         int theme = R.style.FeedbackDialog;
         setStyle(style, theme);
@@ -63,11 +66,11 @@ public class FeedBackFragment extends DialogFragment {
             public void onClick(View v) {
                 String content = mContentEdit.getText().toString();
                 if (TextUtils.isEmpty(content)) {
-                    MyToast.showShortToast("请填写问题描述");
+                    mToast.showToast("请填写问题描述");
                     return;
                 }
                 if (content.length() < 10) {
-                    MyToast.showShortToast("问题描述最少10个字符");
+                    mToast.showToast("问题描述最少10个字符");
                     return;
                 }
 

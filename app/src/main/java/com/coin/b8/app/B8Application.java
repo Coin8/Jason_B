@@ -10,7 +10,7 @@ import com.coin.b8.help.DemoHelper;
 /**
  * Created by zhangyi on 2018/5/29.
  */
-public class B8Application extends Application{
+public class B8Application extends Application {
     private static B8Application mB8Application;
     private static Handler mHandler;
 

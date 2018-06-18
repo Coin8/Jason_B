@@ -29,10 +29,13 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private SetttingPresenterImpl mSetttingPresenter;
     private SwitchButton mPushMangerSwitchButton;
 
+    private MyToast mToast;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+        mToast = new MyToast(this);
         initView();
         initData();
         initToolBar();
@@ -128,6 +131,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void cleanCacheSuccess() {
-        MyToast.showShortToast("清理缓存成功");
+        mToast.showToast("清理缓存成功");
     }
 }

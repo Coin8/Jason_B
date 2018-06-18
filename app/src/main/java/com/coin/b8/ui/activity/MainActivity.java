@@ -14,7 +14,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,7 +28,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.coin.b8.R;
 import com.coin.b8.constant.Constants;
 import com.coin.b8.help.DemoHelper;
@@ -54,12 +52,10 @@ import com.coin.b8.utils.MyToast;
 import com.coin.b8.utils.PhoneUtils;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
-import com.jaeger.library.StatusBarUtil;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
 import com.yanzhenjie.permission.Setting;
-
 import java.util.List;
 
 import io.reactivex.observers.DisposableObserver;
@@ -84,6 +80,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private MainPresenterImpl mMainPresenter;
     private String mCacheZize = "0.00B";
 
+    private MyToast mToast;
+
 
     @Override
     public void onUpdateInfo(B8UpdateInfo b8UpdateInfo) {
@@ -91,11 +89,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             if(b8UpdateInfo.getData().isIsNew()){
                 check(b8UpdateInfo,true,b8UpdateInfo.getData().isIsForce(),false);
             }else {
-                MyToast.showShortToast("已是最新版本");
+               // MyToast.showShortToast("已是最新版本");
+                mToast.showToast("已是最新版本");
             }
 
         }else {
-            MyToast.showShortToast("已是最新版本");
+            mToast.showToast("已是最新版本");
         }
     }
 
@@ -181,6 +180,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mToast = new MyToast(this);
         mMainPresenter = new MainPresenterImpl(this,this);
         UpdateManager.setDebuggable(true);
         UpdateManager.setWifiOnly(false);
@@ -532,7 +532,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 break;
             case R.id.version_info:
 //                mDrawerLayout.closeDrawers();
-                MyToast.showShortToast("正在检测中...");
+                mToast.showToast("正在检测中...");
                 break;
             case R.id.about_info:
 //                mDrawerLayout.closeDrawers();
@@ -583,12 +583,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 DisposableObserver<FeedBackResult>  disposableObserver = new DisposableObserver<FeedBackResult>() {
                     @Override
                     public void onNext(FeedBackResult feedBackResult) {
-                        MyToast.showShortToast("提交反馈成功");
+                        mToast.showToast("提交反馈成功");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        MyToast.showShortToast("提交反馈失败");
+                        mToast.showToast("提交反馈失败");
                         Log.e(TAG,"feedback err = " + e.toString());
                     }
 

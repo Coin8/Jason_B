@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="用户反馈"
+            android:text="意见反馈"
             android:textColor="#191919"
             android:textSize="@dimen/feedback_text_size_16" />
 
