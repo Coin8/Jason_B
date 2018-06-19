@@ -471,7 +471,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mPersonInfoLayout.setOnClickListener(this);
         mVersionInfoLayout.setOnClickListener(this);
         mAboutInfoLayout.setOnClickListener(this);
-
+        /**
+         * 屏蔽抽屉手势滑动
+         */
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mTestView1 = headView.findViewById(R.id.test1);
         mTestView2 = headView.findViewById(R.id.test2);
         mTestView3 = headView.findViewById(R.id.test3);
