@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -21,11 +22,13 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
+import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.coin.b8.R;
@@ -57,7 +60,6 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
 import com.yanzhenjie.permission.Setting;
 import java.util.List;
-
 import io.reactivex.observers.DisposableObserver;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, IMainView {
@@ -81,19 +83,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private String mCacheZize = "0.00B";
 
     private MyToast mToast;
+    private LinearLayout mLoading;
 
 
     @Override
     public void onUpdateInfo(B8UpdateInfo b8UpdateInfo) {
-        if(b8UpdateInfo != null && b8UpdateInfo.getData() != null){
-            if(b8UpdateInfo.getData().isIsNew()){
-                check(b8UpdateInfo,true,b8UpdateInfo.getData().isIsForce(),false);
-            }else {
-               // MyToast.showShortToast("已是最新版本");
+        if (b8UpdateInfo != null && b8UpdateInfo.getData() != null) {
+            if (b8UpdateInfo.getData().isIsNew()) {
+                check(b8UpdateInfo, true, b8UpdateInfo.getData().isIsForce(), false);
+            } else {
+                // MyToast.showShortToast("已是最新版本");
                 mToast.showToast("已是最新版本");
             }
 
-        }else {
+        } else {
             mToast.showToast("已是最新版本");
         }
     }
@@ -116,9 +119,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         public void logout() {
             startLogout();
         }
+
         @JavascriptInterface
-        public void login(String loginName,String password) {
-            startLogin(loginName,password);
+        public void login(String loginName, String password) {
+            startLogin(loginName, password);
         }
 
         @JavascriptInterface
@@ -155,23 +159,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         public String getIMSI() {
             String str = "";
             if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                requestPhonePermission(1,Permission.READ_PHONE_STATE);
-            }else {
+                requestPhonePermission(1, Permission.READ_PHONE_STATE);
+            } else {
                 str = PhoneUtils.getIMSI();
             }
-            Log.e(TAG,"getIMSI = " + str);
+            Log.e(TAG, "getIMSI = " + str);
             return str;
         }
 
         @JavascriptInterface
-        public String getIMEI(){
+        public String getIMEI() {
             String str = "";
             if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                requestPhonePermission(2,Permission.READ_PHONE_STATE);
-            }else {
+                requestPhonePermission(2, Permission.READ_PHONE_STATE);
+            } else {
                 str = PhoneUtils.getIMEI();
             }
-            Log.e(TAG,"getIMEI = " + str);
+            Log.e(TAG, "getIMEI = " + str);
             return str;
         }
 
@@ -181,7 +185,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mToast = new MyToast(this);
-        mMainPresenter = new MainPresenterImpl(this,this);
+        mMainPresenter = new MainPresenterImpl(this, this);
         UpdateManager.setDebuggable(true);
         UpdateManager.setWifiOnly(false);
         UpdateManager.setUrl("b8", "lll");
@@ -196,13 +200,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        B8Api.getTest();
     }
 
-    private void initView(){
+    private void initView() {
         mDrawerLayout = findViewById(R.id.drawerLayout);
         mNavigationView = findViewById(R.id.navigationView);
         mWebView = findViewById(R.id.webView);
+        mLoading = findViewById(R.id.layout_loading);
     }
 
-    private void initWebView(){
+    private void initWebView() {
+        mLoading.setVisibility(View.VISIBLE);
         WebSettings mSettings = mWebView.getSettings();
         mSettings.setJavaScriptEnabled(true);//开启javascript
         mSettings.setDomStorageEnabled(true);//开启DOM
@@ -219,7 +225,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
 
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             mWebView.setWebContentsDebuggingEnabled(true);
         }
@@ -234,7 +239,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Log.e(TAG,"url = " + url);
+                Log.i(TAG, "url = " + url);
                 view.loadUrl(url);
                 return true;
             }
@@ -245,7 +250,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 /**
                  * 开始加载
                  */
-                Log.e(TAG,"onPageStarted url = " + url);
+                Log.i(TAG, "onPageStarted url = " + url);
             }
 
             //设置结束加载函数
@@ -254,7 +259,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 /**
                  * 结束加载了
                  */
-                Log.e(TAG,"onPageFinished url = " + url);
+                Log.i(TAG, "onPageFinished url = " + url);
+                mLoading.setVisibility(View.GONE);
+            }
+
+            /**
+             * 加载错误的时候会回调，在其中可做错误处理，比如再请求加载一次，或者提示404的错误页面
+             */
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                Log.e(TAG, "onReceivedError url = " + failingUrl + ", errorCode = " + errorCode);
+                mLoading.setVisibility(View.GONE);
+            }
+
+            /**
+             * 当接收到https错误时，会回调此函数，在其中可以做错误处理
+             */
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                Log.e(TAG, "onReceivedSslError url = " + error.getUrl());
+                mLoading.setVisibility(View.GONE);
             }
         });
         //设置WebChromeClient类
@@ -272,28 +294,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 /**
                  * 获取加载进度
                  */
+                if (newProgress >= 99) {
+                    mLoading.setVisibility(View.GONE);
+                }
             }
+
             // For Android < 3.0
             public void openFileChooser(ValueCallback<Uri> uploadMsg) {
-                Log.e(TAG,"< 3.0 openFileChooser");
+                Log.e(TAG, "< 3.0 openFileChooser");
                 openFileChooserImpl(uploadMsg);
             }
+
             // For Android > 3.0
             public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
-                Log.e(TAG,"> 3.0 openFileChooser");
+                Log.e(TAG, "> 3.0 openFileChooser");
                 openFileChooserImpl(uploadMsg);
             }
+
             // For Android > 4.1.1
             public void openFileChooser(ValueCallback<Uri> uploadMsg,
                                         String acceptType, String capture) {
-                Log.e(TAG,"> 4.1.1 openFileChooser");
+                Log.e(TAG, "> 4.1.1 openFileChooser");
                 openFileChooserImpl(uploadMsg);
             }
 
             //For Android > 5.0支持多张上传
             @Override
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
-                Log.e(TAG,"> 5.0 openFileChooser");
+                Log.e(TAG, "> 5.0 openFileChooser");
 
                 mUploadMessageForAndroid5 = filePathCallback;
                 requestPermission(Permission.Group.STORAGE);
@@ -305,8 +333,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
 
     /**
-     *
-     * @param type 1 imsi, 2 imei
+     * @param type        1 imsi, 2 imei
      * @param permissions
      */
     private void requestPhonePermission(final int type, String... permissions) {
@@ -318,9 +345,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     @Override
                     public void onAction(List<String> permissions) {
                         String str;
-                        if(type == 1){
+                        if (type == 1) {
                             str = PhoneUtils.getIMSI();
-                        }else if(type == 2){
+                        } else if (type == 2) {
                             str = PhoneUtils.getIMEI();
                         }
                     }
@@ -464,7 +491,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private void initNavigationView() {
         View headView = mNavigationView.getHeaderView(0);
         mVersionName = headView.findViewById(R.id.version_name);
-        mVersionName.setText("v"+AppUtil.getVersionName());
+        mVersionName.setText("v" + AppUtil.getVersionName());
         mPersonInfoLayout = headView.findViewById(R.id.personal_info);
         mVersionInfoLayout = headView.findViewById(R.id.version_info);
         mAboutInfoLayout = headView.findViewById(R.id.about_info);
@@ -492,7 +519,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 mDrawerLayout.closeDrawers();
                 return true;
             }
-            if(mWebView.canGoBack()){
+            if (mWebView.canGoBack()) {
                 mWebView.goBack();
                 return true;
             }
@@ -506,13 +533,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         if (mWebView != null) {
             mWebView.clearHistory();
             ViewGroup viewGroup = (ViewGroup) mWebView.getParent();
-            if(viewGroup != null){
+            if (viewGroup != null) {
                 viewGroup.removeView(mWebView);
             }
             mWebView.destroy();
             mWebView = null;
         }
-        if(mMainPresenter != null){
+        if (mMainPresenter != null) {
             mMainPresenter.onDetach();
         }
         super.onDestroy();
@@ -520,10 +547,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void onClick(View v) {
-        if(v == null){
+        if (v == null) {
             return;
         }
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.personal_info:
 //                startLogin("CJu9Br2lwqnsY","awa2o1fs34ha8i19y39i91g24e25ybbaf0n6f|e4y50aa3n4");
 //                startLogin("xiaoming","123456");
@@ -542,10 +569,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 DialogUtil.showWelcomeDialog(this);
                 break;
             case R.id.test1:
-                startLogin("xiaoming","123456");
+                startLogin("xiaoming", "123456");
                 break;
             case R.id.test2:
-                startLogin("CJu9Br2lwqnsY","awa2o1fs34ha8i19y39i91g24e25ybbaf0n6f|e4y50aa3n4");
+                startLogin("CJu9Br2lwqnsY", "awa2o1fs34ha8i19y39i91g24e25ybbaf0n6f|e4y50aa3n4");
                 break;
             case R.id.test3:
                 startLogout();
@@ -553,37 +580,37 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
-    private void startCheckUpdate(){
+    private void startCheckUpdate() {
         mMainPresenter.getUpdateInfo();
 //        MyToast.showShortToast("正在检测中...");
     }
 
-    private void startUserProtocol(){
+    private void startUserProtocol() {
         Intent intent = new Intent(this, UserProtocolActivity.class);
         startActivity(intent);
     }
 
-    private void startShare(){
+    private void startShare() {
         ShareDialogFragment shareDialogFragment = new ShareDialogFragment();
-        shareDialogFragment.show(getSupportFragmentManager(),"share");
+        shareDialogFragment.show(getSupportFragmentManager(), "share");
     }
 
-    private void startSetting(){
+    private void startSetting() {
         Intent intent = new Intent(this, SettingActivity.class);
         startActivity(intent);
     }
 
-    private void startFeedBack(){
+    private void startFeedBack() {
         FeedBackFragment feedBackFragment = new FeedBackFragment();
         feedBackFragment.setFeedBackInterface(new FeedBackFragment.FeedBackInterface() {
             @Override
             public void onPostQuestion(FeedBackParameter feedBackParameter) {
 
-                if(feedBackParameter == null){
+                if (feedBackParameter == null) {
                     return;
                 }
 
-                DisposableObserver<FeedBackResult>  disposableObserver = new DisposableObserver<FeedBackResult>() {
+                DisposableObserver<FeedBackResult> disposableObserver = new DisposableObserver<FeedBackResult>() {
                     @Override
                     public void onNext(FeedBackResult feedBackResult) {
                         mToast.showToast("提交反馈成功");
@@ -592,7 +619,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     @Override
                     public void onError(Throwable e) {
                         mToast.showToast("提交反馈失败");
-                        Log.e(TAG,"feedback err = " + e.toString());
+                        Log.e(TAG, "feedback err = " + e.toString());
                     }
 
                     @Override
@@ -600,24 +627,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                     }
                 };
-                B8Api.postFeedBackQuestion(disposableObserver,feedBackParameter.getType(),feedBackParameter.getContent(),feedBackParameter.getContact());
+                B8Api.postFeedBackQuestion(disposableObserver, feedBackParameter.getType(), feedBackParameter.getContent(), feedBackParameter.getContact());
 
             }
         });
-        feedBackFragment.show(getSupportFragmentManager(),"feedback");
+        feedBackFragment.show(getSupportFragmentManager(), "feedback");
     }
 
-    private void startLogout(){
+    private void startLogout() {
 
         DemoHelper.getInstance().logout(true, new EMCallBack() {
             @Override
             public void onSuccess() {
-                MySnackbar.makeSnackBarBlack(mNavigationView,"退出登录成功");
+                MySnackbar.makeSnackBarBlack(mNavigationView, "退出登录成功");
             }
 
             @Override
             public void onError(int i, String s) {
-                MySnackbar.makeSnackBarBlack(mNavigationView,"退出登录失败：" + s);
+                MySnackbar.makeSnackBarBlack(mNavigationView, "退出登录失败：" + s);
             }
 
             @Override
@@ -628,9 +655,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
 
-    private void startLogin(String loginName,String password){
-        if(DemoHelper.getInstance().isLoggedIn()){
-            MySnackbar.makeSnackBarBlack(mNavigationView,"已登录，请先退出登录");
+    private void startLogin(String loginName, String password) {
+        if (DemoHelper.getInstance().isLoggedIn()) {
+            MySnackbar.makeSnackBarBlack(mNavigationView, "已登录，请先退出登录");
             return;
         }
 
@@ -641,7 +668,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 Log.d(TAG, "login: onSuccess");
 
 //                MyToast.showShortToast("登录成功");
-                MySnackbar.makeSnackBarBlack(mNavigationView,"登录成功");
+                MySnackbar.makeSnackBarBlack(mNavigationView, "登录成功");
 
                 // ** manually load all local groups and conversation
                 EMClient.getInstance().groupManager().loadAllGroups();
@@ -657,14 +684,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void onError(final int code, final String message) {
                 Log.d(TAG, "login: onError: " + code + "msg = " + message);
-                MySnackbar.makeSnackBarBlack(mNavigationView,"登录失败：" + message);
+                MySnackbar.makeSnackBarBlack(mNavigationView, "登录失败：" + message);
 //                MyToast.showShortToast("登录失败");
             }
         });
     }
 
 
-    private void check(final B8UpdateInfo b8UpdateInfo,final boolean hasUpdate, final boolean isForce, final boolean isSilent) {
+    private void check(final B8UpdateInfo b8UpdateInfo, final boolean hasUpdate, final boolean isForce, final boolean isSilent) {
         UpdateManager.create(this).setChecker(new IUpdateChecker() {
             @Override
             public void check(ICheckAgent agent, String url) {
@@ -690,9 +717,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             }
         }).check();
     }
-
-
-
 
 
 }

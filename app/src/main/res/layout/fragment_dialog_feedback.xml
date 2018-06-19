@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="意见反馈"
+            android:text="@string/feedback_title"
             android:textColor="#191919"
             android:textSize="@dimen/feedback_text_size_16" />
 
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/feedback_marin_15"
             android:layout_marginTop="@dimen/feedback_marin_12"
-            android:text="请选择您的问题分类"
+            android:text="@string/feedback_type"
             android:textColor="#191919"
             android:textSize="@dimen/feedback_text_size_14" />
 
@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="功能建议"
+                android:text="@string/feedback_suggest"
                 android:textColor="#191919"
                 android:textSize="@dimen/feedback_text_size_13"
                 android:theme="@style/FeebackRadioButton" />
@@ -73,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:text="吐槽一下"
+                android:text="@string/feedback_pei"
                 android:textColor="#191919"
                 android:textSize="@dimen/feedback_text_size_13"
                 android:theme="@style/FeebackRadioButton" />
@@ -99,7 +99,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/feedback_marin_15"
-            android:text="问题描述（限10～200字）"
+            android:text="@string/feedback_describe"
             android:textColor="#191919"
             android:textSize="@dimen/feedback_text_size_14" />
 
@@ -112,7 +112,7 @@
             android:layout_marginTop="@dimen/feedback_marin_15"
             android:background="@drawable/feedback_edit_bg"
             android:gravity="left"
-            android:hint="请输入具体的问题描述，我们将尽快为您解决"
+            android:hint="@string/feedback_hint1"
             android:maxLength="200"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
@@ -131,7 +131,7 @@
             android:layout_marginTop="@dimen/feedback_marin_10"
             android:background="@drawable/feedback_edit_bg"
             android:gravity="center_vertical"
-            android:hint="请输入您的邮箱或QQ，以方便我们给您答复"
+            android:hint="@string/feedback_hint2"
             android:maxLength="40"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
@@ -150,7 +150,7 @@
             android:layout_marginTop="@dimen/feedback_marin_20"
             android:background="@drawable/feedback_btn_bg"
             android:gravity="center"
-            android:text="提交反馈"
+            android:text="@string/feedback_submit"
             android:textColor="#ffffff"
             android:textSize="@dimen/feedback_text_size_16" />
 

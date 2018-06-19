@@ -20,6 +20,15 @@
     <string name="msg_recall_by_user">%1$s 撤回了一条消息</string>
     <string name="at_your_in_group">%s在群聊中@了你</string>
 
+    <string name="loading_text">应用初始...</string>
+    <string name="feedback_title">意见反馈</string>
+    <string name="feedback_type">请选择您的问题分类</string>
+    <string name="feedback_suggest">功能建议</string>
+    <string name="feedback_pei">吐槽一下</string>
+    <string name="feedback_describe">问题描述（限10～200字）</string>
+    <string name="feedback_hint1">请输入具体的问题描述，我们将尽快为您解决</string>
+    <string name="feedback_hint2">请输入您的邮箱或QQ，以方便我们给您答复</string>
+    <string name="feedback_submit">提交</string>
 
     <string name="user_protocol_content">
        <b><h3> 用户注册协议、使用协议 </h3></b>
