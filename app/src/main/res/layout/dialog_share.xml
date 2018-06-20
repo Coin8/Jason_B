@@ -106,7 +106,8 @@
                 android:id="@+id/mRlWeibo"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/share_weibo"
@@ -133,7 +134,8 @@
                 android:id="@+id/mRlQQ"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/share_qq"
