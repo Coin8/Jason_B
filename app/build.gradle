@@ -87,6 +87,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation project(':easeui')
     implementation 'com.android.support:support-v4:27.1.1'
+    //微信sdk
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -51,6 +51,13 @@
             android:theme="@style/BaseAppTheme"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Fullscreen.Translucent">
+
+        </activity>
+
         <provider
             android:name=".update.UpdateFileProvider"
             android:authorities="${applicationId}.updatefileprovider"

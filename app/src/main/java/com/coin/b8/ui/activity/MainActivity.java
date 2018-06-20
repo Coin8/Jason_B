@@ -37,6 +37,7 @@ import com.coin.b8.model.FeedBackParameter;
 import com.coin.b8.model.FeedBackResult;
 import com.coin.b8.ui.dialog.FeedBackFragment;
 import com.coin.b8.ui.dialog.ShareDialogFragment;
+import com.coin.b8.ui.listen.ShareListen;
 import com.coin.b8.ui.presenter.MainPresenterImpl;
 import com.coin.b8.permission.RuntimeRationale;
 import com.coin.b8.ui.iView.IMainView;
@@ -50,6 +51,8 @@ import com.coin.b8.utils.DialogUtil;
 import com.coin.b8.utils.MySnackbar;
 import com.coin.b8.utils.MyToast;
 import com.coin.b8.utils.PhoneUtils;
+import com.coin.b8.wxapi.OnResponseListener;
+import com.coin.b8.wxapi.WXShare;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.yanzhenjie.permission.Action;
@@ -81,7 +84,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private String mCacheZize = "0.00B";
 
     private MyToast mToast;
-
+    private WXShare mWXShare;
 
     @Override
     public void onUpdateInfo(B8UpdateInfo b8UpdateInfo) {
@@ -186,16 +189,36 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         UpdateManager.setWifiOnly(false);
         UpdateManager.setUrl("b8", "lll");
         setContentView(R.layout.activity_main);
-//        startLogin("xiaoming","123456");
         initView();
         initNavigationView();
         initWebView();
-//        requestPhonePermission(0,Permission.READ_PHONE_STATE);
         mMainPresenter.getUpdateInfo();
+        initShare();
         printScreen();
-//        B8Api.getTest();
     }
 
+    private void initShare(){
+        /**
+         * 微信分享
+         */
+        mWXShare = new WXShare(this);
+        mWXShare.setListener(new OnResponseListener() {
+            @Override
+            public void onSuccess() {
+                // 分享成功
+            }
+
+            @Override
+            public void onCancel() {
+                // 分享取消
+            }
+
+            @Override
+            public void onFail(String message) {
+                // 分享失败
+            }
+        });
+    }
     private void initView(){
         mDrawerLayout = findViewById(R.id.drawerLayout);
         mNavigationView = findViewById(R.id.navigationView);
@@ -217,8 +240,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
-
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             mWebView.setWebContentsDebuggingEnabled(true);
@@ -502,7 +523,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if(mWXShare != null){
+            mWXShare.register();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
+
+        if(mWXShare != null){
+            mWXShare.unregister();
+        }
+
         if (mWebView != null) {
             mWebView.clearHistory();
             ViewGroup viewGroup = (ViewGroup) mWebView.getParent();
@@ -565,6 +599,31 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private void startShare(){
         ShareDialogFragment shareDialogFragment = new ShareDialogFragment();
+        shareDialogFragment.setShareListen(new ShareListen() {
+            @Override
+            public void onClickWxChat() {
+                if(mWXShare != null){
+                    mWXShare.shareImage(0,R.drawable.share_bg);
+                }
+            }
+
+            @Override
+            public void onClickWxCircle() {
+                if(mWXShare != null){
+                    mWXShare.shareImage(1,R.drawable.share_bg);
+                }
+            }
+
+            @Override
+            public void onClickWeiBo() {
+
+            }
+
+            @Override
+            public void onClickQq() {
+
+            }
+        });
         shareDialogFragment.show(getSupportFragmentManager(),"share");
     }
 
@@ -612,12 +671,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         DemoHelper.getInstance().logout(true, new EMCallBack() {
             @Override
             public void onSuccess() {
-                MySnackbar.makeSnackBarBlack(mNavigationView,"退出登录成功");
+//                MySnackbar.makeSnackBarBlack(mNavigationView,"退出登录成功");
             }
 
             @Override
             public void onError(int i, String s) {
-                MySnackbar.makeSnackBarBlack(mNavigationView,"退出登录失败：" + s);
+//                MySnackbar.makeSnackBarBlack(mNavigationView,"退出登录失败：" + s);
             }
 
             @Override
@@ -630,7 +689,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private void startLogin(String loginName,String password){
         if(DemoHelper.getInstance().isLoggedIn()){
-            MySnackbar.makeSnackBarBlack(mNavigationView,"已登录，请先退出登录");
+//            MySnackbar.makeSnackBarBlack(mNavigationView,"已登录，请先退出登录");
             return;
         }
 
@@ -641,7 +700,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 Log.d(TAG, "login: onSuccess");
 
 //                MyToast.showShortToast("登录成功");
-                MySnackbar.makeSnackBarBlack(mNavigationView,"登录成功");
+//                MySnackbar.makeSnackBarBlack(mNavigationView,"登录成功");
 
                 // ** manually load all local groups and conversation
                 EMClient.getInstance().groupManager().loadAllGroups();
@@ -657,7 +716,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void onError(final int code, final String message) {
                 Log.d(TAG, "login: onError: " + code + "msg = " + message);
-                MySnackbar.makeSnackBarBlack(mNavigationView,"登录失败：" + message);
+//                MySnackbar.makeSnackBarBlack(mNavigationView,"登录失败：" + message);
 //                MyToast.showShortToast("登录失败");
             }
         });
