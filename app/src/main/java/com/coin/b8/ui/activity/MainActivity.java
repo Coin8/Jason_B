@@ -103,15 +103,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void onUpdateInfo(B8UpdateInfo b8UpdateInfo, boolean auto) {
         if (b8UpdateInfo != null && b8UpdateInfo.getData() != null) {
             if (b8UpdateInfo.getData().isIsNew()) {
-                if (!auto) {
-                    mToast.showToast("已是最新版本");
-                }
+//                if (!auto) {
+//                    mToast.showToast("已是最新版本");
+//                }
             } else {
                 check(b8UpdateInfo, true, b8UpdateInfo.getData().isIsForce(), false);
             }
 
         } else if (!auto) {
-            mToast.showToast("已是最新版本");
+            //mToast.showToast("已是最新版本");
         }
     }
 

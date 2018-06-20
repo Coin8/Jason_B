@@ -192,7 +192,7 @@ public class EaseNotifier {
     protected void sendNotification(EMMessage message, boolean isForeground, boolean numIncrease) {
         String username = message.getFrom();
         try {
-            //String notifyText = username + " ";
+            // String notifyText = username + " ";
             String notifyText = "";
             switch (message.getType()) {
                 case TXT:
