@@ -301,13 +301,14 @@ public class EaseNotifier {
             Log.e("zy", "msg lllllllllllllllllll");
 
 
+            int randomId = (int)System.currentTimeMillis();
             if (isForeground) {
-                notificationManager.notify(foregroundNotifyID, notification);
-//                notificationManager.cancel(foregroundNotifyID);
+                // notificationManager.notify(foregroundNotifyID, notification);
+                // notificationManager.cancel(foregroundNotifyID);
             } else {
-                notificationManager.notify(notifyID, notification);
+                //     notificationManager.notify(notifyID, notification);
             }
-
+            notificationManager.notify(randomId, notification);
 
         } catch (Exception e) {
             e.printStackTrace();
