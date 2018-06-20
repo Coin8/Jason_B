@@ -11,11 +11,13 @@ import android.os.Parcelable;
 import android.util.Log;
 
 import com.coin.b8.R;
+import com.coin.b8.utils.CommonUtils;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXImageObject;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXTextObject;
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
@@ -25,7 +27,7 @@ import java.io.ByteArrayOutputStream;
  * Created by zhangyi on 2018/6/19.
  */
 public class WXShare {
-
+    private static final int THUMB_SIZE = 150;
     public static final String APP_ID = "wx8c9da09f334858dd";
     public static final String APP_SECRET = "3ff01be2394a476a7d6869b83e766204";
     public static final String ACTION_SHARE_RESPONSE = "action_wx_share_response";
@@ -78,22 +80,6 @@ public class WXShare {
         return this;
     }
 
-    public static byte[] bmpToByteArray(final Bitmap bmp, final boolean needRecycle) {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.PNG, 100, output);
-        if (needRecycle) {
-            bmp.recycle();
-        }
-
-        byte[] result = output.toByteArray();
-        try {
-            output.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return result;
-    }
 
 
     /**
@@ -110,7 +96,7 @@ public class WXShare {
             msg.mediaObject = imgObj;
             Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, 150, 150, true);
             bmp.recycle();
-            msg.thumbData = bmpToByteArray(thumbBmp, true);
+            msg.thumbData = CommonUtils.bmpToByteArray(thumbBmp, true);
             SendMessageToWX.Req req = new SendMessageToWX.Req();
             req.transaction = buildTransaction("img");
             req.message = msg;
@@ -125,6 +111,60 @@ public class WXShare {
         }
         return this;
     }
+
+    public WXShare shareImage(int type,Bitmap bmp) {
+        try {
+            if(bmp == null){
+                return this;
+            }
+            WXImageObject imgObj = new WXImageObject(bmp);
+            WXMediaMessage msg = new WXMediaMessage();
+            msg.mediaObject = imgObj;
+            Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, 150, 150, true);
+            bmp.recycle();
+            msg.thumbData = CommonUtils.bmpToByteArray(thumbBmp, true);
+            SendMessageToWX.Req req = new SendMessageToWX.Req();
+            req.transaction = buildTransaction("img");
+            req.message = msg;
+            if(type == 0){
+                req.scene = SendMessageToWX.Req.WXSceneSession;
+            }else {
+                req.scene = SendMessageToWX.Req.WXSceneTimeline;
+            }
+            api.sendReq(req);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
+
+    public WXShare shareWeb(int type,String title,String content,String webUrl) {
+        try {
+            WXWebpageObject webpage = new WXWebpageObject();
+            webpage.webpageUrl = webUrl;
+            WXMediaMessage msg = new WXMediaMessage(webpage);
+            msg.title = title;
+            msg.description = content;
+            Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
+            Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
+            bmp.recycle();
+            msg.thumbData = CommonUtils.bmpToByteArray(thumbBmp, true);
+
+            SendMessageToWX.Req req = new SendMessageToWX.Req();
+            req.transaction = buildTransaction("webpage");
+            req.message = msg;
+            if(type == 0){
+                req.scene = SendMessageToWX.Req.WXSceneSession;
+            }else {
+                req.scene = SendMessageToWX.Req.WXSceneTimeline;
+            }
+            api.sendReq(req);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
+
 
 
     public IWXAPI getApi() {

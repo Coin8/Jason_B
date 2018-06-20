@@ -40,6 +40,7 @@ import com.coin.b8.model.B8UpdateInfo;
 import com.coin.b8.model.FeedBackParameter;
 import com.coin.b8.model.FeedBackResult;
 import com.coin.b8.ui.dialog.FeedBackFragment;
+import com.coin.b8.ui.dialog.LoadingDialog;
 import com.coin.b8.ui.dialog.ShareDialogFragment;
 import com.coin.b8.ui.listen.ShareListen;
 import com.coin.b8.ui.presenter.MainPresenterImpl;
@@ -64,6 +65,7 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
 import com.yanzhenjie.permission.Setting;
 
+import java.io.File;
 import java.util.List;
 
 import io.reactivex.observers.DisposableObserver;
@@ -94,6 +96,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private LinearLayout mLoading;
 
+    private LoadingDialog mLoadingDialog;
+
 
     @Override
     public void onUpdateInfo(B8UpdateInfo b8UpdateInfo, boolean auto) {
@@ -116,7 +120,41 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
+    @Override
+    public void onGetShareNetImageBitmap(int type,Bitmap bitmap) {
+        hideShareLoading();
+        if(mWXShare != null && bitmap != null){
+            Log.e(TAG,"onGetShareNetImageBitmap ");
+            mWXShare.shareImage(type,bitmap);
+        }
+        Log.e(TAG,"onGetShareNetImageBitmap 000 ");
+    }
+
+    @Override
+    public void onGetShareNetImageBitmapError() {
+        Log.e(TAG,"onGetShareNetImageBitmapError  ");
+        hideShareLoading();
+    }
+
     class JSInterface {
+
+        @JavascriptInterface
+        public void shareWebUrl(String type,String title,String content, String webUrl) {
+            if(!TextUtils.isEmpty(type) && mWXShare != null){
+                int xx = Integer.parseInt(type);
+                mWXShare.shareWeb(xx,title,content,webUrl);
+            }
+        }
+        @JavascriptInterface
+        public void shareImage(String type,String url) {
+            if(!TextUtils.isEmpty(type) && !TextUtils.isEmpty(url)){
+                showShareLoading();
+                int xx = Integer.parseInt(type);
+                mMainPresenter.getShareNetworkImage(xx,url);
+            }else {
+                Log.e(TAG,"file is null");
+            }
+        }
 
         @JavascriptInterface
         public void startBrowse(String url) {
@@ -266,6 +304,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mWebView.loadUrl(Constants.BASEURL + "#/market");
 //        mWebView.loadUrl("https://test.doraemoney.com/newCube/SourceTestPage.html");
 //        mWebView.loadUrl("file:///android_asset/index4.html");
+//        mWebView.loadUrl("http://app.diyli.cn/static/share/index-url.html");
 
         //设置不用系统浏览器打开,直接显示在当前Webview
         mWebView.setWebViewClient(new WebViewClient() {
@@ -787,5 +826,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }).check();
     }
 
+    private void showShareLoading() {
+        if (mLoadingDialog != null && mLoadingDialog.getDialog() != null && mLoadingDialog.getDialog().isShowing()) {
+            mLoadingDialog.dismiss();
+        }
+        mLoadingDialog = new LoadingDialog();
+        mLoadingDialog.show(getSupportFragmentManager(), "loading");
+
+    }
+
+
+    private void hideShareLoading(){
+        if (mLoadingDialog != null && mLoadingDialog.getDialog().isShowing()) {
+            mLoadingDialog.dismiss();
+        }
+    }
 
 }

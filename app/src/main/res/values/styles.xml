@@ -56,6 +56,10 @@
         <item name="android:windowBackground">@drawable/feedback_bg</item>
     </style>
 
+    <style name="LoadingDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@drawable/loading_bg</item>
+    </style>
+
 
     <style name="MyDialog" parent="android:style/Theme.Dialog">
         <!--背景颜色及和透明程度-->
