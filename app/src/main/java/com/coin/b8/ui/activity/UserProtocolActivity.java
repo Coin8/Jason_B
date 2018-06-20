@@ -2,14 +2,18 @@ package com.coin.b8.ui.activity;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.text.TextPaint;
+import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,23 +28,43 @@ public class UserProtocolActivity extends BaseActivity {
     private LinearLayout mLoading;
     private WebView mWebView;
 
+    private ImageView mViewBack;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_protocol);
         mToolbar = findViewById(R.id.toolbar);
         mToolbarTitle = mToolbar.findViewById(R.id.toolbar_title);
+        mViewBack = findViewById(R.id.toolbar_back);
         mLoading = findViewById(R.id.layout_loading);
         mWebView = findViewById(R.id.webView);
         this.initToolBar();
         this.initWeb();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                finish();
+                //  return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     private void initToolBar() {
-        initToolBar(mToolbar, "");
+        super.initToolBar(mToolbar, "");
         mToolbarTitle.setText("用户协议");
         TextPaint tp = mToolbarTitle.getPaint();
         tp.setFakeBoldText(true);
+        mViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void initWeb() {

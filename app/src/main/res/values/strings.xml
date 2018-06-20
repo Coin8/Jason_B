@@ -32,11 +32,4 @@
     <string name="feedback_hint2">请输入您的邮箱或QQ，以方便我们给您答复</string>
     <string name="feedback_submit">提交</string>
 
-    <string name="user_protocol_content">
-    <div style="margin-top: 150px;">
-            <h1>用户注册协议、使用协议</h1>
-        </div>
-    </string>
-
-
 </resources>

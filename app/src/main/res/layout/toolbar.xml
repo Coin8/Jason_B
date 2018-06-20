@@ -6,8 +6,17 @@
     android:layout_height="44dp"
     android:background="@color/white"
     android:fitsSystemWindows="true"
-    app:contentInsetStart="0.0dp"
+    app:contentInsetStart="0dp"
     app:layout_collapseMode="pin">
+
+    <ImageView
+        android:id="@+id/toolbar_back"
+        android:layout_width="8dp"
+        android:layout_height="13dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dp"
+        android:clickable="true"
+        android:src="@drawable/icon_back" />
 
     <TextView
         android:id="@+id/toolbar_title"

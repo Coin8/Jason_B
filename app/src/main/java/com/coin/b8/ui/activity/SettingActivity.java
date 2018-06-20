@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.text.TextPaint;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.coin.b8.R;
@@ -24,6 +26,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     private Toolbar mToolbar;
     private TextView mToolbarTitle;
+    private ImageView mViewBack;
     private SettingItemView mAboutUs;
     private SettingItemView mCleanCache;
     private SetttingPresenterImpl mSetttingPresenter;
@@ -40,6 +43,17 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         initData();
         initToolBar();
         mSetttingPresenter.initCache();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                finish();
+                //  return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -61,6 +75,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private void initView() {
         mToolbar = findViewById(R.id.toolbar);
         mToolbarTitle = mToolbar.findViewById(R.id.toolbar_title);
+        mViewBack = findViewById(R.id.toolbar_back);
         mAboutUs = findViewById(R.id.item_about_us);
         mCleanCache = findViewById(R.id.item_clean_cache);
         mPushMangerSwitchButton = findViewById(R.id.switch_button);
@@ -79,10 +94,16 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initToolBar() {
-        initToolBar(mToolbar, "");
+        super.initToolBar(mToolbar, "");
         mToolbarTitle.setText("系统设置");
         TextPaint tp = mToolbarTitle.getPaint();
         tp.setFakeBoldText(true);
+        mViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
 
