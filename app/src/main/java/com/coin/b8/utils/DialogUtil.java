@@ -19,7 +19,7 @@ public class DialogUtil {
 
         MaterialDialog dialog = new MaterialDialog.Builder(context)
                 .btnStackedGravity(GravityEnum.CENTER)
-                .content("欢迎使用币8")
+                .content("欢迎使用币发")
                 .positiveText("确定")
                 .show();
     }

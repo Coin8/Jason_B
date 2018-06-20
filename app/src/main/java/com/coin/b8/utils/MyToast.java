@@ -40,7 +40,7 @@ public class MyToast {
         TextView title = view.findViewById(R.id.toast_text);
         title.setText(text);
         Toast toast = new Toast(mActivity.getApplication());
-        toast.setGravity(Gravity.BOTTOM, 0, 200);//setGravity用来设置Toast显示的位置，相当于xml中的android:gravity或android:layout_gravity
+        toast.setGravity(Gravity.CENTER, 0, 0);//setGravity用来设置Toast显示的位置，相当于xml中的android:gravity或android:layout_gravity
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(view);
         toast.show();
