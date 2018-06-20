@@ -24,13 +24,13 @@ public class MainPresenterImpl {
         this.mContext = context;
     }
 
-    public void getUpdateInfo(){
+    public void getUpdateInfo(boolean auto){
 
         DisposableObserver<B8UpdateInfo> disposableObserver = new DisposableObserver<B8UpdateInfo>() {
             @Override
             public void onNext(B8UpdateInfo updateInfo) {
                 if(updateInfo != null){
-                    mView.onUpdateInfo(updateInfo);
+                    mView.onUpdateInfo(updateInfo, auto);
                 }
             }
 

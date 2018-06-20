@@ -31,6 +31,7 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.coin.b8.R;
 import com.coin.b8.constant.Constants;
 import com.coin.b8.help.DemoHelper;
@@ -62,7 +63,9 @@ import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
 import com.yanzhenjie.permission.Setting;
+
 import java.util.List;
+
 import io.reactivex.observers.DisposableObserver;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, IMainView {
@@ -93,16 +96,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
 
     @Override
-    public void onUpdateInfo(B8UpdateInfo b8UpdateInfo) {
+    public void onUpdateInfo(B8UpdateInfo b8UpdateInfo, boolean auto) {
         if (b8UpdateInfo != null && b8UpdateInfo.getData() != null) {
             if (b8UpdateInfo.getData().isIsNew()) {
-                check(b8UpdateInfo, true, b8UpdateInfo.getData().isIsForce(), false);
+                if (!auto) {
+                    mToast.showToast("已是最新版本");
+                }
             } else {
-                // MyToast.showShortToast("已是最新版本");
-                mToast.showToast("已是最新版本");
+                check(b8UpdateInfo, true, b8UpdateInfo.getData().isIsForce(), false);
             }
 
-        } else {
+        } else if (!auto) {
             mToast.showToast("已是最新版本");
         }
     }
@@ -139,6 +143,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         @JavascriptInterface
         public String getAppVersion() {
             return AppUtil.getVersionName();
+        }
+
+        @JavascriptInterface
+        public int getVersionCode() {
+            return AppUtil.getVersionCode();
         }
 
         @JavascriptInterface
@@ -199,12 +208,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         initView();
         initNavigationView();
         initWebView();
-        mMainPresenter.getUpdateInfo();
+        mMainPresenter.getUpdateInfo(true);
         initShare();
         printScreen();
     }
 
-    private void initShare(){
+    private void initShare() {
         /**
          * 微信分享
          */
@@ -554,7 +563,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onStart() {
         super.onStart();
-        if(mWXShare != null){
+        if (mWXShare != null) {
             mWXShare.register();
         }
     }
@@ -562,7 +571,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onDestroy() {
 
-        if(mWXShare != null){
+        if (mWXShare != null) {
             mWXShare.unregister();
         }
 
@@ -617,7 +626,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void startCheckUpdate() {
-        mMainPresenter.getUpdateInfo();
+        mMainPresenter.getUpdateInfo(false);
 //        MyToast.showShortToast("正在检测中...");
     }
 
@@ -631,15 +640,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         shareDialogFragment.setShareListen(new ShareListen() {
             @Override
             public void onClickWxChat() {
-                if(mWXShare != null){
-                    mWXShare.shareImage(0,R.drawable.share_bg);
+                if (mWXShare != null) {
+                    mWXShare.shareImage(0, R.drawable.share_bg);
                 }
             }
 
             @Override
             public void onClickWxCircle() {
-                if(mWXShare != null){
-                    mWXShare.shareImage(1,R.drawable.share_bg);
+                if (mWXShare != null) {
+                    mWXShare.shareImage(1, R.drawable.share_bg);
                 }
             }
 
@@ -653,7 +662,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
             }
         });
-        shareDialogFragment.show(getSupportFragmentManager(),"share");
+        shareDialogFragment.show(getSupportFragmentManager(), "share");
 
     }
 
@@ -717,10 +726,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
 
-
     private void startLogin(String loginName, String password) {
         if (DemoHelper.getInstance().isLoggedIn()) {
-           // MySnackbar.makeSnackBarBlack(mNavigationView, "已登录，请先退出登录");
+            // MySnackbar.makeSnackBarBlack(mNavigationView, "已登录，请先退出登录");
             return;
         }
 
