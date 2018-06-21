@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.coin.b8.R;
 import com.coin.b8.ui.listen.ShareListen;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by zhangyi on 2018/6/8.
@@ -38,6 +39,18 @@ public class ShareDialogFragment extends DialogFragment implements View.OnClickL
         int style = DialogFragment.STYLE_NO_TITLE;
         int theme = R.style.ShareDialog;
         setStyle(style,theme);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this.getContext());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this.getContext());
     }
 
     @Override

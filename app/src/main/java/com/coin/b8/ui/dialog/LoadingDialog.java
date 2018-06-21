@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.coin.b8.R;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by zhangyi on 2018/6/20.
@@ -48,5 +49,17 @@ public class LoadingDialog extends DialogFragment {
         super.onStart();
         getDialog().setCanceledOnTouchOutside(false);
         getDialog().setCancelable(false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this.getContext());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this.getContext());
     }
 }

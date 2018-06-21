@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.coin.b8.R;
 import com.coin.b8.model.FeedBackParameter;
 import com.coin.b8.utils.MyToast;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by zhangyi on 2018/6/8.
@@ -47,6 +48,18 @@ public class FeedBackFragment extends DialogFragment {
         int style = DialogFragment.STYLE_NO_TITLE;
         int theme = R.style.FeedbackDialog;
         setStyle(style, theme);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this.getContext());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this.getContext());
     }
 
     @Nullable
