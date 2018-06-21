@@ -7,8 +7,8 @@ android {
         applicationId "com.coin.b8"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 1000015
-        versionName "1.0.0.15"
+        versionCode 1000017
+        versionName "1.0.0.17"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
@@ -55,11 +55,11 @@ android {
     android.applicationVariants.all { variant ->
         variant.outputs.all {
             //def date = new Date().format("yyyyMMdd" , TimeZone.getTimeZone("Asia/Shanghai"))
-            def date = new Date().format("yyyyMMdd" , TimeZone.getTimeZone("GMT+08"))
-            if(variant.buildType.name.equals('debug')){
+            def date = new Date().format("yyyyMMdd", TimeZone.getTimeZone("GMT+08"))
+            if (variant.buildType.name.equals('debug')) {
                 outputFileName = "B8_${date}_${versionName}.apk"
             }
-            if(variant.buildType.name.equals('release')){
+            if (variant.buildType.name.equals('release')) {
                 outputFileName = "B8_${date}_${versionName}.apk"
             }
         }
@@ -89,6 +89,8 @@ dependencies {
     implementation 'com.android.support:support-v4:27.1.1'
     //微信sdk
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+    //implementation files('libs/umeng-analytics-7.5.3.jar')
+    //implementation files('libs/umeng-common-1.5.3.jar')
 }
 
 apply plugin: 'com.google.gms.google-services'

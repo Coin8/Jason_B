@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import com.coin.b8.R;
 import com.coin.b8.constant.Constants;
 import com.jaeger.library.StatusBarUtil;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by zhangyi on 2018/6/7.
@@ -24,6 +25,18 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.initSystemBar();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void initSystemBar() {

@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.coin.b8.help.DemoHelper;
 import com.coin.b8.update.UpdateManager;
+import com.umeng.commonsdk.UMConfigure;
 
 /**
  * Created by zhangyi on 2018/5/29.
@@ -20,6 +21,8 @@ public class B8Application extends Application {
 
     private NetWorkStateReceiver mNetWorkReceiver;
 
+    private static final String UMENG_KEY = "5b29bc71b27b0a2f4e000014";
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -30,6 +33,12 @@ public class B8Application extends Application {
         UpdateManager.setWifiOnly(false);
         UpdateManager.setUrl("b8", "lll");
         this.registerNetWorkReceiver();
+        this.initUMeng();
+    }
+
+    private void initUMeng() {
+        UMConfigure.init(this, UMENG_KEY, "001", UMConfigure.DEVICE_TYPE_PHONE, null);
+        UMConfigure.setLogEnabled(false);
     }
 
     @Override

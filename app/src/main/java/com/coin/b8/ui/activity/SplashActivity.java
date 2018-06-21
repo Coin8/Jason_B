@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
 import com.coin.b8.R;
+import com.umeng.analytics.MobclickAgent;
 
 
 /**
@@ -25,6 +26,18 @@ public class SplashActivity extends AppCompatActivity {
         mMyCountDownTimer = new MyCountDownTimer(3*1000);
         mMyCountDownTimer.start();
 
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
 
