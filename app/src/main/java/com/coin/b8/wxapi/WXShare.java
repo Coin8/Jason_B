@@ -145,7 +145,7 @@ public class WXShare {
             WXMediaMessage msg = new WXMediaMessage(webpage);
             msg.title = title;
             msg.description = content;
-            Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
+            Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.share_smal_icon);
             Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
             bmp.recycle();
             msg.thumbData = CommonUtils.bmpToByteArray(thumbBmp, true);
