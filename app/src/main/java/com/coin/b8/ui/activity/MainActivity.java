@@ -30,6 +30,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -96,7 +97,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private WXShare mWXShare;
 
-    private LinearLayout mLoading;
+    private ImageView mImageViewWaitting;
 
     private LoadingDialog mLoadingDialog;
 
@@ -285,11 +286,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mDrawerLayout = findViewById(R.id.drawerLayout);
         mNavigationView = findViewById(R.id.navigationView);
         mWebView = findViewById(R.id.webView);
-        mLoading = findViewById(R.id.layout_loading);
+        mImageViewWaitting = findViewById(R.id.iv_waitting);
     }
 
     private void initWebView() {
-        mLoading.setVisibility(View.VISIBLE);
+        mImageViewWaitting.setVisibility(View.VISIBLE);
         WebSettings mSettings = mWebView.getSettings();
         mSettings.setJavaScriptEnabled(true);//开启javascript
         mSettings.setDomStorageEnabled(true);//开启DOM
@@ -338,7 +339,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                  * 结束加载了
                  */
                 Log.i(TAG, "onPageFinished url = " + url);
-                mLoading.setVisibility(View.GONE);
+                mImageViewWaitting.setVisibility(View.GONE);
             }
 
             /**
@@ -346,7 +347,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
              */
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 Log.e(TAG, "onReceivedError url = " + failingUrl + ", errorCode = " + errorCode);
-                mLoading.setVisibility(View.GONE);
+                mImageViewWaitting.setVisibility(View.GONE);
             }
 
             /**
@@ -354,7 +355,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
              */
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
                 Log.e(TAG, "onReceivedSslError url = " + error.getUrl());
-                mLoading.setVisibility(View.GONE);
+                mImageViewWaitting.setVisibility(View.GONE);
             }
         });
         //设置WebChromeClient类
@@ -373,7 +374,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                  * 获取加载进度
                  */
                 if (newProgress >= 99) {
-                    mLoading.setVisibility(View.GONE);
+                    mImageViewWaitting.setVisibility(View.GONE);
                 }
             }
 

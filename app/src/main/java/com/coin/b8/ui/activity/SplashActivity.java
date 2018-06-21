@@ -23,7 +23,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         mImageView = findViewById(R.id.splash_image);
         mImageView.setImageResource(R.drawable.splash);
-        mMyCountDownTimer = new MyCountDownTimer(3*1000);
+        mMyCountDownTimer = new MyCountDownTimer(2*1000);
         mMyCountDownTimer.start();
 
     }
