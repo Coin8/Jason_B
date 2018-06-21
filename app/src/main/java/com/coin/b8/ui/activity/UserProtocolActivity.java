@@ -1,6 +1,9 @@
 package com.coin.b8.ui.activity;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Messenger;
 import android.os.RemoteException;
@@ -19,11 +22,14 @@ import android.widget.TextView;
 
 import com.coin.b8.R;
 import com.coin.b8.constant.Constants;
+import com.coin.b8.utils.MyToast;
 
 public class UserProtocolActivity extends BaseActivity {
 
     private TextView mToolbarTitle;
     private Toolbar mToolbar;
+
+    private MyToast mToast;
 
     private LinearLayout mLoading;
     private WebView mWebView;
@@ -34,13 +40,18 @@ public class UserProtocolActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_protocol);
+        mToast = new MyToast(this);
         mToolbar = findViewById(R.id.toolbar);
         mToolbarTitle = mToolbar.findViewById(R.id.toolbar_title);
         mViewBack = findViewById(R.id.toolbar_back);
         mLoading = findViewById(R.id.layout_loading);
         mWebView = findViewById(R.id.webView);
         this.initToolBar();
-        this.initWeb();
+        if (!this.isNetworkConnected()) {
+            mToast.showToast(getString(R.string.network_disconnect));
+        } else {
+            this.initWeb();
+        }
     }
 
     @Override
@@ -126,5 +137,15 @@ public class UserProtocolActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager mConnectivityManager = (ConnectivityManager) getApplication()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+        if (mNetworkInfo != null) {
+            return mNetworkInfo.isAvailable();
+        }
+        return false;
     }
 }
