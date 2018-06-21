@@ -588,6 +588,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mTestView3.setOnClickListener(this);
     }
 
+    private static long EXIT_TIME_LAST = 0;
+    private static final long EXIT_TIME = 2000;
 
     //点击返回上一页面而不是退出浏览器
     @Override
@@ -601,9 +603,29 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 mWebView.goBack();
                 return true;
             }
+            /**
+             * 退出判断
+             */
+            if (!exit()) {
+                return true;
+            }
         }
 
         return super.onKeyDown(keyCode, event);
+    }
+
+    private boolean exit() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - EXIT_TIME_LAST > EXIT_TIME) {
+            EXIT_TIME_LAST = currentTime;
+            mToast.showToast(getString(R.string.main_back_again));
+            return false;
+        } else {
+            EXIT_TIME_LAST = 0;
+            finish();
+            System.exit(0);
+            return true;
+        }
     }
 
     @Override

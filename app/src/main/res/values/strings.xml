@@ -32,5 +32,6 @@
     <string name="feedback_hint1">请输入具体的问题描述，我们将尽快为您解决</string>
     <string name="feedback_hint2">请输入您的邮箱或QQ，以方便我们给您答复</string>
     <string name="feedback_submit">提交</string>
+    <string name="main_back_again">再按一次退出程序</string>
 
 </resources>
