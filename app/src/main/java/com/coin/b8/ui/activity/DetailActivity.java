@@ -588,6 +588,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
                 return true;
             }else {
                 startActivity(new Intent(this,MainActivity.class));
+                finish();
             }
         }
 
