@@ -40,7 +40,7 @@ public class UpdateInfo {
 
     public String url;
     public String md5;
-    public long size;
+    public String size;
 
     public static UpdateInfo parse(String s) throws JSONException {
         JSONObject o = new JSONObject(s);
@@ -67,7 +67,7 @@ public class UpdateInfo {
 
         info.url = o.optString("url");
         info.md5 = o.optString("md5");
-        info.size = o.optLong("size", 0);
+        info.size = o.optString("size");
 
         return info;
     }

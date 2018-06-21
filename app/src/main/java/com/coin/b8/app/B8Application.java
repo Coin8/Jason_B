@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.multidex.MultiDex;
 
 import com.coin.b8.help.DemoHelper;
+import com.coin.b8.update.UpdateManager;
 
 /**
  * Created by zhangyi on 2018/5/29.
@@ -20,6 +21,9 @@ public class B8Application extends Application {
         mB8Application = this;
         mHandler = new Handler();
         DemoHelper.getInstance().init(mB8Application);
+        UpdateManager.setDebuggable(true);
+        UpdateManager.setWifiOnly(false);
+        UpdateManager.setUrl("b8", "lll");
     }
 
     @Override

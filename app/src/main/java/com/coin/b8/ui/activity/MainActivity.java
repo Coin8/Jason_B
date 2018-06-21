@@ -811,13 +811,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             public UpdateInfo parse(String source) throws Exception {
                 UpdateInfo info = new UpdateInfo();
                 info.hasUpdate = hasUpdate;
-                info.updateContent = b8UpdateInfo.getMessage();
-//                info.versionCode = 587;
-//                info.versionName = "v5.8.7";
+                info.updateContent = b8UpdateInfo.getData().getVersionDesc();
+                info.versionCode = b8UpdateInfo.getData().getVersionCode();
+                info.versionName = b8UpdateInfo.getData().getVersionName();
                 info.url = b8UpdateInfo.getData().getApkUrl();
-//                info.url = "http://download.fir.im/v2/app/install/5a52e936ca87a8600e0002f9?download_token=cd8662357947f151de92975b46082ba6&source=update";
                 info.md5 = b8UpdateInfo.getData().getApkMd5();
-//                info.size = 10149314;
+                info.size = b8UpdateInfo.getData().getApkSize();
                 info.isForce = isForce;
                 info.isIgnorable = false;
                 info.isSilent = isSilent;

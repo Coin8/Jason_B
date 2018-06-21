@@ -12,6 +12,7 @@
 package com.hyphenate.easeui.model;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -27,6 +28,8 @@ import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
@@ -59,6 +62,8 @@ public class EaseNotifier {
 
     protected static int notifyID = 0525; // start notification id
     protected static int foregroundNotifyID = 0555;
+    private static final String b8_channel_id = "b8_channel_id";
+    private static final String b8_channel_name = "b8_channel_name";
 
     protected NotificationManager notificationManager = null;
 
@@ -249,6 +254,7 @@ public class EaseNotifier {
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(appContext)
                     .setSmallIcon(appContext.getApplicationInfo().icon)
                     .setWhen(System.currentTimeMillis())
+                    .setPriority(Notification.PRIORITY_DEFAULT)
                     .setAutoCancel(true);
 
             Intent msgIntent = appContext.getPackageManager().getLaunchIntentForPackage(packageName);
@@ -258,6 +264,20 @@ public class EaseNotifier {
                     msgIntent = intent;
                 }
             }
+
+            B8MessageBodyModel b8MessageBodyModel = null;
+            try {
+                Gson gson = new Gson();
+                b8MessageBodyModel = gson.fromJson(notifyText,B8MessageBodyModel.class);
+            } catch (JsonSyntaxException e) {
+                e.printStackTrace();
+            }
+
+            if(b8MessageBodyModel != null && msgIntent != null){
+                msgIntent.putExtra("webUrl", b8MessageBodyModel.getUrl());
+                notifyText = b8MessageBodyModel.getText();
+            }
+
 
             PendingIntent pendingIntent = PendingIntent.getActivity(appContext, notifyID, msgIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -278,28 +298,36 @@ public class EaseNotifier {
                 if (customSummaryBody != null) {
                     summaryBody = customSummaryBody;
                 }
-
                 // small icon
                 int smallIcon = notificationInfoProvider.getSmallIcon(message);
                 if (smallIcon != 0) {
-//                    mBuilder.setSmallIcon(smallIcon);
-//                    mBuilder.setSmallIcon(smallIcon);
                     mBuilder.setSmallIcon(smallIcon);
                 } else {
                     mBuilder.setSmallIcon(R.drawable.ease_open_icon);
                 }
             }
 
+
+
             mBuilder.setContentTitle(contentTitle);
+
+
+
+
 //            mBuilder.setTicker(notifyText);
             mBuilder.setContentText(notifyText);
-//            mBuilder.setContentIntent(pendingIntent);
+            mBuilder.setContentIntent(pendingIntent);
             // mBuilder.setNumber(notificationNum);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                NotificationChannel channel = new NotificationChannel(b8_channel_id, b8_channel_name, NotificationManager.IMPORTANCE_DEFAULT);
+                notificationManager.createNotificationChannel(channel);
+                mBuilder.setChannelId(b8_channel_id);
+            }
+
             Notification notification = mBuilder.build();
 
-
-            Log.e("zy", "msg lllllllllllllllllll");
-
+            Log.d("zy", "msg lllllllllllllllllll");
 
             int randomId = (int)System.currentTimeMillis();
             if (isForeground) {
@@ -343,10 +371,21 @@ public class EaseNotifier {
                 .setWhen(System.currentTimeMillis())
                 //首次进入时显示效果
                 .setTicker("我是测试内容")
+                .setAutoCancel(true)
+                .setPriority(Notification.PRIORITY_DEFAULT)
                 //设置通知方式，声音，震动，呼吸灯等效果，这里通知方式为声音
                 .setDefaults(Notification.DEFAULT_SOUND);
 
-        notificationManager.notify(10, mBuilder.build());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel("channel_id", "app_msg", NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(channel);
+            mBuilder.setChannelId("channel_id");
+        }
+
+
+        int randomId = (int)System.currentTimeMillis();
+
+        notificationManager.notify(randomId, mBuilder.build());
     }
 
 

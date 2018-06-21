@@ -7,6 +7,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.coin.b8.R;
+import com.coin.b8.ui.activity.DetailActivity;
+import com.coin.b8.ui.activity.MainActivity;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
@@ -303,7 +305,7 @@ public class DemoHelper {
             @Override
             public Intent getLaunchIntent(EMMessage message) {
                 // you can set what activity you want display when user click the notification
-//                Intent intent = new Intent(appContext, ChatActivity.class);
+                Intent intent = new Intent(appContext, DetailActivity.class);
 //                // open calling activity if there is call
 //                if(isVideoCalling){
 //                    intent = new Intent(appContext, VideoCallActivity.class);
@@ -327,7 +329,7 @@ public class DemoHelper {
 //                }
 //                return intent;
 
-                return null;
+                return intent;
             }
         });
     }

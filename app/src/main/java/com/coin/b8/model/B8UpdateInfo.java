@@ -8,8 +8,8 @@ public class B8UpdateInfo {
 
     /**
      * result : true
-     * message : 为了方便调试，先弄个假接口，各个参数都提供假数据
-     * data : {"apkMd5":"1e602eb5ae41f27bea082dd76c5defeb","apkUrl":"https://share.be8.io/1523499696484fa364e1c969b411ddae08175567db656.apk","isNew":true,"isForce":false,"versionCode":"1.0.1"}
+     * message : 请求成功
+     * data : {"apkMd5":"553091bfb5fc8290a4ea38a601a1246d","apkUrl":"http://cdn.diyli.cn/3982ea9440be4c9ba00b272c4c9b9f6b.apk","versionDesc":"更新描述","isNew":false,"apkSize":"13MB","isForce":false,"versionName":"1.0.0.14","versionCode":1000014}
      * code : 200
      * exception : null
      */
@@ -62,18 +62,24 @@ public class B8UpdateInfo {
 
     public static class DataBean {
         /**
-         * apkMd5 : 1e602eb5ae41f27bea082dd76c5defeb
-         * apkUrl : https://share.be8.io/1523499696484fa364e1c969b411ddae08175567db656.apk
-         * isNew : true
+         * apkMd5 : 553091bfb5fc8290a4ea38a601a1246d
+         * apkUrl : http://cdn.diyli.cn/3982ea9440be4c9ba00b272c4c9b9f6b.apk
+         * versionDesc : 更新描述
+         * isNew : false
+         * apkSize : 13MB
          * isForce : false
-         * versionCode : 1.0.1
+         * versionName : 1.0.0.14
+         * versionCode : 1000014
          */
 
         private String apkMd5;
         private String apkUrl;
+        private String versionDesc;
         private boolean isNew;
+        private String apkSize;
         private boolean isForce;
-        private String versionCode;
+        private String versionName;
+        private int versionCode;
 
         public String getApkMd5() {
             return apkMd5;
@@ -91,12 +97,28 @@ public class B8UpdateInfo {
             this.apkUrl = apkUrl;
         }
 
+        public String getVersionDesc() {
+            return versionDesc;
+        }
+
+        public void setVersionDesc(String versionDesc) {
+            this.versionDesc = versionDesc;
+        }
+
         public boolean isIsNew() {
             return isNew;
         }
 
         public void setIsNew(boolean isNew) {
             this.isNew = isNew;
+        }
+
+        public String getApkSize() {
+            return apkSize;
+        }
+
+        public void setApkSize(String apkSize) {
+            this.apkSize = apkSize;
         }
 
         public boolean isIsForce() {
@@ -107,11 +129,19 @@ public class B8UpdateInfo {
             this.isForce = isForce;
         }
 
-        public String getVersionCode() {
+        public String getVersionName() {
+            return versionName;
+        }
+
+        public void setVersionName(String versionName) {
+            this.versionName = versionName;
+        }
+
+        public int getVersionCode() {
             return versionCode;
         }
 
-        public void setVersionCode(String versionCode) {
+        public void setVersionCode(int versionCode) {
             this.versionCode = versionCode;
         }
     }

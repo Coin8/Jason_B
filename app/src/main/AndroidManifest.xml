@@ -32,6 +32,7 @@
         </activity>
 
         <activity android:name="com.coin.b8.ui.activity.MainActivity"
+            android:launchMode="singleTask"
             android:theme="@style/BaseAppTheme"
             android:screenOrientation="portrait">
 

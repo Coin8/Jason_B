@@ -9,5 +9,6 @@ public class Constants {
     public static final int NOTIFY_ID = 998;
     public static final int SHARE_WXCHAT = 0;
     public static final int SHARE_WXCIRCLE = 1;
+    public static boolean MAIN_ACTIVITY_IS_ACTIVE = false;
 
 }
