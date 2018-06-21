@@ -17,25 +17,26 @@ import com.umeng.analytics.MobclickAgent;
 public class SplashActivity extends AppCompatActivity {
     private ImageView mImageView;
     private MyCountDownTimer mMyCountDownTimer;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         mImageView = findViewById(R.id.splash_image);
         mImageView.setImageResource(R.drawable.splash);
-        mMyCountDownTimer = new MyCountDownTimer(2*1000);
+        mMyCountDownTimer = new MyCountDownTimer(2 * 1000);
         mMyCountDownTimer.start();
 
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
     }
@@ -58,6 +59,7 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         public void onFinish() {
             startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
             SplashActivity.this.finish();
         }
     }
@@ -65,7 +67,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mMyCountDownTimer != null){
+        if (mMyCountDownTimer != null) {
             mMyCountDownTimer.cancel();
             mMyCountDownTimer = null;
         }
