@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
@@ -121,38 +123,39 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     @Override
-    public void onGetShareNetImageBitmap(int type,Bitmap bitmap) {
+    public void onGetShareNetImageBitmap(int type, Bitmap bitmap) {
         hideShareLoading();
-        if(mWXShare != null && bitmap != null){
-            Log.e(TAG,"onGetShareNetImageBitmap ");
-            mWXShare.shareImage(type,bitmap);
+        if (mWXShare != null && bitmap != null) {
+            Log.e(TAG, "onGetShareNetImageBitmap ");
+            mWXShare.shareImage(type, bitmap);
         }
-        Log.e(TAG,"onGetShareNetImageBitmap 000 ");
+        Log.e(TAG, "onGetShareNetImageBitmap 000 ");
     }
 
     @Override
     public void onGetShareNetImageBitmapError() {
-        Log.e(TAG,"onGetShareNetImageBitmapError  ");
+        Log.e(TAG, "onGetShareNetImageBitmapError  ");
         hideShareLoading();
     }
 
     class JSInterface {
 
         @JavascriptInterface
-        public void shareWebUrl(String type,String title,String content, String webUrl) {
-            if(!TextUtils.isEmpty(type) && mWXShare != null){
+        public void shareWebUrl(String type, String title, String content, String webUrl) {
+            if (!TextUtils.isEmpty(type) && mWXShare != null) {
                 int xx = Integer.parseInt(type);
-                mWXShare.shareWeb(xx,title,content,webUrl);
+                mWXShare.shareWeb(xx, title, content, webUrl);
             }
         }
+
         @JavascriptInterface
-        public void shareImage(String type,String url) {
-            if(!TextUtils.isEmpty(type) && !TextUtils.isEmpty(url)){
+        public void shareImage(String type, String url) {
+            if (!TextUtils.isEmpty(type) && !TextUtils.isEmpty(url)) {
                 showShareLoading();
                 int xx = Integer.parseInt(type);
-                mMainPresenter.getShareNetworkImage(xx,url);
-            }else {
-                Log.e(TAG,"file is null");
+                mMainPresenter.getShareNetworkImage(xx, url);
+            } else {
+                Log.e(TAG, "file is null");
             }
         }
 
@@ -245,7 +248,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         setContentView(R.layout.activity_main);
         initView();
         initNavigationView();
-        initWebView();
+        if (!this.isNetworkConnected()) {
+            mToast.showToast(getString(R.string.network_disconnect));
+        } else {
+            initWebView();
+        }
         mMainPresenter.getUpdateInfo(true);
         initShare();
         printScreen();
@@ -581,6 +588,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mTestView3.setOnClickListener(this);
     }
 
+    private static long EXIT_TIME_LAST = 0;
+    private static final long EXIT_TIME = 2000;
 
     //点击返回上一页面而不是退出浏览器
     @Override
@@ -594,9 +603,29 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 mWebView.goBack();
                 return true;
             }
+            /**
+             * 退出判断
+             */
+            if (!exit()) {
+                return true;
+            }
         }
 
         return super.onKeyDown(keyCode, event);
+    }
+
+    private boolean exit() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - EXIT_TIME_LAST > EXIT_TIME) {
+            EXIT_TIME_LAST = currentTime;
+            mToast.showToast(getString(R.string.main_back_again));
+            return false;
+        } else {
+            EXIT_TIME_LAST = 0;
+            finish();
+            System.exit(0);
+            return true;
+        }
     }
 
     @Override
@@ -834,11 +863,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
-
-    private void hideShareLoading(){
+    private void hideShareLoading() {
         if (mLoadingDialog != null && mLoadingDialog.getDialog().isShowing()) {
             mLoadingDialog.dismiss();
         }
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager mConnectivityManager = (ConnectivityManager) getApplication()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+        if (mNetworkInfo != null) {
+            return mNetworkInfo.isAvailable();
+        }
+        return false;
     }
 
 }

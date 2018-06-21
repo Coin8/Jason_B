@@ -1,45 +1,48 @@
 package com.coin.b8.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.coin.b8.R;
 
 /**
- * Created by zhangyi on 2018/5/29.
+ * By Jason
  */
 public class MyToast {
 
-    //private static Toast mToast = null;
-
     private Activity mActivity;
+
+    private LayoutInflater mLayoutInflater;
 
     public MyToast(Activity activity) {
         this.mActivity = activity;
     }
 
-//    public static void showShortToast(String text) {
-//        if (TextUtils.isEmpty(text)) {
-//            return;
-//        }
-//        if (mToast == null) {
-//            mToast = Toast.makeText(B8Application.getIntstance(), text, Toast.LENGTH_SHORT);
-//        } else {
-//            mToast.setText(text);
-//            mToast.setDuration(Toast.LENGTH_SHORT);
-//        }
-//        mToast.show();
-//    }
+    public MyToast(LayoutInflater layoutInflater) {
+        this.mLayoutInflater = layoutInflater;
+    }
 
     public void showToast(String text) {
-        LayoutInflater inflater = mActivity.getLayoutInflater();
-        View view = inflater.inflate(R.layout.toast_layout, null);
+        View view;
+        Context context;
+        if (mActivity != null) {
+            LayoutInflater inflater = mActivity.getLayoutInflater();
+            view = inflater.inflate(R.layout.toast_layout, null);
+            context = mActivity.getApplication();
+        } else if (mLayoutInflater != null) {
+            view = mLayoutInflater.inflate(R.layout.toast_layout, null);
+            context = mLayoutInflater.getContext();
+        } else {
+            return;
+        }
         TextView title = view.findViewById(R.id.toast_text);
         title.setText(text);
-        Toast toast = new Toast(mActivity.getApplication());
+        Toast toast = new Toast(context);
         toast.setGravity(Gravity.CENTER, 0, 0);//setGravity用来设置Toast显示的位置，相当于xml中的android:gravity或android:layout_gravity
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(view);
