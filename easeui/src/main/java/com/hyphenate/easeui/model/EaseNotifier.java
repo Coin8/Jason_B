@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -60,7 +61,7 @@ public class EaseNotifier {
             "%1个联系人发来%2条消息"
     };
 
-    protected static int notifyID = 0525; // start notification id
+    protected static final int notifyID = 0525; // start notification id
     protected static int foregroundNotifyID = 0555;
     private static final String b8_channel_id = "b8_channel_id";
     private static final String b8_channel_name = "b8_channel_name";
@@ -272,12 +273,15 @@ public class EaseNotifier {
             } catch (JsonSyntaxException e) {
                 e.printStackTrace();
             }
-
+            long requestCode = System.currentTimeMillis();
             if(b8MessageBodyModel != null && msgIntent != null){
                 msgIntent.putExtra("webUrl", b8MessageBodyModel.getUrl());
+                msgIntent.putExtra("time",requestCode);
                 notifyText = b8MessageBodyModel.getText();
             }
 
+
+            Log.e("zy","requestCode = "  + requestCode);
 
             PendingIntent pendingIntent = PendingIntent.getActivity(appContext, notifyID, msgIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -310,13 +314,12 @@ public class EaseNotifier {
 
 
             mBuilder.setContentTitle(contentTitle);
-
-
-
-
+            
 //            mBuilder.setTicker(notifyText);
             mBuilder.setContentText(notifyText);
-            mBuilder.setContentIntent(pendingIntent);
+            if(b8MessageBodyModel != null && !TextUtils.isEmpty(b8MessageBodyModel.getUrl())){
+                mBuilder.setContentIntent(pendingIntent);
+            }
             // mBuilder.setNumber(notificationNum);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){

@@ -306,6 +306,7 @@ public class DemoHelper {
             public Intent getLaunchIntent(EMMessage message) {
                 // you can set what activity you want display when user click the notification
                 Intent intent = new Intent(appContext, DetailActivity.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                // open calling activity if there is call
 //                if(isVideoCalling){
 //                    intent = new Intent(appContext, VideoCallActivity.class);

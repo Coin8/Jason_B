@@ -80,7 +80,7 @@ import io.reactivex.observers.DisposableObserver;
 
 
 public class DetailActivity extends BaseActivity implements View.OnClickListener, IMainView {
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = DetailActivity.class.getSimpleName();
     private ValueCallback<Uri> mUploadMessage;
     private ValueCallback<Uri[]> mUploadMessageForAndroid5;
     public static int FILECHOOSER_RESULTCODE = 1;
@@ -260,8 +260,20 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         initShare();
         printScreen();
         mMainPresenter = new MainPresenterImpl(this, this);
+
+        Log.e(TAG,"onCreate");
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleData();
+        if(mWebView != null){
+            mWebView.loadUrl(mWebViewUrl);
+        }
+        Log.e(TAG,"onNewIntent");
+    }
 
     private void initShare() {
         /**
