@@ -250,7 +250,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         initView();
         initNavigationView();
         if (!this.isNetworkConnected()) {
-            mToast.showToast(getString(R.string.network_disconnect));
+            // mToast.showToast(getString(R.string.network_disconnect));
+            this.initStartImage(false);
         } else {
             initWebView();
         }
@@ -290,7 +291,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void initWebView() {
-        mImageViewWaitting.setVisibility(View.VISIBLE);
+        this.initStartImage(true);
         WebSettings mSettings = mWebView.getSettings();
         mSettings.setJavaScriptEnabled(true);//开启javascript
         mSettings.setDomStorageEnabled(true);//开启DOM
@@ -878,6 +879,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             return mNetworkInfo.isAvailable();
         }
         return false;
+    }
+
+    private void initStartImage(boolean networkstate) {
+        if (networkstate) {
+            mImageViewWaitting.setImageResource(R.drawable.splash2);
+        } else {
+            mImageViewWaitting.setImageResource(R.drawable.network_fail);
+        }
+        mImageViewWaitting.setVisibility(View.VISIBLE);
     }
 
 }

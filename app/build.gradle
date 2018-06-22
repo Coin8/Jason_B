@@ -7,8 +7,8 @@ android {
         applicationId "com.coin.b8"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 1000000
-        versionName "1.0.0"
+        versionCode 1000022
+        versionName "1.0.0.22"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
