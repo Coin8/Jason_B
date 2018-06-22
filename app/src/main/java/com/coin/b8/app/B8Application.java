@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.coin.b8.help.DemoHelper;
 import com.coin.b8.update.UpdateManager;
+import com.coin.b8.utils.CommonUtils;
 import com.umeng.commonsdk.UMConfigure;
 
 /**
@@ -21,13 +22,15 @@ public class B8Application extends Application {
 
     private NetWorkStateReceiver mNetWorkReceiver;
 
-    private static final String CHANNEL = "001";
+    private String CHANNEL = "001";
 
     private static final String UMENG_KEY = "5b29bc71b27b0a2f4e000014";
 
     @Override
     public void onCreate() {
         super.onCreate();
+        CHANNEL = CommonUtils.getChannelNo(this);
+        Log.e("B8Application","channel_no = " + CHANNEL);
         mB8Application = this;
         mHandler = new Handler();
         DemoHelper.getInstance().init(mB8Application);

@@ -12,6 +12,7 @@ android {
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+        manifestPlaceholders = [CHANNEL_NO:"00000001"]
 
         ndk {
             abiFilters "armeabi", "armeabi-v7a"
@@ -46,6 +47,70 @@ android {
 //            buildConfigField "boolean", "LOG_DEBUG", "true"
         }
     }
+    flavorDimensions "b8"
+    productFlavors{
+
+        //华为应用商店
+        huawei {
+            dimension "b8"
+            manifestPlaceholders = [CHANNEL_NO:"00000001"]
+        }
+        //锤子应用商店
+        chuizi {
+            dimension "b8"
+            manifestPlaceholders = [CHANNEL_NO:"00000002"]
+        }
+        //安智市场
+        androidStore {
+            dimension "b8"
+            manifestPlaceholders = [CHANNEL_NO:"00000003"]
+        }
+        //搜狗手机助手
+        sougou {
+            dimension "b8"
+            manifestPlaceholders = [CHANNEL_NO:"00000004"]
+        }
+        //豌豆荚
+        wandoujia {
+            dimension "b8"
+            manifestPlaceholders = [CHANNEL_NO:"00000005"]
+        }
+        //酷安
+        kuan {
+            dimension "b8"
+            manifestPlaceholders = [CHANNEL_NO:"00000006"]
+        }
+        //Google Play
+        googleplay {
+            dimension "b8"
+            manifestPlaceholders = [CHANNEL_NO:"00000007"]
+        }
+        //腾讯应用宝
+        tencent {
+            dimension "b8"
+            manifestPlaceholders = [CHANNEL_NO:"00000008"]
+        }
+        //魅族应用商店
+        meizu {
+            dimension "b8"
+            manifestPlaceholders = [CHANNEL_NO:"00000009"]
+        }
+        //应用汇
+        yingyonghui {
+            dimension "b8"
+            manifestPlaceholders = [CHANNEL_NO:"00000010"]
+        }
+        //小米应用商店
+        xiaomi {
+            dimension "b8"
+            manifestPlaceholders = [CHANNEL_NO:"00000011"]
+        }
+        //百度手机助手
+        baidu {
+            dimension "b8"
+            manifestPlaceholders = [CHANNEL_NO:"00000012"]
+        }
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -57,10 +122,10 @@ android {
             //def date = new Date().format("yyyyMMdd" , TimeZone.getTimeZone("Asia/Shanghai"))
             def date = new Date().format("yyyyMMdd", TimeZone.getTimeZone("GMT+08"))
             if (variant.buildType.name.equals('debug')) {
-                outputFileName = "B8_${date}_${versionName}.apk"
+                outputFileName = "B8_${date}_${versionName}_${variant.productFlavors[0].name}_${variant.productFlavors[0].manifestPlaceholders['CHANNEL_NO']}.apk"
             }
             if (variant.buildType.name.equals('release')) {
-                outputFileName = "B8_${date}_${versionName}.apk"
+                outputFileName = "B8_${date}_${versionName}_${variant.productFlavors[0].name}_${variant.productFlavors[0].manifestPlaceholders['CHANNEL_NO']}.apk"
             }
         }
     }
