@@ -21,6 +21,8 @@ public class B8Application extends Application {
 
     private NetWorkStateReceiver mNetWorkReceiver;
 
+    private static final String CHANNEL = "001";
+
     private static final String UMENG_KEY = "5b29bc71b27b0a2f4e000014";
 
     @Override
@@ -31,13 +33,13 @@ public class B8Application extends Application {
         DemoHelper.getInstance().init(mB8Application);
         UpdateManager.setDebuggable(true);
         UpdateManager.setWifiOnly(false);
-        UpdateManager.setUrl("b8", "lll");
+        UpdateManager.setUrl("b8", CHANNEL);
         this.registerNetWorkReceiver();
         this.initUMeng();
     }
 
     private void initUMeng() {
-        UMConfigure.init(this, UMENG_KEY, "001", UMConfigure.DEVICE_TYPE_PHONE, null);
+        UMConfigure.init(this, UMENG_KEY, CHANNEL, UMConfigure.DEVICE_TYPE_PHONE, null);
         UMConfigure.setLogEnabled(false);
     }
 
