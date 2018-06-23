@@ -110,6 +110,12 @@ android {
             dimension "b8"
             manifestPlaceholders = [CHANNEL_NO:"00000012"]
         }
+
+        //官网渠道
+        official {
+            dimension "b8"
+            manifestPlaceholders = [CHANNEL_NO:"00000013"]
+        }
     }
 
     compileOptions {
