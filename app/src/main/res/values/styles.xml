@@ -22,6 +22,12 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
+    <style name="SplashThemeEnd" parent="@style/BaseAppTheme">
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:fitsSystemWindows">false</item>
+    </style>
+
 
     <!--侧滑菜单分割线样式-->
     <style name="ViewLineNav">

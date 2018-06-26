@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
 import com.coin.b8.R;
+import com.coin.b8.utils.StatusUtil;
 import com.umeng.analytics.MobclickAgent;
 
 
@@ -20,8 +21,10 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setTheme(R.style.SplashThemeEnd);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        StatusUtil.immersive(this);
         mImageView = findViewById(R.id.splash_image);
         mImageView.setImageResource(R.drawable.splash);
         mMyCountDownTimer = new MyCountDownTimer(2 * 1000);
