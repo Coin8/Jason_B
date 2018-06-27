@@ -14,27 +14,13 @@ import java.util.Map;
 
 /**
  * Created by zhangyi on 2018/6/20.
- */
+        */
 public class CommonUtils {
-
 
     public static Map<String, String> getHeaders(Context context) {
         Map<String, String> map = new HashMap<>();
-        map.put("channelCode", getChannelNo(context));
+        map.put("channelCode", AppUtil.getChannelNo(context));
         return map;
-    }
-
-    public static String getChannelNo(Context context) {
-        try {
-            ApplicationInfo appInfo = context.getPackageManager()
-                    .getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-            if (appInfo != null) {
-                return appInfo.metaData.getString("CHANNEL_NO");
-            }
-        } catch (Exception e) {
-            Log.e("CommonUtils", e.toString());
-        }
-        return null;
     }
 
     public static byte[] bmpToByteArray(final Bitmap bmp, final boolean needRecycle) {
@@ -43,14 +29,12 @@ public class CommonUtils {
         if (needRecycle) {
             bmp.recycle();
         }
-
         byte[] result = output.toByteArray();
         try {
             output.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return result;
     }
 

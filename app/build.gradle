@@ -49,6 +49,11 @@ android {
     }
     flavorDimensions "b8"
     productFlavors{
+        // 开发测试渠道
+        dev {
+            dimension "b8"
+            manifestPlaceholders = [CHANNEL_NO:"99999999"]
+        }
 
         //华为应用商店
         huawei {

@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.coin.b8.help.DemoHelper;
 import com.coin.b8.update.UpdateManager;
-import com.coin.b8.utils.CommonUtils;
+import com.coin.b8.utils.AppUtil;
 import com.umeng.commonsdk.UMConfigure;
 
 /**
@@ -29,8 +29,8 @@ public class B8Application extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        CHANNEL = CommonUtils.getChannelNo(this);
-        Log.e("B8Application","channel_no = " + CHANNEL);
+        CHANNEL = AppUtil.getChannelNo(this);
+        Log.e("B8Application", "channel_no = " + CHANNEL);
         mB8Application = this;
         mHandler = new Handler();
         DemoHelper.getInstance().init(mB8Application);
@@ -39,6 +39,13 @@ public class B8Application extends Application {
         UpdateManager.setUrl("b8", CHANNEL);
         this.registerNetWorkReceiver();
         this.initUMeng();
+    }
+
+    /**
+     * Init APP environment. Such as, log, host......
+     */
+    private void initAppEnv() {
+
     }
 
     private void initUMeng() {
