@@ -151,6 +151,15 @@
             android:name="CHANNEL_NO"
             android:value="\ ${CHANNEL_NO}"/>
 
+        <!-- true-open; false-close -->
+        <meta-data
+            android:name="LOG"
+            android:value="${ONOFF}"/>
+
+        <meta-data
+            android:name="MODE"
+            android:value="${DEBUG}"/>
+
     </application>
 
 </manifest>
