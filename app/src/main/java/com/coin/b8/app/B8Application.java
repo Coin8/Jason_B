@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
+import com.coin.b8.constant.Constants;
 import com.coin.b8.help.DemoHelper;
 import com.coin.b8.update.UpdateManager;
 import com.coin.b8.utils.AppUtil;
@@ -22,15 +23,14 @@ public class B8Application extends Application {
 
     private NetWorkStateReceiver mNetWorkReceiver;
 
-    private String CHANNEL = "001";
+    private String CHANNEL = "999999999";
 
     private static final String UMENG_KEY = "5b29bc71b27b0a2f4e000014";
 
     @Override
     public void onCreate() {
         super.onCreate();
-        CHANNEL = AppUtil.getChannelNo(this);
-        Log.e("B8Application", "channel_no = " + CHANNEL);
+        this.initAppEnv();
         mB8Application = this;
         mHandler = new Handler();
         DemoHelper.getInstance().init(mB8Application);
@@ -45,12 +45,20 @@ public class B8Application extends Application {
      * Init APP environment. Such as, log, host......
      */
     private void initAppEnv() {
-
+        AppLogger.setOnOff(AppUtil.getLogOnOff(this));
+        CHANNEL = AppUtil.getChannelNo(this);
+        if (AppUtil.getMode(this)) {
+            Constants.DEBUG = true;
+            Constants.BASEURL = Constants.DEBUG_URL;
+        } else {
+            Constants.DEBUG = false;
+            Constants.BASEURL = Constants.ONLINE_URL;
+        }
     }
 
     private void initUMeng() {
         UMConfigure.init(this, UMENG_KEY, CHANNEL, UMConfigure.DEVICE_TYPE_PHONE, null);
-        UMConfigure.setLogEnabled(false);
+        UMConfigure.setLogEnabled(AppLogger.getLogStatus());
     }
 
     @Override

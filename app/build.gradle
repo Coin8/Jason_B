@@ -12,7 +12,7 @@ android {
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-        manifestPlaceholders = [CHANNEL_NO:"00000001"]
+        manifestPlaceholders = [CHANNEL_NO: "00000001"]
 
         ndk {
             abiFilters "armeabi", "armeabi-v7a"
@@ -48,78 +48,76 @@ android {
         }
     }
     flavorDimensions "b8"
-    productFlavors{
+    productFlavors {
         // 开发测试渠道
         dev {
             dimension "b8"
-            manifestPlaceholders = [CHANNEL_NO:"99999999"]
+            manifestPlaceholders = [CHANNEL_NO: "99999999", ONOFF: true, DEBUG: false]
         }
-
         //华为应用商店
         huawei {
             dimension "b8"
-            manifestPlaceholders = [CHANNEL_NO:"00000001"]
+            manifestPlaceholders = [CHANNEL_NO: "00000001", ONOFF: false, DEBUG: false]
         }
         //锤子应用商店
         chuizi {
             dimension "b8"
-            manifestPlaceholders = [CHANNEL_NO:"00000002"]
+            manifestPlaceholders = [CHANNEL_NO: "00000002", ONOFF: false, DEBUG: false]
         }
         //安智市场
         androidStore {
             dimension "b8"
-            manifestPlaceholders = [CHANNEL_NO:"00000003"]
+            manifestPlaceholders = [CHANNEL_NO: "00000003", ONOFF: false, DEBUG: false]
         }
         //搜狗手机助手
         sougou {
             dimension "b8"
-            manifestPlaceholders = [CHANNEL_NO:"00000004"]
+            manifestPlaceholders = [CHANNEL_NO: "00000004", ONOFF: false, DEBUG: false]
         }
         //豌豆荚
         wandoujia {
             dimension "b8"
-            manifestPlaceholders = [CHANNEL_NO:"00000005"]
+            manifestPlaceholders = [CHANNEL_NO: "00000005", ONOFF: false, DEBUG: false]
         }
         //酷安
         kuan {
             dimension "b8"
-            manifestPlaceholders = [CHANNEL_NO:"00000006"]
+            manifestPlaceholders = [CHANNEL_NO: "00000006", ONOFF: false, DEBUG: false]
         }
         //Google Play
         googleplay {
             dimension "b8"
-            manifestPlaceholders = [CHANNEL_NO:"00000007"]
+            manifestPlaceholders = [CHANNEL_NO: "00000007", ONOFF: false, DEBUG: false]
         }
         //腾讯应用宝
         tencent {
             dimension "b8"
-            manifestPlaceholders = [CHANNEL_NO:"00000008"]
+            manifestPlaceholders = [CHANNEL_NO: "00000008", ONOFF: false, DEBUG: false]
         }
         //魅族应用商店
         meizu {
             dimension "b8"
-            manifestPlaceholders = [CHANNEL_NO:"00000009"]
+            manifestPlaceholders = [CHANNEL_NO: "00000009", ONOFF: false, DEBUG: false]
         }
         //应用汇
         yingyonghui {
             dimension "b8"
-            manifestPlaceholders = [CHANNEL_NO:"00000010"]
+            manifestPlaceholders = [CHANNEL_NO: "00000010", ONOFF: false, DEBUG: false]
         }
         //小米应用商店
         xiaomi {
             dimension "b8"
-            manifestPlaceholders = [CHANNEL_NO:"00000011"]
+            manifestPlaceholders = [CHANNEL_NO: "00000011", ONOFF: false, DEBUG: false]
         }
         //百度手机助手
         baidu {
             dimension "b8"
-            manifestPlaceholders = [CHANNEL_NO:"00000012"]
+            manifestPlaceholders = [CHANNEL_NO: "00000012", ONOFF: false, DEBUG: false]
         }
-
         //官网渠道
         official {
             dimension "b8"
-            manifestPlaceholders = [CHANNEL_NO:"00000013"]
+            manifestPlaceholders = [CHANNEL_NO: "00000013", ONOFF: false, DEBUG: false]
         }
     }
 
