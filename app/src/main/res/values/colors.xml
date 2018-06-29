@@ -35,4 +35,7 @@
 
     <!--侧边栏分割线-->
     <color name="colorNavLine">#E0E0E0</color>
+
+    <color name="home_top_text_select">#191919</color>
+    <color name="home_top_text_default">#9b9b9b</color>
 </resources>

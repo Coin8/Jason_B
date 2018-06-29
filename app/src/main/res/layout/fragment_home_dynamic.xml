@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+    <!--<android.support.design.widget.TabLayout-->
+        <!--android:id="@+id/tablayout_dynamic"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@color/white"-->
+        <!--app:tabIndicatorColor="@color/blue"-->
+        <!--app:tabSelectedTextColor="@color/home_top_text_select"-->
+        <!--app:tabTextColor="@color/home_top_text_default"-->
+        <!--app:tabTextAppearance="@style/TabLayoutTextStyle"-->
+        <!--app:tabIndicatorHeight="3dp"-->
+        <!--app:tabMode="scrollable"/>-->
+
+    <com.flyco.tablayout.SlidingTabLayout
+        android:id="@+id/tablayout_dynamic"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+        app:tl_textsize="16sp"
+        app:tl_textSelectColor="@color/home_top_text_select"
+        app:tl_textUnselectColor="@color/home_top_text_default"
+        app:tl_indicator_corner_radius="1.5dp"
+        app:tl_indicator_height="3dp"
+        app:tl_indicator_width="20dp"
+        app:tl_indicator_color="@color/blue"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lineColor"/>
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_dynamic"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

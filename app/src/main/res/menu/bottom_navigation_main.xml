@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/tab_market"
+        android:enabled="true"
+        android:icon="@drawable/home_market_selector"
+        android:title="@string/home_market"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/tab_dynamic"
+        android:enabled="true"
+        android:icon="@drawable/home_dynamic_selector"
+        android:title="@string/home_dynamic"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/tab_select_coin"
+        android:enabled="true"
+        android:icon="@drawable/home_select_coin_selector"
+        android:title="@string/home_select_coin"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/tab_mine"
+        android:enabled="true"
+        android:icon="@drawable/home_mine_selector"
+        android:title="@string/home_mine"
+        app:showAsAction="ifRoom" />
+</menu>

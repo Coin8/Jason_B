@@ -167,6 +167,7 @@ dependencies {
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     //implementation files('libs/umeng-analytics-7.5.3.jar')
     //implementation files('libs/umeng-common-1.5.3.jar')
+    compile 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
 }
 
 apply plugin: 'com.google.gms.google-services'

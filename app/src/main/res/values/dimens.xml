@@ -12,5 +12,9 @@
     <dimen name="feedback_marin_20">20dp</dimen>
     <dimen name="feedback_marin_25">25dp</dimen>
 
+    <dimen name="bottom_text_size">16sp</dimen>
+
+    <dimen name="tab_padding">5dp</dimen>
+
 
 </resources>

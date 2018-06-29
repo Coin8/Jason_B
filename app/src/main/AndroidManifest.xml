@@ -23,6 +23,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <activity android:name="com.coin.b8.ui.activity.HomeActivity"
+            android:theme="@style/BaseAppTheme"
+            android:screenOrientation="portrait">
+        </activity>
+
         <activity android:name="com.coin.b8.ui.activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
