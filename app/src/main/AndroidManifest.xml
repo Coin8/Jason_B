@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name="com.coin.b8.app.B8Application"
@@ -72,6 +73,16 @@
             android:theme="@style/AppTheme.Fullscreen.Translucent">
         </activity>
 
+        <activity
+            android:name=".ui.activity.CollectionActivity"
+            android:theme="@style/BaseAppTheme"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.activity.PersonalInfoActivity"
+            android:theme="@style/BaseAppTheme"
+            android:screenOrientation="portrait"/>
+
         <provider
             android:name=".update.UpdateFileProvider"
             android:authorities="${applicationId}.updatefileprovider"
@@ -80,6 +91,16 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/update_cache_path"/>
+        </provider>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.chosehead"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
         </provider>
 
         <!-- mi push -->

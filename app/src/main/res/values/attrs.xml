@@ -6,6 +6,7 @@
         <attr name="setting_title" format="string" />
         <attr name="setting_right_text" format="string" />
         <attr name="setting_red_dot" format="reference|boolean" />
+        <attr name="setting_title_image" format="reference"/><!--箭头图片-->
     </declare-styleable>
 
 
@@ -30,6 +31,13 @@
         <attr name="sb_show_indicator" format="reference|boolean"/>
         <attr name="sb_background" format="reference|color"/>
         <attr name="sb_enable_effect" format="reference|boolean"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="SwipeMenuLayout">
+        <attr name="swipeEnable" format="boolean"/>
+        <attr name="ios" format="boolean"/>
+        <attr name="leftSwipe" format="boolean"/>
     </declare-styleable>
 
 </resources>

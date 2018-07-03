@@ -41,4 +41,16 @@
     <string name="home_dynamic_quick_news">快讯</string>
     <string name="home_dynamic_important_news">要闻</string>
 
+    <string name="mine_invite_friend">邀请好友</string>
+    <string name="mine_collection">我的收藏</string>
+    <string name="mine_earl_warning_record">预警记录</string>
+    <string name="mine_business_cooperation">商务合作</string>
+    <string name="mine_system_setting">系统设置</string>
+    <string name="mine_check_update">检查更新</string>
+    <string name="already_new_version">已是最新版本</string>
+    <string name="find_new_version">发现新版本</string>
+    <string name="mine_name_default">无</string>
+    <string name="unlogin">未登录</string>
+    <string name="about_us">关于我们</string>
+    <string name="personal_info">个人中心</string>
 </resources>

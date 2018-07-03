@@ -14,5 +14,6 @@ public class Constants {
     public static final int SHARE_WXCHAT = 0;
     public static final int SHARE_WXCIRCLE = 1;
     public static boolean MAIN_ACTIVITY_IS_ACTIVE = false;
+    public static String LOCAL_HEAD_ICON_FILE_NAME = "local_head_icon.jpg";
 
 }

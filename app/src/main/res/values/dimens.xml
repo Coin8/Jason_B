@@ -15,6 +15,6 @@
     <dimen name="bottom_text_size">16sp</dimen>
 
     <dimen name="tab_padding">5dp</dimen>
-
+    <dimen name="line_width">1dp</dimen>
 
 </resources>

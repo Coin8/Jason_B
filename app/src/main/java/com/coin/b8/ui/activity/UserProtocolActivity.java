@@ -25,28 +25,18 @@ import com.coin.b8.constant.Constants;
 import com.coin.b8.utils.MyToast;
 
 public class UserProtocolActivity extends BaseActivity {
-
-    private TextView mToolbarTitle;
-    private Toolbar mToolbar;
-
     private MyToast mToast;
-
     private LinearLayout mLoading;
     private WebView mWebView;
-
-    private ImageView mViewBack;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_protocol);
         mToast = new MyToast(this);
-        mToolbar = findViewById(R.id.toolbar);
-        mToolbarTitle = mToolbar.findViewById(R.id.toolbar_title);
-        mViewBack = findViewById(R.id.toolbar_back);
         mLoading = findViewById(R.id.layout_loading);
         mWebView = findViewById(R.id.webView);
-        this.initToolBar();
+        setInitToolBar("用户协议");
         if (!this.isNetworkConnected()) {
             mToast.showToast(getString(R.string.network_disconnect));
         } else {
@@ -63,19 +53,6 @@ public class UserProtocolActivity extends BaseActivity {
             }
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    private void initToolBar() {
-        super.initToolBar(mToolbar, "");
-        mToolbarTitle.setText("用户协议");
-        TextPaint tp = mToolbarTitle.getPaint();
-        tp.setFakeBoldText(true);
-        mViewBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
     private void initWeb() {

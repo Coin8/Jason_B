@@ -24,9 +24,6 @@ import com.coin.b8.utils.MyToast;
  */
 public class SettingActivity extends BaseActivity implements View.OnClickListener, ISettingView {
 
-    private Toolbar mToolbar;
-    private TextView mToolbarTitle;
-    private ImageView mViewBack;
     private SettingItemView mAboutUs;
     private SettingItemView mCleanCache;
     private SetttingPresenterImpl mSetttingPresenter;
@@ -41,7 +38,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         mToast = new MyToast(this);
         initView();
         initData();
-        initToolBar();
+        setInitToolBar(getResources().getString(R.string.mine_system_setting));
         mSetttingPresenter.initCache();
     }
 
@@ -73,9 +70,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initView() {
-        mToolbar = findViewById(R.id.toolbar);
-        mToolbarTitle = mToolbar.findViewById(R.id.toolbar_title);
-        mViewBack = findViewById(R.id.toolbar_back);
         mAboutUs = findViewById(R.id.item_about_us);
         mCleanCache = findViewById(R.id.item_clean_cache);
         mPushMangerSwitchButton = findViewById(R.id.switch_button);
@@ -93,18 +87,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         });
     }
 
-    private void initToolBar() {
-        super.initToolBar(mToolbar, "");
-        mToolbarTitle.setText("系统设置");
-        TextPaint tp = mToolbarTitle.getPaint();
-        tp.setFakeBoldText(true);
-        mViewBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
 
 
     @Override

@@ -1,15 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.coin.b8.ui.view.BounceScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/home_mine"
-        android:textColor="@color/home_top_text_select"
-        android:textSize="18sp"/>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/lineColor">
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/user_layout"
+            android:layout_width="match_parent"
+            android:layout_height="145dp"
+            android:orientation="horizontal"
+            android:background="@drawable/ripple_one_item_bg">
+
+            <ImageView
+                android:id="@+id/user_icon"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_marginLeft="15dp"
+                android:layout_gravity="center_vertical"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_head"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mine_name_default"
+                    android:textSize="20sp"
+                    android:textColor="@color/title_text_color"/>
+                <TextView
+                    android:id="@+id/user_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/unlogin"
+                    android:textSize="14sp"
+                    android:textColor="#9b9b9b"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <com.coin.b8.ui.view.SettingItemView
+            android:id="@+id/mine_invite_friends"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/ripple_one_item_bg"
+            app:setting_red_dot="false"
+            app:setting_right_text=""
+            app:setting_title="@string/mine_invite_friend"
+            app:setting_title_image="@drawable/icon_invite_friends"/>
+
+        <View
+            android:layout_width="15dp"
+            android:layout_height="1dp"
+            android:background="@color/white"/>
+        <com.coin.b8.ui.view.SettingItemView
+            android:id="@+id/mine_collection"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/ripple_one_item_bg"
+            app:setting_red_dot="false"
+            app:setting_right_text=""
+            app:setting_title="@string/mine_collection"
+            app:setting_title_image="@drawable/icon_mine_collection"/>
+
+        <com.coin.b8.ui.view.SettingItemView
+            android:id="@+id/mine_early_warning_record"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/ripple_one_item_bg"
+            app:setting_red_dot="false"
+            app:setting_right_text=""
+            app:setting_title="@string/mine_earl_warning_record"
+            app:setting_title_image="@drawable/icon_earl_warning"/>
+
+        <View
+            android:layout_width="15dp"
+            android:layout_height="1dp"
+            android:background="@color/white"/>
+
+        <com.coin.b8.ui.view.SettingItemView
+            android:id="@+id/mine_business_cooperation"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/ripple_one_item_bg"
+            app:setting_red_dot="false"
+            app:setting_right_text=""
+            app:setting_title="@string/mine_business_cooperation"
+            app:setting_title_image="@drawable/icon_business"/>
+        <View
+            android:layout_width="15dp"
+            android:layout_height="1dp"
+            android:background="@color/white"/>
+        <com.coin.b8.ui.view.SettingItemView
+            android:id="@+id/mine_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/ripple_one_item_bg"
+            app:setting_red_dot="false"
+            app:setting_right_text=""
+            app:setting_title="@string/feedback_title"
+            app:setting_title_image="@drawable/icon_feedback"/>
+
+        <com.coin.b8.ui.view.SettingItemView
+            android:id="@+id/mine_system_setting"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/ripple_one_item_bg"
+            app:setting_red_dot="false"
+            app:setting_right_text=""
+            app:setting_title="@string/mine_system_setting"
+            app:setting_title_image="@drawable/icon_system_setting"/>
+        <View
+            android:layout_width="15dp"
+            android:layout_height="1dp"
+            android:background="@color/white"/>
+        <com.coin.b8.ui.view.SettingItemView
+            android:id="@+id/mine_check_update"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/ripple_one_item_bg"
+            app:setting_red_dot="false"
+            app:setting_right_text=""
+            app:setting_title="@string/mine_check_update"
+            app:setting_title_image="@drawable/icon_check_update"/>
+
+    </LinearLayout>
+
+</com.coin.b8.ui.view.BounceScrollView>

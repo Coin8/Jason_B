@@ -5,10 +5,14 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,5 +42,23 @@ public class CommonUtils {
         return result;
     }
 
+    public static String millis2String(final long millis, @NonNull final DateFormat format) {
+        return format.format(new Date(millis));
+    }
+
+    public static String getCachePath(Context context) {
+        String cachePath = null;
+
+        if (Environment.MEDIA_MOUNTED.equals(Environment
+                .getExternalStorageState())
+                || !Environment.isExternalStorageRemovable()) {
+
+            cachePath = context.getExternalCacheDir().getPath();
+
+        } else {
+            cachePath = context.getCacheDir().getPath();
+        }
+        return cachePath;
+    }
 
 }

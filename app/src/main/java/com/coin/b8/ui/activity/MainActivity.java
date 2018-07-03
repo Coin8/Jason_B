@@ -243,9 +243,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         super.onCreate(savedInstanceState);
         mToast = new MyToast(this);
         mMainPresenter = new MainPresenterImpl(this, this);
-        UpdateManager.setDebuggable(true);
-        UpdateManager.setWifiOnly(false);
-        UpdateManager.setUrl("b8", "lll");
         setContentView(R.layout.activity_main);
         initView();
         initNavigationView();
@@ -472,43 +469,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 .start();
     }
 
-    public void showSettingDialog(Context context, final List<String> permissions) {
-        List<String> permissionNames = Permission.transformText(context, permissions);
-        String message = context.getString(R.string.message_permission_always_failed, TextUtils.join("\n", permissionNames));
 
-        new AlertDialog.Builder(context)
-                .setCancelable(false)
-                .setTitle(R.string.title_dialog)
-                .setMessage(message)
-                .setPositiveButton(R.string.setting, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        setPermission();
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .show();
-    }
-
-    /**
-     * Set permissions.
-     */
-    private void setPermission() {
-        AndPermission.with(this)
-                .runtime()
-                .setting()
-                .onComeback(new Setting.Action() {
-                    @Override
-                    public void onAction() {
-                        Toast.makeText(MainActivity.this, R.string.message_setting_comeback, Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .start();
-    }
 
     private void openFileChooserImpl(ValueCallback<Uri> uploadMsg) {
         mUploadMessage = uploadMsg;

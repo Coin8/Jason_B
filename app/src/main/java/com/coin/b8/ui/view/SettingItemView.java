@@ -2,6 +2,7 @@ package com.coin.b8.ui.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -22,6 +23,8 @@ public class SettingItemView extends FrameLayout {
     private TextView tv_title;  //标题
     private TextView tv_right;  //右侧文字
     private ImageView iv_red_dot;   //小红点
+    private Drawable mDrawable;
+    private ImageView mTitleImage;
 
     private String title;
     private String rightText;
@@ -55,6 +58,9 @@ public class SettingItemView extends FrameLayout {
                 case R.styleable.SettingView_setting_right_text:
                     rightText = typedArray.getString(R.styleable.SettingView_setting_right_text);
                     break;
+                case R.styleable.SettingView_setting_title_image:
+                    mDrawable = typedArray.getDrawable(R.styleable.SettingView_setting_title_image);
+                    break;
             }
         }
         //销毁
@@ -71,6 +77,11 @@ public class SettingItemView extends FrameLayout {
         tv_title = (TextView) findViewById(R.id.setting_tv_title);
         tv_right = (TextView) findViewById(R.id.setting_tv_right);
         iv_red_dot = (ImageView) findViewById(R.id.setting_iv_red);
+        mTitleImage = findViewById(R.id.title_image);
+        if(mDrawable != null){
+            mTitleImage.setVisibility(VISIBLE);
+            mTitleImage.setImageDrawable(mDrawable);
+        }
 
         //赋值
         tv_title.setText(title);

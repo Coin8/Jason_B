@@ -19,19 +19,13 @@ import com.coin.b8.R;
 public class AboutUsActivity extends BaseActivity {
 
     private TextView mUerProtocol;
-    private TextView mToolbarTitle;
-    private Toolbar mToolbar;
-    private ImageView mViewBack;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_us);
-        mToolbar = findViewById(R.id.toolbar);
-        mToolbarTitle = mToolbar.findViewById(R.id.toolbar_title);
         mUerProtocol = findViewById(R.id.user_protocol);
-        mViewBack = findViewById(R.id.toolbar_back);
-        initToolBar();
+        setInitToolBar(getResources().getString(R.string.about_us));
 
         mUerProtocol.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,18 +54,5 @@ public class AboutUsActivity extends BaseActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void initToolBar() {
-        initToolBar(mToolbar, "");
-        mToolbarTitle.setText("关于我们");
-        TextPaint tp = mToolbarTitle.getPaint();
-        tp.setFakeBoldText(true);
-        mViewBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 }
