@@ -21,9 +21,15 @@ import android.widget.TextView;
 import com.coin.b8.R;
 import com.coin.b8.app.AppLogger;
 import com.coin.b8.constant.Constants;
+import com.coin.b8.help.PreferenceHelper;
+import com.coin.b8.model.ModifyUserHeadResponse;
+import com.coin.b8.model.ModifyUserResponse;
+import com.coin.b8.model.UserInfoResponse;
 import com.coin.b8.permission.RuntimeRationale;
 import com.coin.b8.ui.dialog.CustomSelectDialog;
 import com.coin.b8.ui.dialog.InputDialog;
+import com.coin.b8.ui.iView.IPersonalInfoView;
+import com.coin.b8.ui.presenter.PersonalInfoPresenterImpl;
 import com.coin.b8.utils.CommonUtils;
 import com.coin.b8.utils.GlideUtil;
 import com.coin.b8.utils.MyToast;
@@ -40,7 +46,7 @@ import java.util.List;
 /**
  * Created by zhangyi on 2018/7/2.
  */
-public class PersonalInfoActivity extends BaseActivity implements View.OnClickListener{
+public class PersonalInfoActivity extends BaseActivity implements View.OnClickListener,IPersonalInfoView{
     //相册请求码
     private static final int ALBUM_REQUEST_CODE = 1;
     //相机请求码
@@ -53,17 +59,21 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
     private View mSexLayout;
     private ImageView mImageUserIcon;
     private TextView mLoginBtn;
+    private PersonalInfoPresenterImpl mPersonalInfoPresenter;
 
     //调用照相机返回图片文件
     private File tempFile;
     private String mAuthority = "";
     private String mLocalHeadIconPath;
     private MyToast mMyToast;
+    private boolean mIsHeadNewCreate = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_info);
+        mLocalHeadIconPath = getFilesDir() +  Constants.LOCAL_HEAD_ICON_FILE_NAME;
+        mPersonalInfoPresenter = new PersonalInfoPresenterImpl(this);
         setInitToolBar(getString(R.string.personal_info));
         mNickName = findViewById(R.id.nicheng_text);
         mSex = findViewById(R.id.xb_text);
@@ -77,14 +87,58 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
         mLoginBtn.setOnClickListener(this);
         mAuthority = getPackageName() + ".chosehead";
         mMyToast = new MyToast(this);
-        initHead();
+        if(PreferenceHelper.getIsLogin(this)){
+            mLoginBtn.setText("切换账号");
+        }
+    }
+
+    private void updateUser(){
+        String name = PreferenceHelper.getNickName(this);
+        if(TextUtils.isEmpty(name)){
+            mNickName.setText("无");
+        }else {
+            mNickName.setText(name);
+        }
+        if(PreferenceHelper.getSex(this) == 1){
+            mSex.setText("男");
+        }else {
+            mSex.setText("女");
+        }
+    }
+
+    private void updateHead(){
+        String iconUrl = PreferenceHelper.getHeadIcon(this);
+        if(!TextUtils.isEmpty(iconUrl)){
+            GlideUtil.setImageRes(this,mImageUserIcon,iconUrl,R.drawable.icon_head,R.drawable.icon_head,true);
+        }else {
+            mImageUserIcon.setImageResource(R.drawable.icon_head);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateUser();
+        if(mIsHeadNewCreate){
+            mIsHeadNewCreate = false;
+        }else {
+            updateHead();
+        }
+        mPersonalInfoPresenter.getUserInfo(PreferenceHelper.getUid(this));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPersonalInfoPresenter.onDetach();
     }
 
     private void initHead(){
-        mLocalHeadIconPath = getFilesDir() + Constants.LOCAL_HEAD_ICON_FILE_NAME;
         File file = new File(mLocalHeadIconPath);
         if(file.exists()){
+            mIsHeadNewCreate = true;
             GlideUtil.setImageRes(this,mImageUserIcon,file,R.drawable.icon_head,R.drawable.icon_head,true);
+            mPersonalInfoPresenter.modifyUserHead(mLocalHeadIconPath);
         }
     }
 
@@ -156,7 +210,11 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
                     mMyToast.showToast("请输入10个字符以内");
                     return;
                 }
-                mNickName.setText(inputText.trim());
+                mNickName.setText(inputText);
+                PreferenceHelper.setNickName(PersonalInfoActivity.this,inputText);
+                mPersonalInfoPresenter.modifyUserInfo(PreferenceHelper.getSex(PersonalInfoActivity.this),
+                        inputText,
+                        PreferenceHelper.getUid(PersonalInfoActivity.this));
             }
         },"");
         inputDialog.showDialog();
@@ -172,9 +230,18 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
                 switch (position) {
                     case 0:
                         mSex.setText(names.get(position));
+                        PreferenceHelper.setSex(PersonalInfoActivity.this,1);
+                        mPersonalInfoPresenter.modifyUserInfo(1,
+                                PreferenceHelper.getNickName(PersonalInfoActivity.this),
+                                PreferenceHelper.getUid(PersonalInfoActivity.this));
+
                         break;
                     case 1:
                         mSex.setText(names.get(position));
+                        PreferenceHelper.setSex(PersonalInfoActivity.this,2);
+                        mPersonalInfoPresenter.modifyUserInfo(2,
+                                PreferenceHelper.getNickName(PersonalInfoActivity.this),
+                                PreferenceHelper.getUid(PersonalInfoActivity.this));
                         break;
                 }
             }
@@ -323,18 +390,56 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
         if(file.exists()){
             file.delete();
         }
+
         try {
+            file.createNewFile();
             FileOutputStream fos = new FileOutputStream(file);
             bmp.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
             fos.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
+        bmp.recycle();
     }
 
     private void startLogin(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onUserInfo(UserInfoResponse userInfoResponse) {
+        if(userInfoResponse != null && userInfoResponse.getData() != null){
+            PreferenceHelper.saveUserInfo(this,userInfoResponse);
+            updateUser();
+            updateHead();
+        }
+    }
+
+    @Override
+    public void onModifyUserSuccess(ModifyUserResponse modifyUserResponse) {
 
     }
 
+    @Override
+    public void onModifyUserFail() {
+
+    }
+
+    @Override
+    public void onModifyUserHeadSuccess(ModifyUserHeadResponse modifyUserHeadResponse) {
+        if(modifyUserHeadResponse != null && modifyUserHeadResponse.isResult()){
+            PreferenceHelper.setHeadIcon(this,modifyUserHeadResponse.getData());
+            updateHead();
+            mMyToast.showToast("修改头像成功");
+        }else {
+            mMyToast.showToast("修改头像失败");
+        }
+    }
+
+    @Override
+    public void onModifyUserHeadFail() {
+        mMyToast.showToast("修改头像失败");
+    }
 }

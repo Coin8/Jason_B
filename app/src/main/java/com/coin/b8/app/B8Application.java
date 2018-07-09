@@ -11,6 +11,7 @@ import com.coin.b8.constant.Constants;
 import com.coin.b8.help.DemoHelper;
 import com.coin.b8.update.UpdateManager;
 import com.coin.b8.utils.AppUtil;
+import com.coin.b8.utils.CommonUtils;
 import com.umeng.commonsdk.UMConfigure;
 
 /**

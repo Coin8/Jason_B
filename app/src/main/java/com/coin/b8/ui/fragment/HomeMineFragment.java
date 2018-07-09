@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,10 +13,13 @@ import android.widget.TextView;
 import com.coin.b8.R;
 import com.coin.b8.app.AppLogger;
 import com.coin.b8.constant.Constants;
+import com.coin.b8.help.PreferenceHelper;
 import com.coin.b8.http.B8Api;
 import com.coin.b8.model.B8UpdateInfo;
 import com.coin.b8.model.FeedBackParameter;
 import com.coin.b8.model.FeedBackResult;
+import com.coin.b8.model.UserInfoResponse;
+import com.coin.b8.ui.activity.BusinessCooperationActivity;
 import com.coin.b8.ui.activity.CollectionActivity;
 import com.coin.b8.ui.activity.PersonalInfoActivity;
 import com.coin.b8.ui.activity.SettingActivity;
@@ -96,15 +100,42 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
 
         TextPaint tp = mViewUserName.getPaint();
         tp.setFakeBoldText(true);
+
+    }
+
+    private void initUser(){
         initHead();
+        initNickName();
+        if(PreferenceHelper.getIsLogin(getContext())) {
+            mViewUserId.setText("ID:" + PreferenceHelper.getUid(getContext()));
+        }
+        String icon = PreferenceHelper.getHeadIcon(getContext());
+        if(!TextUtils.isEmpty(icon)){
+            GlideUtil.setImageRes(getContext(),mUserImageView,icon,
+                    R.drawable.icon_head,
+                    R.drawable.icon_head,
+                    true);
+        }else {
+            mUserImageView.setImageResource(R.drawable.icon_head);
+        }
+    }
+
+    private void initNickName(){
+        String nickName = PreferenceHelper.getNickName(getContext());
+        if(TextUtils.isEmpty(nickName)){
+            int random = (int)((Math.random()*9+1)*1000000);
+            nickName = "币友"+random;
+            PreferenceHelper.setNickName(getContext(),nickName);
+        }
+        mViewUserName.setText(nickName);
     }
 
     private void initHead(){
-        String path = getContext().getFilesDir() + Constants.LOCAL_HEAD_ICON_FILE_NAME;
-        File file = new File(path);
-        if(file.exists()){
-            GlideUtil.setImageRes(getContext(),mUserImageView,file,R.drawable.icon_head,R.drawable.icon_head,true);
-        }
+//        String path = getContext().getFilesDir() + Constants.LOCAL_HEAD_ICON_FILE_NAME;
+//        File file = new File(path);
+//        if(file.exists()){
+//            GlideUtil.setImageRes(getContext(),mUserImageView,file,R.drawable.icon_head,R.drawable.icon_head,true);
+//        }
     }
 
     @Override
@@ -116,11 +147,24 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        initUser();
+        String uid  = PreferenceHelper.getUid(getContext());
+        if(TextUtils.isEmpty(uid)){
+            uid = "0";
+        }
+        mHomeMinePresenter.getUserInfo(uid);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         if (mWXShare != null) {
             mWXShare.unregister();
         }
+        mHomeMinePresenter.onDetach();
     }
 
     @Override
@@ -138,6 +182,7 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
             case R.id.mine_early_warning_record:
                 break;
             case R.id.mine_business_cooperation:
+                BusinessCooperationActivity.startBusinessCooperationActivity(getContext());
                 break;
             case R.id.mine_feedback:
                 startFeedBack();
@@ -241,6 +286,7 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
         });
         feedBackFragment.show(getFragmentManager(), "feedback");
     }
+
     private void startSetting() {
         Intent intent = new Intent(getContext(), SettingActivity.class);
         startActivity(intent);
@@ -303,5 +349,13 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onUpdateInfoError(Throwable e) {
 
+    }
+
+    @Override
+    public void onUserInfo(UserInfoResponse userInfoResponse) {
+        if(userInfoResponse != null && userInfoResponse.getData() != null){
+            PreferenceHelper.saveUserInfo(getContext(),userInfoResponse);
+            initUser();
+        }
     }
 }

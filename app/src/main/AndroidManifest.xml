@@ -83,6 +83,26 @@
             android:theme="@style/BaseAppTheme"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:theme="@style/BaseAppTheme"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.activity.RegisterActivity"
+            android:theme="@style/BaseAppTheme"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.activity.ForgetPasswordActivity"
+            android:theme="@style/BaseAppTheme"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.activity.BusinessCooperationActivity"
+            android:theme="@style/BaseAppTheme"
+            android:screenOrientation="portrait"/>
+
         <provider
             android:name=".update.UpdateFileProvider"
             android:authorities="${applicationId}.updatefileprovider"

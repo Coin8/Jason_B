@@ -48,7 +48,7 @@
             android:layout_toLeftOf="@id/right_arrows"
             android:layout_marginRight="5dp"
             android:layout_centerVertical="true"
-            android:text="123"
+            android:text="无"
             android:textColor="@color/setting_text_color"
             android:textSize="16sp"/>
     </RelativeLayout>

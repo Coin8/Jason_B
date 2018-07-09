@@ -53,4 +53,15 @@
     <string name="unlogin">未登录</string>
     <string name="about_us">关于我们</string>
     <string name="personal_info">个人中心</string>
+    <string name="b8_login">登录</string>
+    <string name="b8_register">注册</string>
+    <string name="login_account_hint">邮箱</string>
+    <string name="login_password_hint">密码</string>
+    <string name="register_password">密码(6-32位)</string>
+    <string name="register_password_confirm">确认密码</string>
+    <string name="register_submit">提交</string>
+    <string name="b8_forget_password">忘记密码</string>
+    <string name="business_cooperation">商务合作</string>
+    <string name="business_message">商务合作请发送邮箱至</string>
+    <string name="business_email">bifa2018vip@163.com</string>
 </resources>

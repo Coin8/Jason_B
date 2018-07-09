@@ -14,7 +14,7 @@ import java.io.File;
  */
 public class GlideUtil {
 
-    public static void setImageRes(Context context, ImageView imageView, String url,
+    public static void setImageRes(Context context, ImageView imageView, Object url,
                                     int placeHolderRes, int errorRes, boolean isCircle) {
         if (imageView == null || context == null) {
             AppLogger.e("Failed to set image resource to certain ImageView, since url or imageView or context is unavailable.");

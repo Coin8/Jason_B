@@ -35,6 +35,7 @@ public class BaseActivity extends AppCompatActivity {
     protected Toolbar mToolbar;
     protected TextView mToolbarTitle;
     protected ImageView mViewBack;
+    protected TextView mToolbarRightTitle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,6 +89,7 @@ public class BaseActivity extends AppCompatActivity {
         mToolbar = findViewById(R.id.toolbar);
         mToolbarTitle = mToolbar.findViewById(R.id.toolbar_title);
         mViewBack = findViewById(R.id.toolbar_back);
+        mToolbarRightTitle = mToolbar.findViewById(R.id.right_title);
         initToolBar(mToolbar, "");
         mToolbarTitle.setText(title);
         TextPaint tp = mToolbarTitle.getPaint();

@@ -28,4 +28,17 @@
         android:textColor="@color/title_text_color"
         android:textSize="18sp" />
 
+    <TextView
+        android:id="@+id/right_title"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingRight="15dp"
+        android:layout_gravity="right"
+        android:singleLine="true"
+        android:textColor="@color/title_text_color"
+        android:textSize="15sp"
+        android:gravity="center_vertical"
+        android:text="注册账号"
+        android:visibility="gone"/>
+
 </android.support.v7.widget.Toolbar>  

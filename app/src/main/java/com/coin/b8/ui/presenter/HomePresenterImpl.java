@@ -2,35 +2,36 @@ package com.coin.b8.ui.presenter;
 
 import com.coin.b8.http.B8Api;
 import com.coin.b8.model.B8UpdateInfo;
-import com.coin.b8.model.UserInfoResponse;
+import com.coin.b8.model.UnLoginUidInfo;
 import com.coin.b8.ui.iView.IHomeMine;
+import com.coin.b8.ui.iView.IHomeView;
 import com.coin.b8.utils.AppUtil;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 
 /**
- * Created by zhangyi on 2018/6/29.
+ * Created by zhangyi on 2018/7/4.
  */
-public class HomeMinePresenterImpl {
-    private IHomeMine mView;
+public class HomePresenterImpl {
+    private IHomeView mView;
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
-    public HomeMinePresenterImpl(IHomeMine iHomeMine) {
-        mView = iHomeMine;
+    public HomePresenterImpl(IHomeView iHomeView) {
+        mView = iHomeView;
     }
     public void getUpdateInfo(boolean auto){
         DisposableObserver<B8UpdateInfo> disposableObserver = new DisposableObserver<B8UpdateInfo>() {
             @Override
             public void onNext(B8UpdateInfo updateInfo) {
-                if(updateInfo != null){
+                if(mView != null){
                     mView.onUpdateInfo(updateInfo, auto);
                 }
             }
 
             @Override
             public void onError(Throwable e) {
-                if(e != null){
+                if(mView != null){
                     mView.onUpdateInfoError(e);
                 }
             }
@@ -44,18 +45,17 @@ public class HomeMinePresenterImpl {
         mCompositeDisposable.add(disposableObserver);
     }
 
-    public void getUserInfo(String uid){
-        DisposableObserver<UserInfoResponse> disposableObserver = new DisposableObserver<UserInfoResponse>() {
+    public void getUnLoginUid(String imei){
+        DisposableObserver<UnLoginUidInfo> disposableObserver = new DisposableObserver<UnLoginUidInfo>() {
             @Override
-            public void onNext(UserInfoResponse userInfoResponse) {
+            public void onNext(UnLoginUidInfo unLoginUidInfo) {
                 if(mView != null){
-                    mView.onUserInfo(userInfoResponse);
+                    mView.onUnLoginUidInfo(unLoginUidInfo);
                 }
             }
 
             @Override
             public void onError(Throwable e) {
-
             }
 
             @Override
@@ -63,7 +63,7 @@ public class HomeMinePresenterImpl {
 
             }
         };
-        B8Api.getUserInfo(disposableObserver,uid);
+        B8Api.getUnLoginUidInfo(disposableObserver,imei);
         mCompositeDisposable.add(disposableObserver);
     }
 
@@ -71,6 +71,5 @@ public class HomeMinePresenterImpl {
         mView = null;
         mCompositeDisposable.dispose();
     }
-
 
 }

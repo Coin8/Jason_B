@@ -127,6 +127,13 @@ public class DemoHelper {
 
 		setEaseUIProviders();
         registerMessageListener();
+
+        if(PreferenceHelper.getIsLogin(context)){
+            if(!DemoHelper.getInstance().isLoggedIn()){
+                login(PreferenceHelper.getEaseName(context),
+                        PreferenceHelper.getEasePassword(context));
+            }
+        }
 	}
 
 
@@ -441,6 +448,48 @@ public class DemoHelper {
      */
     public boolean isLoggedIn() {
         return EMClient.getInstance().isLoggedInBefore();
+    }
+
+    public void logout(){
+        DemoHelper.getInstance().logout(true, new EMCallBack() {
+            @Override
+            public void onSuccess() {
+            }
+
+            @Override
+            public void onError(int i, String s) {
+            }
+
+            @Override
+            public void onProgress(int i, String s) {
+            }
+        });
+
+    }
+
+
+    public void login(String loginName, String password){
+        EMClient.getInstance().login(loginName, password, new EMCallBack() {
+
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "login: onSuccess");
+                EMClient.getInstance().groupManager().loadAllGroups();
+                EMClient.getInstance().chatManager().loadAllConversations();
+
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+                Log.d(TAG, "login: onProgress");
+            }
+
+            @Override
+            public void onError(final int code, final String message) {
+                Log.d(TAG, "login: onError: " + code + "msg = " + message);
+            }
+        });
+
     }
 
     public void logout(boolean unbindDeviceToken, final EMCallBack callback) {

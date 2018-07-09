@@ -150,7 +150,7 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-    implementation 'com.yanzhenjie:permission:2.0.0-rc6'
+    implementation 'com.yanzhenjie:permission:2.0.0-rc11'
     implementation 'com.google.firebase:firebase-messaging:11.4.0'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
