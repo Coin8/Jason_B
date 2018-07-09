@@ -6,21 +6,65 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.coin.b8.R;
+import com.coin.b8.model.CollectionListInfoResponse;
 import com.coin.b8.utils.CommonUtils;
+import com.coin.b8.utils.GlideUtil;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by zhangyi on 2018/7/2.
  */
 public class CollectionAdapter extends RecyclerView.Adapter{
 
-//    private DateFormat DEFAULT_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private List<CollectionListInfoResponse.DataBean> mList;
     private DateFormat DEFAULT_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+    public interface OnItemClickListen{
+        void onItemClick(CollectionListInfoResponse.DataBean dataBean,int position);
+        void onItemCancelClick(CollectionListInfoResponse.DataBean dataBean,int position);
+    }
+
+    private OnItemClickListen mOnItemClickListen;
+
+    public CollectionAdapter(List<CollectionListInfoResponse.DataBean> list) {
+        mList = list;
+    }
+
+    public void setList(List<CollectionListInfoResponse.DataBean> list) {
+        mList = list;
+    }
+
+    public void remove(int position){
+        if(mList == null){
+            return;
+        }
+        mList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, mList.size() - position);
+    }
+    public void addList(List<CollectionListInfoResponse.DataBean> list){
+        if(list != null && list.size() > 0){
+            if(mList == null){
+                mList = new ArrayList<>();
+            }
+            mList.addAll(list);
+            notifyItemRangeInserted(mList.size() - list.size(), list.size());
+        }
+    }
+
+    public void setItemClickListen(OnItemClickListen onItemClickListen){
+        mOnItemClickListen = onItemClickListen;
+    }
+
+
 
     @NonNull
     @Override
@@ -32,15 +76,44 @@ public class CollectionAdapter extends RecyclerView.Adapter{
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         CollectionVH collectionVH = (CollectionVH) holder;
+        CollectionListInfoResponse.DataBean dataBean = mList.get(position);
+        if(dataBean == null){
+            return;
+        }
         if(collectionVH != null ){
-            collectionVH.title.setText("这是 " + position );
-            collectionVH.time.setText(CommonUtils.millis2String(System.currentTimeMillis(),DEFAULT_FORMAT));
+            collectionVH.title.setText(dataBean.getTitle() );
+            collectionVH.time.setText(CommonUtils.millis2String(dataBean.getCreateTime(),DEFAULT_FORMAT));
+            GlideUtil.setImageRes(holder.itemView.getContext(),
+                    collectionVH.mImageView,
+                    dataBean.getPic(),
+                    R.drawable.share_smal_icon,
+                    R.drawable.share_smal_icon,
+                    false);
+            collectionVH.content.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mOnItemClickListen != null){
+                        mOnItemClickListen.onItemClick(dataBean,position);
+                    }
+                }
+            });
+            collectionVH.btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mOnItemClickListen != null){
+                        mOnItemClickListen.onItemCancelClick(dataBean,position);
+                    }
+                }
+            });
         }
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        if(mList != null){
+            return mList.size();
+        }
+        return 0;
     }
 
 
@@ -49,6 +122,7 @@ public class CollectionAdapter extends RecyclerView.Adapter{
         TextView btnDelete;
         TextView title;
         TextView time;
+        ImageView mImageView;
 
         public CollectionVH(View itemView) {
             super(itemView);
@@ -56,6 +130,7 @@ public class CollectionAdapter extends RecyclerView.Adapter{
             btnDelete = itemView.findViewById(R.id.btnDelete);
             title = itemView.findViewById(R.id.title);
             time = itemView.findViewById(R.id.time);
+            mImageView = itemView.findViewById(R.id.collect_image);
         }
     }
 }

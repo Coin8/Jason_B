@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:layout_toLeftOf="@id/collect_image"
             android:maxLines="2"
-            android:text="项目中我是任意复杂的原Item布局"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="15sp"/>
         <TextView

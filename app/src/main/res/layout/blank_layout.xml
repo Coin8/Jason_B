@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <ImageView
+        android:id="@+id/blank_image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/img_blank_wifi"/>
+
+    <TextView
+        android:id="@+id/blank_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:textSize="14sp"
+        android:text="网络连接失败"
+        android:textColor="#899fbd"/>
+    
+    <TextView
+        android:id="@+id/blank_btn"
+        android:layout_width="130dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:text="点击刷新"
+        android:textColor="#16387c"
+        android:background="@drawable/corner_bg_gray"/>
+
+</merge>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -8,13 +8,24 @@
 
     <include layout="@layout/toolbar"/>
     <View
+        android:id="@+id/top_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_below="@id/toolbar"
         android:background="@color/lineColor"/>
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+    <com.coin.b8.ui.view.BlankView
+        android:id="@+id/blank_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/top_line"
+        android:visibility="gone"/>
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/smart_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/top_line"
+        android:visibility="visible"
         app:srlEnableScrollContentWhenLoaded="true"
         app:srlEnableFooterFollowWhenLoadFinished="true">
 
@@ -41,4 +52,4 @@
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
-</LinearLayout>
+</RelativeLayout>

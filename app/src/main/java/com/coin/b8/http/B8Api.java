@@ -2,6 +2,9 @@ package com.coin.b8.http;
 
 import android.util.Log;
 
+import com.coin.b8.model.CancelCollectionResponse;
+import com.coin.b8.model.CollectionListInfoResponse;
+import com.coin.b8.model.DynamicImportNewsResponse;
 import com.coin.b8.model.FeedBackParameter;
 import com.coin.b8.model.FeedBackResult;
 import com.coin.b8.model.LoginParameter;
@@ -14,6 +17,7 @@ import com.coin.b8.model.RegisterParameter;
 import com.coin.b8.model.RegisterResponseInfo;
 import com.coin.b8.model.ResetPasswordParameter;
 import com.coin.b8.model.ResetPasswordResponseInfo;
+import com.coin.b8.model.SelectCoinListResponse;
 import com.coin.b8.model.TestModel;
 import com.coin.b8.model.B8UpdateInfo;
 import com.coin.b8.model.UnLoginUidInfo;
@@ -202,6 +206,38 @@ public class B8Api {
         MultipartBody.Part body = MultipartBody.Part.createFormData("img",file.getName(),requestBody);
 
         BuildApi.getAPIService().modifyUserHead(1,body)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void getCollectionList(Observer<CollectionListInfoResponse> observer, String uid,long start){
+        BuildApi.getAPIService().getCollectionList(uid,start)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void cancelCollection(Observer<CancelCollectionResponse> observer, long id, int type){
+        BuildApi.getAPIService().deleteCollection(id,type)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void getSelectCoinList(Observer<SelectCoinListResponse> observer){
+        BuildApi.getAPIService().getSelectCoinList()
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void getDynamicImportantNews(Observer<DynamicImportNewsResponse> observer,int page){
+        BuildApi.getAPIService().getDynamicImportantNews(page)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
