@@ -38,6 +38,9 @@ public class CommonUtils {
     }
 
     public static String encode(String s) {
+        if(TextUtils.isEmpty(s)){
+            return "";
+        }
         try {
             s = java.net.URLEncoder.encode(s, "UTF-8");
         } catch (Exception e) {

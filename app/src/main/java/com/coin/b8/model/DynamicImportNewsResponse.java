@@ -271,11 +271,20 @@ public class DynamicImportNewsResponse {
              * pic : https://huobizixun-prd-1253283450.cos.ap-beijing.myqcloud.com/144e01cd-42cb-4ae3-9ba9-b254392cda30.jpg
              * publishTime : 1531130449
              */
+            private int viewType;
 
             private int id;
             private String title;
             private String pic;
-            private int publishTime;
+            private long publishTime;
+
+            public int getViewType() {
+                return viewType;
+            }
+
+            public void setViewType(int viewType) {
+                this.viewType = viewType;
+            }
 
             public int getId() {
                 return id;
@@ -301,11 +310,11 @@ public class DynamicImportNewsResponse {
                 this.pic = pic;
             }
 
-            public int getPublishTime() {
+            public long getPublishTime() {
                 return publishTime;
             }
 
-            public void setPublishTime(int publishTime) {
+            public void setPublishTime(long publishTime) {
                 this.publishTime = publishTime;
             }
         }

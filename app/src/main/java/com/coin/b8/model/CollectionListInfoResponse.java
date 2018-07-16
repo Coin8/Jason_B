@@ -82,6 +82,9 @@ public class CollectionListInfoResponse {
         private Object updateTime;
         private int publishTime;
         private int yn;
+        /**
+         * 1.要闻2，干货3 banner
+         */
         private int targetType;
         private String pic;
         private String title;

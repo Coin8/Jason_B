@@ -23,6 +23,7 @@ import com.coin.b8.ui.activity.BusinessCooperationActivity;
 import com.coin.b8.ui.activity.CollectionActivity;
 import com.coin.b8.ui.activity.PersonalInfoActivity;
 import com.coin.b8.ui.activity.SettingActivity;
+import com.coin.b8.ui.activity.YuJingRecordActivity;
 import com.coin.b8.ui.dialog.FeedBackFragment;
 import com.coin.b8.ui.dialog.ShareDialogFragment;
 import com.coin.b8.ui.iView.IHomeMine;
@@ -180,6 +181,7 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
                 startCollection();
                 break;
             case R.id.mine_early_warning_record:
+                YuJingRecordActivity.startYuJingRecordActivity(getContext());
                 break;
             case R.id.mine_business_cooperation:
                 BusinessCooperationActivity.startBusinessCooperationActivity(getContext());

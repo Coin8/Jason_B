@@ -2,6 +2,7 @@ package com.coin.b8.ui.view;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -70,11 +71,18 @@ public class BlankView extends LinearLayout{
     }
 
     public void setDesc(String text){
+        if(TextUtils.isEmpty(text)){
+            mDesc.setVisibility(GONE);
+        }
         mDesc.setText(text);
     }
 
     public void setButtonOnclick(OnClickListener onclick){
         mClickBtn.setOnClickListener(onclick);
+    }
+
+    public void setButtonText(String text){
+        mClickBtn.setText(text);
     }
 
     public void setEnableButton(boolean value){

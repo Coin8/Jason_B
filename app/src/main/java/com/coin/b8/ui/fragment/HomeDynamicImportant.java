@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.coin.b8.R;
 import com.coin.b8.model.DynamicImportNewsResponse;
+import com.coin.b8.model.ImportantNewsBannerResponse;
 import com.coin.b8.ui.adapter.DynamicImportNewsAdapter;
 import com.coin.b8.ui.iView.IDynamicImportView;
 import com.coin.b8.ui.presenter.DynamicImportPresenter;
@@ -72,6 +73,7 @@ public class HomeDynamicImportant extends BaseFragment implements IDynamicImport
     private void startRefresh(){
         mCurrentPage = 1;
         mDynamicImportPresenter.getImportNews();
+        mDynamicImportPresenter.getBanner();
     }
 
     @Override
@@ -83,12 +85,12 @@ public class HomeDynamicImportant extends BaseFragment implements IDynamicImport
             mDynamicImportNewsAdapter.setList(dynamicImportNewsResponse.getData().getContent());
             mDynamicImportNewsAdapter.notifyDataSetChanged();
         }
-        mSmartRefreshLayout.finishRefresh();
+        mSmartRefreshLayout.finishRefresh(0);
     }
 
     @Override
     public void onNewError() {
-        mSmartRefreshLayout.finishRefresh();
+        mSmartRefreshLayout.finishRefresh(0);
     }
 
     @Override
@@ -100,11 +102,25 @@ public class HomeDynamicImportant extends BaseFragment implements IDynamicImport
             mDynamicImportNewsAdapter.addList(dynamicImportNewsResponse.getData().getContent());
             mCurrentPage++;
         }
-        mSmartRefreshLayout.finishLoadMore();
+        mSmartRefreshLayout.finishLoadMore(0);
     }
 
     @Override
     public void onNewsLoadMoreError() {
-        mSmartRefreshLayout.finishLoadMore();
+        mSmartRefreshLayout.finishLoadMore(0);
+    }
+
+    @Override
+    public void onBannerSuccess(ImportantNewsBannerResponse importantNewsBannerResponse) {
+        if(importantNewsBannerResponse != null
+                && importantNewsBannerResponse.getData() != null
+                && importantNewsBannerResponse.getData().size() > 0){
+            mDynamicImportNewsAdapter.addBanner(importantNewsBannerResponse.getData());
+        }
+    }
+
+    @Override
+    public void onBannerError() {
+
     }
 }

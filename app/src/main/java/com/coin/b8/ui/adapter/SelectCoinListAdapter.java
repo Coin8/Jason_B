@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.coin.b8.R;
 import com.coin.b8.model.SelectCoinItemModel;
+import com.coin.b8.ui.activity.SelectCoinTypeListActivity;
 
 import java.util.List;
 
@@ -100,6 +101,14 @@ public class SelectCoinListAdapter extends RecyclerView.Adapter{
                     normalViewHolder.mTitle.setText(selectCoinItemModel.getItemsBean().getName());
                     normalViewHolder.mDesc.setText(selectCoinItemModel.getItemsBean().getIntroduction());
                     normalViewHolder.mImageView.setImageResource(getCurrentResId());
+                    normalViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            SelectCoinTypeListActivity.startSelectCoinTypeListActivity(v.getContext(),
+                                    selectCoinItemModel.getItemsBean().getName(),
+                                    selectCoinItemModel.getItemsBean().getId());
+                        }
+                    });
                 }
             }
                 break;

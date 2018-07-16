@@ -1,5 +1,6 @@
 package com.coin.b8.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -148,5 +149,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void onLoginFail() {
         hideLoading();
         mMyToast.showToast("登录失败");
+    }
+
+
+    public static void startLoginActivity(Context context){
+        if(context == null){
+            return;
+        }
+        context.startActivity(new Intent(context,LoginActivity.class));
     }
 }

@@ -1,6 +1,7 @@
 package com.coin.b8.ui.activity;
 
 
+import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,12 +9,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextPaint;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.coin.b8.R;
+import com.coin.b8.constant.Constants;
 import com.coin.b8.help.PreferenceHelper;
 import com.coin.b8.model.CancelCollectionResponse;
 import com.coin.b8.model.CollectionListInfoResponse;
@@ -74,6 +78,54 @@ public class CollectionActivity extends BaseActivity implements IMyCollectionVie
         mCollectionAdapter.setItemClickListen(new CollectionAdapter.OnItemClickListen() {
             @Override
             public void onItemClick(CollectionListInfoResponse.DataBean dataBean, int position) {
+                if(dataBean == null){
+                    return;
+                }
+                switch (dataBean.getTargetType()){
+                    case 1: {
+                        //要闻
+
+                        StringBuilder stringBuilder = new StringBuilder(Constants.IMPORTANT_NEWS_DETAIL_BASE_URL);
+                        stringBuilder.append(dataBean.getArticleId());
+                        Context context = mRecyclerView.getContext();
+                        stringBuilder.append("&uid=").append(PreferenceHelper.getUid(context));
+                        String imei = PreferenceHelper.getIMEI(context);
+                        if(!TextUtils.isEmpty(imei)){
+                            stringBuilder.append("&imei=").append(imei);
+                        }
+                        String token = PreferenceHelper.getToken(context);
+                        if(!TextUtils.isEmpty(token)){
+                            stringBuilder.append("&token=").append(token);
+                        }
+                        String web_url = stringBuilder.toString();
+                        NativeDetailActivity.startNativeDetailActivity(mRecyclerView.getContext(), web_url );
+                    }
+                        break;
+                    case 2:
+                        //干货
+                        break;
+                    case 3: {
+                        StringBuilder stringBuilder = new StringBuilder(Constants.IMPORTANT_NEWS_DETAIL_BASE_URL);
+                        stringBuilder.append(dataBean.getArticleId());
+                        stringBuilder.append("&type=banner");
+                        Context context = mRecyclerView.getContext();
+                        stringBuilder.append("&uid=").append(PreferenceHelper.getUid(context));
+                        String imei = PreferenceHelper.getIMEI(context);
+                        if(!TextUtils.isEmpty(imei)){
+                            stringBuilder.append("&imei=").append(imei);
+                        }
+                        String token = PreferenceHelper.getToken(context);
+                        if(!TextUtils.isEmpty(token)){
+                            stringBuilder.append("&token=").append(token);
+                        }
+
+                        String web_url =  stringBuilder.toString();
+//                        Log.e("zy","web_url = " + web_url);
+                        NativeDetailActivity.startNativeDetailActivity(context, web_url );
+                        //banner
+                    }
+                        break;
+                }
 
             }
 

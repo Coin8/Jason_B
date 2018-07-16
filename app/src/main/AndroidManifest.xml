@@ -103,6 +103,26 @@
             android:theme="@style/BaseAppTheme"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".ui.activity.SelectCoinTypeListActivity"
+            android:theme="@style/BaseAppTheme"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.activity.YuJingRecordActivity"
+            android:theme="@style/BaseAppTheme"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.activity.NativeDetailActivity"
+            android:theme="@style/BaseAppTheme"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ui.activity.SearchActivity"
+            android:theme="@style/BaseAppTheme"
+            android:screenOrientation="portrait"/>
+
         <provider
             android:name=".update.UpdateFileProvider"
             android:authorities="${applicationId}.updatefileprovider"

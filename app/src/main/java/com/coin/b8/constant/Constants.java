@@ -16,4 +16,7 @@ public class Constants {
     public static boolean MAIN_ACTIVITY_IS_ACTIVE = false;
     public static String LOCAL_HEAD_ICON_FILE_NAME = "local_head_icon.png";
 
+    public static String IMPORTANT_NEWS_DETAIL_BASE_URL = "http://app.diyli.cn/#/dynamic_details/focus?id=";
+    public static String MART_DETAIL_URL = "http://app.diyli.cn/#/market-details?";
+    public static String GLOBAL_DETAIL_URL = "http://app.diyli.cn/#/global-details?";
 }

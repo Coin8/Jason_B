@@ -34,6 +34,10 @@
     <string name="feedback_submit">提交</string>
     <string name="main_back_again">再按一次退出程序</string>
 
+    <string name="home_market_self">自选</string>
+    <string name="home_market_value">市值</string>
+    <string name="home_market_fire_coin">火币</string>
+
     <string name="home_market">行情</string>
     <string name="home_dynamic">动态</string>
     <string name="home_select_coin">选币</string>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/lineColor">
+
+    <LinearLayout
+        android:id="@+id/head_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:background="@color/lineColor"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
+
+        <LinearLayout
+            android:id="@+id/head_name_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="名称/24H成交"
+                android:textColor="#4a4a4a"
+                android:textSize="12sp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="2dp">
+
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/name_up"
+                    android:layout_width="11dp"
+                    android:layout_height="6dp"
+                    android:button="@drawable/sort_up_selector"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:background="@color/colorTransparent"/>
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/name_down"
+                    android:layout_width="11dp"
+                    android:layout_height="6dp"
+                    android:layout_marginTop="2dp"
+                    android:button="@drawable/sort_down_selector"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:background="@color/colorTransparent"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/head_latest_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="最新价"
+                android:textColor="#4a4a4a"
+                android:textSize="12sp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="2dp">
+
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/latest_up"
+                    android:layout_width="11dp"
+                    android:layout_height="6dp"
+                    android:button="@drawable/sort_up_selector"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:background="@color/colorTransparent"/>
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/latest_down"
+                    android:layout_width="11dp"
+                    android:layout_height="6dp"
+                    android:layout_marginTop="2dp"
+                    android:button="@drawable/sort_down_selector"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:background="@color/colorTransparent"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/head_one_day_layout"
+            android:layout_width="85dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="24H涨幅"
+                android:textColor="#4a4a4a"
+                android:textSize="12sp"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="2dp">
+
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/one_day_up"
+                    android:layout_width="11dp"
+                    android:layout_height="6dp"
+                    android:button="@drawable/sort_up_selector"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:background="@color/colorTransparent"/>
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/one_day_down"
+                    android:layout_width="11dp"
+                    android:layout_height="6dp"
+                    android:layout_marginTop="2dp"
+                    android:button="@drawable/sort_down_selector"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:background="@color/colorTransparent"/>
+                
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/head_layout"
+        app:srlEnableScrollContentWhenLoaded="true"
+        app:srlEnableFooterFollowWhenLoadFinished="true">
+
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+            android:id="@+id/classic_head"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srlPrimaryColor="@color/lineColor"
+            app:srlAccentColor="@color/black">
+        </com.scwang.smartrefresh.layout.header.ClassicsHeader>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.coin.b8.ui.view.BlankView
+                android:id="@+id/blank_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </FrameLayout>
+
+
+
+        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+            android:id="@+id/classic_footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srlClassicsSpinnerStyle="Translate"
+            app:srlPrimaryColor="@color/lineColor"
+            app:srlAccentColor="@color/black"/>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+</RelativeLayout>

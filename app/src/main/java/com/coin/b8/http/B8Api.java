@@ -4,25 +4,35 @@ import android.util.Log;
 
 import com.coin.b8.model.CancelCollectionResponse;
 import com.coin.b8.model.CollectionListInfoResponse;
+import com.coin.b8.model.CommonResponse;
+import com.coin.b8.model.DeleteYuJingResponse;
 import com.coin.b8.model.DynamicImportNewsResponse;
 import com.coin.b8.model.FeedBackParameter;
 import com.coin.b8.model.FeedBackResult;
+import com.coin.b8.model.ImportantNewsBannerResponse;
 import com.coin.b8.model.LoginParameter;
 import com.coin.b8.model.LoginResponseInfo;
+import com.coin.b8.model.MarketListSearchResponse;
+import com.coin.b8.model.MarketSelfListResponse;
 import com.coin.b8.model.ModifyUserHeadResponse;
 import com.coin.b8.model.ModifyUserParameter;
 import com.coin.b8.model.ModifyUserResponse;
+import com.coin.b8.model.ModifyYuJingParameter;
+import com.coin.b8.model.ModifyYuJingResponse;
 import com.coin.b8.model.PhoneParameter;
+import com.coin.b8.model.QuickNewsResponse;
 import com.coin.b8.model.RegisterParameter;
 import com.coin.b8.model.RegisterResponseInfo;
 import com.coin.b8.model.ResetPasswordParameter;
 import com.coin.b8.model.ResetPasswordResponseInfo;
 import com.coin.b8.model.SelectCoinListResponse;
+import com.coin.b8.model.SelectCoinTypeListResponse;
 import com.coin.b8.model.TestModel;
 import com.coin.b8.model.B8UpdateInfo;
 import com.coin.b8.model.UnLoginUidInfo;
 import com.coin.b8.model.UserInfoResponse;
 import com.coin.b8.model.VerifycodeResponseModel;
+import com.coin.b8.model.YujingListResponse;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -238,6 +248,127 @@ public class B8Api {
 
     public static void getDynamicImportantNews(Observer<DynamicImportNewsResponse> observer,int page){
         BuildApi.getAPIService().getDynamicImportantNews(page)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void getDynamicImportantNewsBanner(Observer<ImportantNewsBannerResponse> observer){
+        BuildApi.getAPIService().getDynamicImportantNewsBanner()
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void getQuickNews(Observer<QuickNewsResponse> observer, int page){
+        BuildApi.getAPIService().getQuickNews(page)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void getSelectCoinTypeList(Observer<SelectCoinTypeListResponse> observer, int id){
+        BuildApi.getAPIService().getSelectCoinTypeList(id)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void getYuJingList(Observer<YujingListResponse> observer, String uid){
+        BuildApi.getAPIService().getYuJingList(uid)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void deleteYuJing(Observer<DeleteYuJingResponse> observer, String uid, long id){
+        BuildApi.getAPIService().deleteYuJing(uid,id)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void modifyYuJing(Observer<ModifyYuJingResponse> observer,
+                                    String uid,
+                                    long id ,
+                                    int status){
+        ModifyYuJingParameter modifyYuJingParameter = new ModifyYuJingParameter();
+        modifyYuJingParameter.setId(id);
+        modifyYuJingParameter.setUid(uid);
+        modifyYuJingParameter.setOpenStatus(status);
+        Gson gson = new Gson();
+        String data = gson.toJson(modifyYuJingParameter);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), data);
+        BuildApi.getAPIService().modifyYuJing(requestBody)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    /**
+     * 行情列表搜索
+     * @param content  （用户搜索的内容用这个字段传）可以搜索币种、交易所、全网；
+    都是根据简称进行搜索。
+    全网简称: coinmarketcap
+    火币交易所简称：火币Pro
+     * @param sort
+     * 排序，1为升序，-1为降序默认为-1
+     * @param start 默认为1
+     * @param limit 默认为20
+     * @param sortType
+     * 1是交易额，2是交易量 ，3是当前价格，4是涨幅5市值
+     * @param exchange
+     * （app操作中限制的条件用这个字段传，比如用户点了只在火币网内搜，就在这个字段传火币Pro,未限制就不传）
+     * @return
+     */
+    public static void getMarketListSearch(Observer<MarketListSearchResponse> observer,
+                                           String content,
+                                           int sort,
+                                           int start,
+                                           int limit,
+                                           int sortType,
+                                           String exchange){
+        BuildApi.getAPIService().getMarketListSearch(content,sort,start,limit,sortType,exchange)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+
+
+    public static void getMarketSelfList(Observer<MarketSelfListResponse> observer,
+                                           String uid,
+                                           int sort,
+                                           int start,
+                                           int limit,
+                                           int sortType){
+        BuildApi.getAPIService().getMarketSelfList(uid,sort,start,limit,sortType)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void getTopMarketSelfList(Observer<CommonResponse> observer,
+                                         long ucid){
+        BuildApi.getAPIService().topMarketSelfCoin(ucid)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void deleteMarketSelfList(Observer<CommonResponse> observer,
+                                            long ucid){
+        BuildApi.getAPIService().deleteMarketSelf(ucid)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

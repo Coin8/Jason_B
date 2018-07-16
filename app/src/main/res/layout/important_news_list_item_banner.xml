@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.youth.banner.Banner xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/news_banner"
+    android:layout_width="match_parent"
+    android:layout_height="130dp"
+    app:banner_default_image="@drawable/share_smal_icon"
+    app:indicator_drawable_selected="@drawable/banner_indicator_selected"
+    app:indicator_drawable_unselected="@drawable/banner_indicator_unselected"
+    app:indicator_width="10dp"
+    app:indicator_height="10dp">
+
+</com.youth.banner.Banner>

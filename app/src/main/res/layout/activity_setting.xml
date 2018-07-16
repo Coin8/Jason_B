@@ -63,7 +63,8 @@
             android:layout_marginRight="6dp"
             app:sb_show_indicator="false"
             app:sb_checked="true"
-            app:sb_checked_color="#426ab3"/>
+            app:sb_checked_color="#426ab3"
+            />
     </RelativeLayout>
 
     <ImageView

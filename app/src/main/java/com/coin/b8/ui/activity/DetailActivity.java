@@ -562,7 +562,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
                 mWebView.goBack();
                 return true;
             }else {
-                startActivity(new Intent(this,MainActivity.class));
+                startActivity(new Intent(this,HomeActivity.class));
                 finish();
             }
         }

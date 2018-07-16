@@ -20,11 +20,14 @@
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="42dp"
+            android:layout_height="46dp"
+            android:paddingTop="17dp"
+            android:paddingBottom="17dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
             android:src="@drawable/dialog_close" />
 
     </RelativeLayout>

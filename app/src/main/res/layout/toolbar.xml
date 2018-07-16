@@ -11,10 +11,11 @@
 
     <ImageView
         android:id="@+id/toolbar_back"
-        android:layout_width="18dp"
-        android:layout_height="23dp"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:clickable="true"
         android:src="@drawable/icon_back" />
 

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="63dp"
+    android:orientation="horizontal"
+    android:background="@drawable/ripple_one_item_bg">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dp">
+
+        <TextView
+            android:id="@+id/symbol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/title_text_color"
+            android:textSize="16sp"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:includeFontPadding="false"/>
+        <TextView
+            android:id="@+id/chinese_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/symbol"
+            android:layout_alignBottom="@id/symbol"
+            android:layout_marginLeft="2dp"
+            android:textSize="12sp"
+            android:textColor="#9b9b9b"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:includeFontPadding="false"/>
+
+        <TextView
+            android:id="@+id/vol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/symbol"
+            android:layout_alignLeft="@id/symbol"
+            android:textSize="9sp"
+            android:textColor="#9b9b9b"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:includeFontPadding="false"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginLeft="5dp"
+        android:gravity="center_vertical"
+        android:textSize="16sp"
+        android:textColor="@color/title_text_color"
+        android:singleLine="true"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:id="@+id/rate_str"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="15dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:background="@color/green"
+        android:singleLine="true"
+        android:ellipsize="end"/>
+
+</LinearLayout>
