@@ -64,6 +64,7 @@
 
     <style name="LoadingDialog" parent="android:style/Theme.Dialog">
         <item name="android:windowBackground">@drawable/loading_bg</item>
+        <item name="android:backgroundDimEnabled">false</item>
     </style>
 
 

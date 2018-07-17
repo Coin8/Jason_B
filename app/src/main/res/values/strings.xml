@@ -68,4 +68,6 @@
     <string name="business_cooperation">商务合作</string>
     <string name="business_message">商务合作请发送邮箱至</string>
     <string name="business_email">bifa2018vip@163.com</string>
+
+    <string name="search_hint">请输入币种/市场搜索</string>
 </resources>

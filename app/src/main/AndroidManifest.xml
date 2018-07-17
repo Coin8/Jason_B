@@ -123,6 +123,11 @@
             android:theme="@style/BaseAppTheme"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".ui.activity.SearchOnExchangeActivity"
+            android:theme="@style/BaseAppTheme"
+            android:screenOrientation="portrait"/>
+
         <provider
             android:name=".update.UpdateFileProvider"
             android:authorities="${applicationId}.updatefileprovider"

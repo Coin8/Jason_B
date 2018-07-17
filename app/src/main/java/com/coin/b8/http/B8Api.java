@@ -2,13 +2,17 @@ package com.coin.b8.http;
 
 import android.util.Log;
 
+import com.coin.b8.model.AddMarketSelfParameter;
+import com.coin.b8.model.AddMarketSelfResponse;
 import com.coin.b8.model.CancelCollectionResponse;
 import com.coin.b8.model.CollectionListInfoResponse;
 import com.coin.b8.model.CommonResponse;
 import com.coin.b8.model.DeleteYuJingResponse;
 import com.coin.b8.model.DynamicImportNewsResponse;
+import com.coin.b8.model.ExchangeListResponse;
 import com.coin.b8.model.FeedBackParameter;
 import com.coin.b8.model.FeedBackResult;
+import com.coin.b8.model.HotCoinResponse;
 import com.coin.b8.model.ImportantNewsBannerResponse;
 import com.coin.b8.model.LoginParameter;
 import com.coin.b8.model.LoginResponseInfo;
@@ -369,6 +373,40 @@ public class B8Api {
     public static void deleteMarketSelfList(Observer<CommonResponse> observer,
                                             long ucid){
         BuildApi.getAPIService().deleteMarketSelf(ucid)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void getHotCoin(Observer<HotCoinResponse> observer){
+        BuildApi.getAPIService().getHotCoin()
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void getExchangeList(Observer<ExchangeListResponse> observer){
+        BuildApi.getAPIService().getExchangeList()
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+
+    public static void addMarketSelfList(Observer<AddMarketSelfResponse> observer,
+                                         String uid,
+                                         String exchangeName,
+                                         String symbol){
+        AddMarketSelfParameter addMarketSelfParameter = new AddMarketSelfParameter();
+        addMarketSelfParameter.setExchangeName(exchangeName);
+        addMarketSelfParameter.setSymbol(symbol);
+        Gson gson = new Gson();
+        String data = gson.toJson(addMarketSelfParameter);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), data);
+        BuildApi.getAPIService().addMarketSelf(uid,requestBody)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

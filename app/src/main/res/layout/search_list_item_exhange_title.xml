@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="34dp"
+    android:layout_marginTop="20dp"
+    android:gravity="center_vertical"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:textSize="14sp"
+    android:textColor="#4a4a4a"
+    android:text="从以下交易市场搜索"
+    android:background="@color/lineColor">
+
+</TextView>

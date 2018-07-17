@@ -4,10 +4,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.coin.b8.R;
@@ -21,16 +21,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by zhangyi on 2018/7/11.
+ * Created by zhangyi on 2018/7/17.
  */
-public class HomeMarketNormalAdapter extends RecyclerView.Adapter{
-    // 0 市值，1 火币
-    private int mCoinType = 0;
+public class SearchResultAdapter extends RecyclerView.Adapter{
 
+
+    public interface OnItemClickListen{
+        void onItemClick(MarketListSearchResponse.DataBean dataBean);
+    }
+    private OnItemClickListen mOnItemClickListen;
     private List<MarketListSearchResponse.DataBean> mList;
 
-    public void setCoinType(int coinType) {
-        mCoinType = coinType;
+    public void setOnItemClickListen(OnItemClickListen onItemClickListen) {
+        mOnItemClickListen = onItemClickListen;
     }
 
     public void setList(List<MarketListSearchResponse.DataBean> list) {
@@ -51,41 +54,29 @@ public class HomeMarketNormalAdapter extends RecyclerView.Adapter{
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_market_listitem_normal, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_list_item_coin, parent, false);
         return new NormalViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         NormalViewHolder normalViewHolder = (NormalViewHolder) holder;
-        if(normalViewHolder == null){
+        MarketListSearchResponse.DataBean dataBean = mList.get(position);
+        if(normalViewHolder == null || dataBean == null){
             return;
         }
-        MarketListSearchResponse.DataBean dataBean = mList.get(position);
         normalViewHolder.mBase.setText(dataBean.getBase());
-        if(mCoinType == 1){
-            normalViewHolder.mChineseName.setText(dataBean.getQuote());
-            normalViewHolder.mVol.setText("量"+dataBean.getAmount());
-            normalViewHolder.mCloseCny.setText(dataBean.getClose());
-            normalViewHolder.mClose.setText("¥"+dataBean.getCloseCny());
-        }else {
-            normalViewHolder.mChineseName.setText(dataBean.getChineseName());
-            normalViewHolder.mVol.setText("¥"+dataBean.getVol());
-            normalViewHolder.mCloseCny.setText("¥"+dataBean.getCloseCny());
-            normalViewHolder.mClose.setText("$"+dataBean.getClose());
-        }
-
+        normalViewHolder.mQuote.setText(dataBean.getQuote());
+        normalViewHolder.mExchangeName.setText(dataBean.getExchangeName());
+        normalViewHolder.mClose.setText(dataBean.getClose());
+        normalViewHolder.mCloseCny.setText("¥"+dataBean.getCloseCny());
         normalViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 StringBuilder stringBuilder = new StringBuilder();
-                if(mCoinType == 1){
-                    stringBuilder.append(Constants.MART_DETAIL_URL);
-                }else {
-                    stringBuilder.append(Constants.GLOBAL_DETAIL_URL);
-                }
 
+                stringBuilder.append(Constants.MART_DETAIL_URL);
                 Context context = v.getContext();
                 stringBuilder.append("uid=").append(PreferenceHelper.getUid(context));
                 String imei = PreferenceHelper.getIMEI(context);
@@ -123,10 +114,7 @@ public class HomeMarketNormalAdapter extends RecyclerView.Adapter{
                         .append("lowCny").append("=").append(CommonUtils.encode(dataBean.getLowCny())).append("&")
                         .append("highCny").append("=").append(CommonUtils.encode(dataBean.getHighCny()));
 
-
-
                 String web_url = stringBuilder.toString();
-//                Log.e("zy","web_url = " + web_url);
                 NativeDetailActivity.startNativeDetailActivity(v.getContext(),web_url);
 
             }
@@ -142,6 +130,22 @@ public class HomeMarketNormalAdapter extends RecyclerView.Adapter{
             }
         }
 
+        if(dataBean.getIsSelect() == 1){
+            normalViewHolder.mBtn.setImageResource(R.drawable.icon_reduce);
+        }else {
+            normalViewHolder.mBtn.setImageResource(R.drawable.icon_add);
+        }
+
+        normalViewHolder.mBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mOnItemClickListen != null){
+                    mOnItemClickListen.onItemClick(dataBean);
+                }
+            }
+        });
+
+
     }
 
     @Override
@@ -154,21 +158,23 @@ public class HomeMarketNormalAdapter extends RecyclerView.Adapter{
 
     private class NormalViewHolder extends RecyclerView.ViewHolder{
         public TextView mBase;
-        public TextView mChineseName;
-        public TextView mVol;
+        public TextView mQuote;
+        public TextView mExchangeName;
         public TextView mCloseCny;
         public TextView mClose;
         public TextView mRateStr;
+        public ImageView mBtn;
         public NormalViewHolder(View itemView) {
             super(itemView);
             mBase = itemView.findViewById(R.id.symbol);
-            mChineseName = itemView.findViewById(R.id.chinese_name);
-            mVol = itemView.findViewById(R.id.vol);
-            mCloseCny = itemView.findViewById(R.id.price);
-            mClose = itemView.findViewById(R.id.price2);
+            mQuote = itemView.findViewById(R.id.chinese_name);
+            mExchangeName = itemView.findViewById(R.id.vol);
+            mClose = itemView.findViewById(R.id.price);
+            mCloseCny = itemView.findViewById(R.id.price2);
             mRateStr = itemView.findViewById(R.id.rate_str);
             mRateStr.setBackgroundResource(R.drawable.corner_bg_green);
+            mBtn = itemView.findViewById(R.id.btn_add);
+            mBtn.setImageResource(R.drawable.icon_add);
         }
     }
-
 }

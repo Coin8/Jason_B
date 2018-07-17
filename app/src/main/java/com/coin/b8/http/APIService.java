@@ -7,7 +7,9 @@ import com.coin.b8.model.CommonResponse;
 import com.coin.b8.model.DeleteMarketSelfResponse;
 import com.coin.b8.model.DeleteYuJingResponse;
 import com.coin.b8.model.DynamicImportNewsResponse;
+import com.coin.b8.model.ExchangeListResponse;
 import com.coin.b8.model.FeedBackResult;
+import com.coin.b8.model.HotCoinResponse;
 import com.coin.b8.model.ImportantNewsBannerResponse;
 import com.coin.b8.model.LoginResponseInfo;
 import com.coin.b8.model.MarketListSearchResponse;
@@ -256,7 +258,27 @@ public interface APIService {
             @Path("ucrid") long ucrid);
 
 
+    /**
+     *  置顶接口
+     * @param ucrid
+     * @return
+     */
     @GET("b/a/u/coin/top/{ucrid}")
     Observable<CommonResponse> topMarketSelfCoin(
             @Path("ucrid") long ucrid);
+
+    /**
+     * 获取热门币
+     * @return
+     */
+    @GET("b/a/coin/hot")
+    Observable<HotCoinResponse> getHotCoin();
+
+    /**
+     * 获取交易所列表
+     * @return
+     */
+    @GET("b/a/coin/exchange")
+    Observable<ExchangeListResponse> getExchangeList();
+
 }

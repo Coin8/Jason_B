@@ -10,20 +10,16 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.TextView;
 
 import com.coin.b8.R;
-import com.coin.b8.db.SearchHistoryDB;
 import com.coin.b8.help.PreferenceHelper;
 import com.coin.b8.model.AddMarketSelfResponse;
 import com.coin.b8.model.CommonResponse;
 import com.coin.b8.model.ExchangeListResponse;
 import com.coin.b8.model.HotCoinResponse;
 import com.coin.b8.model.MarketListSearchResponse;
-import com.coin.b8.ui.adapter.SearchAdapter;
 import com.coin.b8.ui.adapter.SearchResultAdapter;
 import com.coin.b8.ui.dialog.LoadingDialog;
 import com.coin.b8.ui.iView.ISearchView;
@@ -37,75 +33,37 @@ import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Created by zhangyi on 2018/7/10.
+ * Created by zhangyi on 2018/7/17.
  */
-public class SearchActivity extends BaseActivity implements ISearchView{
+public class SearchOnExchangeActivity extends BaseActivity implements ISearchView{
+    private String mExchange = "";
 
-    private TextView mCancelBtn;
-    private RecyclerView mRecyclerView;
-    private SearchAdapter mSearchAdapter;
-    private SearchPresenterImpl mSearchPresenter;
-    private ExchangeListResponse mExchangeListResponse;
-    private HotCoinResponse mHotCoinResponse;
-    private boolean mIsHotCoinGet = false;
-    private boolean mIsExchangeGet = false;
     private LoadingDialog mLoadingDialog;
     private EditTextClear mEditTextClear;
-
     private SmartRefreshLayout mSmartRefreshLayout;
     private RecyclerView mSearchResultRecyclerView;
     private SearchResultAdapter mSearchResultAdapter;
     private BlankView mBlankView;
     private ClassicsFooter mClassicsFooter;
 
-    private SearchHistoryDB mSearchHistoryDB;
-    private List<String> mHistoryList;
-
+    private SearchPresenterImpl mSearchPresenter;
     private MyToast mMyToast;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        handleData();
         mSearchPresenter = new SearchPresenterImpl(this);
-        mSearchHistoryDB = new SearchHistoryDB(this);
+        setContentView(R.layout.activity_search_on_exchange);
         mMyToast = new MyToast(this);
+        setInitToolBar(mExchange);
         initView();
-        getData();
+
     }
 
-
     private void initView(){
-        mCancelBtn = findViewById(R.id.search_cancel);
         mEditTextClear = findViewById(R.id.search_edit);
-
-        mRecyclerView = findViewById(R.id.recyclerview);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-        mSearchAdapter = new SearchAdapter();
-        mRecyclerView.setAdapter(mSearchAdapter);
-        mSearchAdapter.setOnBtnClickListen(new SearchAdapter.OnBtnClickListen() {
-            @Override
-            public void onHistoryDeleteClick() {
-                mSearchHistoryDB.deleteAllHistory();
-                getData();
-            }
-
-            @Override
-            public void onBtnClick(String text) {
-                mEditTextClear.setText(text);
-                if(!TextUtils.isEmpty(text)){
-                    mEditTextClear.setSelection(text.length());
-                }
-                startSearch(text);
-            }
-        });
-
         mSmartRefreshLayout = findViewById(R.id.refreshLayout);
         mClassicsFooter = findViewById(R.id.classic_footer);
         mClassicsFooter.REFRESH_FOOTER_FAILED = "没有更多数据了";
@@ -153,15 +111,6 @@ public class SearchActivity extends BaseActivity implements ISearchView{
             }
         });
 
-
-
-        mCancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
         mEditTextClear.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -177,7 +126,7 @@ public class SearchActivity extends BaseActivity implements ISearchView{
             public void afterTextChanged(Editable s) {
                 String text = mEditTextClear.getText().toString();
                 if(TextUtils.isEmpty(text)){
-                    getData();
+                    startSearch("");
                 }
             }
         });
@@ -188,41 +137,25 @@ public class SearchActivity extends BaseActivity implements ISearchView{
                     String string = mEditTextClear.getText().toString();
                     if(!TextUtils.isEmpty(string)){
                         startSearch(mEditTextClear.getText().toString());
-                        mSearchHistoryDB.deleteHistory(string);
-                        mSearchHistoryDB.insertHistory(string);
                     }
                 }
                 return false;
             }
         });
 
+        showLoading();
+        mSearchPresenter.search("",1,20,mExchange);
     }
 
-
     private void startSearch(String text){
-        if(TextUtils.isEmpty(text)){
-            return;
-        }
         showLoading();
-        mSearchPresenter.search(text,1,20,"");
+        mSearchPresenter.search(text,1,20,mExchange);
     }
 
     private void startSearchMore(String text){
         int start = mSearchResultAdapter.getItemCount() + 1;
-        mSearchPresenter.searchMore(text,start,20,"");
+        mSearchPresenter.searchMore(text,start,20,mExchange);
     }
-
-    private void getData(){
-//        Log.e("zy","getData");
-        showLoading();
-        mHistoryList = mSearchHistoryDB.queryAllHistory();
-        mSearchAdapter.setHistoryList(mHistoryList);
-        mIsExchangeGet = false;
-        mIsHotCoinGet = false;
-        mSearchPresenter.getHotCoinList();
-        mSearchPresenter.getExchangeList();
-    }
-
 
 
     private void showLoading(){
@@ -241,8 +174,6 @@ public class SearchActivity extends BaseActivity implements ISearchView{
     private void updateSearchData(MarketListSearchResponse response){
         mSmartRefreshLayout.finishRefresh(0);
         hideLoading();
-        mRecyclerView.setVisibility(View.GONE);
-        mSmartRefreshLayout.setVisibility(View.VISIBLE);
         if(response != null && response.getData() != null && response.getData().size() > 0){
             mBlankView.setVisibility(View.GONE);
             mSearchResultRecyclerView.setVisibility(View.VISIBLE);
@@ -265,39 +196,6 @@ public class SearchActivity extends BaseActivity implements ISearchView{
         }
     }
 
-
-    private void updateData(){
-        if(mIsExchangeGet && mIsHotCoinGet){
-            hideLoading();
-            mRecyclerView.setVisibility(View.VISIBLE);
-            mSmartRefreshLayout.setVisibility(View.GONE);
-            List<ExchangeListResponse.DataBean> list = new ArrayList<>();
-
-            if(mHistoryList != null && mHistoryList.size() > 0){
-                ExchangeListResponse.DataBean dataBean = new ExchangeListResponse.DataBean();
-                dataBean.setViewType(SearchAdapter.SEARCH_TYPE_HISTORY);
-                list.add(dataBean);
-            }
-
-            if(mHotCoinResponse != null
-                    && mHotCoinResponse.getData() != null
-                    && mHotCoinResponse.getData().size() > 0){
-                ExchangeListResponse.DataBean dataBean = new ExchangeListResponse.DataBean();
-                dataBean.setViewType(SearchAdapter.SEARCH_TYPE_HOT_COIN);
-                list.add(dataBean);
-            }
-            ExchangeListResponse.DataBean dataBean = new ExchangeListResponse.DataBean();
-            dataBean.setViewType(SearchAdapter.SEARCH_TYPE_EXCHANGE_TITLE);
-            list.add(dataBean);
-            if(mExchangeListResponse != null
-                    && mExchangeListResponse.getData() != null
-                    && mExchangeListResponse.getData().size() > 0){
-                list.addAll(mExchangeListResponse.getData());
-            }
-            mSearchAdapter.setList(list);
-        }
-    }
-
     private void startAddSelf(String exchangeName,String symbol){
         showLoading();
         String uid = PreferenceHelper.getUid(this);
@@ -311,34 +209,45 @@ public class SearchActivity extends BaseActivity implements ISearchView{
 
     private void refreshCurrent(){
         int limit = mSearchResultAdapter.getItemCount();
-        mSearchPresenter.search(mEditTextClear.getText().toString(),1,limit,"");
+        mSearchPresenter.search(mEditTextClear.getText().toString(),1,limit,mExchange);
     }
+
+
+    private void handleData(){
+        Intent intent = getIntent();
+        if(intent != null){
+            mExchange = intent.getStringExtra("exchange");
+        }
+    }
+
+    public static void startSearchOnExchangeActivity(Context context,String exchange){
+        if(context == null){
+            return;
+        }
+        Intent intent = new Intent(context,SearchOnExchangeActivity.class);
+        intent.putExtra("exchange",exchange);
+        context.startActivity(intent);
+    }
+
 
     @Override
     public void onHotCoinSuccess(HotCoinResponse response) {
-        mHotCoinResponse = response;
-        mSearchAdapter.setHotCoinResponse(response);
-        mIsHotCoinGet = true;
-        updateData();
+
     }
 
     @Override
     public void onHotCoinError() {
-        mIsHotCoinGet = true;
-        updateData();
+
     }
 
     @Override
     public void onExchangeSuccess(ExchangeListResponse response) {
-        mExchangeListResponse = response;
-        mIsExchangeGet = true;
-        updateData();
+
     }
 
     @Override
     public void onExchangeError() {
-        mIsExchangeGet = true;
-        updateData();
+
     }
 
     @Override
@@ -379,12 +288,5 @@ public class SearchActivity extends BaseActivity implements ISearchView{
             mMyToast.showToast("删除失败");
         }
         refreshCurrent();
-    }
-
-    public static void startSearchActivity(Context context){
-        if(context == null){
-            return;
-        }
-        context.startActivity(new Intent(context,SearchActivity.class));
     }
 }
