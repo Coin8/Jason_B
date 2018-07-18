@@ -11,15 +11,24 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.coin.b8.app.AppLogger;
+import com.coin.b8.app.B8Application;
+import com.coin.b8.help.DemoHelper;
 import com.coin.b8.help.PreferenceHelper;
+import com.coin.b8.http.B8Api;
+import com.coin.b8.model.UnLoginUidInfo;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
+
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * Created by zhangyi on 2018/6/20.
@@ -94,6 +103,87 @@ public class CommonUtils {
     }
     public static boolean isMatch(final String regex, final CharSequence input) {
         return input != null && input.length() > 0 && Pattern.matches(regex, input);
+    }
+
+    public static String getWeek(long time) {
+        String Week = "";
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(new Date(time));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        int wek=c.get(Calendar.DAY_OF_WEEK);
+
+        if (wek == 1) {
+            Week += "星期日";
+        }
+        if (wek == 2) {
+            Week += "星期一";
+        }
+        if (wek == 3) {
+            Week += "星期二";
+        }
+        if (wek == 4) {
+            Week += "星期三";
+        }
+        if (wek == 5) {
+            Week += "星期四";
+        }
+        if (wek == 6) {
+            Week += "星期五";
+        }
+        if (wek == 7) {
+            Week += "星期六";
+        }
+        return Week;
+    }
+
+
+    public static void getUnLoginUid(){
+
+        if(PreferenceHelper.getIsLogin(B8Application.getIntstance())){
+            return;
+        }
+
+        String imei = PreferenceHelper.getIMEI(B8Application.getIntstance());
+        if(TextUtils.isEmpty(imei)){
+            return;
+        }
+        DisposableObserver<UnLoginUidInfo> disposableObserver = new DisposableObserver<UnLoginUidInfo>() {
+            @Override
+            public void onNext(UnLoginUidInfo unLoginUidInfo) {
+                if(unLoginUidInfo != null){
+                    if(!PreferenceHelper.getIsLogin(B8Application.getIntstance())){
+                        PreferenceHelper.setUid(B8Application.getIntstance(),String.valueOf(unLoginUidInfo.getUid()));
+
+                        if(!TextUtils.isEmpty(unLoginUidInfo.getEasename())
+                                && !TextUtils.isEmpty(unLoginUidInfo.getPassword())){
+                            PreferenceHelper.setEaseName(B8Application.getIntstance(),unLoginUidInfo.getEasename());
+                            PreferenceHelper.setEasePassword(B8Application.getIntstance(),unLoginUidInfo.getPassword());
+
+                            DemoHelper.getInstance().logout();
+                            DemoHelper.getInstance().login(unLoginUidInfo.getEasename(),
+                                    unLoginUidInfo.getPassword());
+                        }
+
+
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+        B8Api.getUnLoginUidInfo(disposableObserver,imei);
     }
 
 }

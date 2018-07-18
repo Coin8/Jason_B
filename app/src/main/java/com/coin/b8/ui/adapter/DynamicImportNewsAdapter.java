@@ -39,11 +39,21 @@ public class DynamicImportNewsAdapter extends RecyclerView.Adapter{
     private List<DynamicImportNewsResponse.DataBean.ContentBean> mList;
     private List<ImportantNewsBannerResponse.DataBean> mBannerBeanList;
 
+    public interface ItemOnclickListen{
+        void onShareClick(DynamicImportNewsResponse.DataBean.ContentBean contentBean);
+    }
+
+    private ItemOnclickListen mItemOnclickListen;
 
 
     public DynamicImportNewsAdapter(List<DynamicImportNewsResponse.DataBean.ContentBean> list) {
         mList = list;
     }
+
+    public void setItemOnclickListen(ItemOnclickListen itemOnclickListen) {
+        mItemOnclickListen = itemOnclickListen;
+    }
+
     public void addList(List<DynamicImportNewsResponse.DataBean.ContentBean> list){
         if(list != null && list.size() > 0){
             if(mList == null){
@@ -181,6 +191,15 @@ public class DynamicImportNewsAdapter extends RecyclerView.Adapter{
                         NativeDetailActivity.startNativeDetailActivity(v.getContext(), web_url );
                     }
                 });
+
+                normalViewHolder.mShareBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(mItemOnclickListen != null){
+                            mItemOnclickListen.onShareClick(contentBean);
+                        }
+                    }
+                });
             }
         }
     }
@@ -210,7 +229,7 @@ public class DynamicImportNewsAdapter extends RecyclerView.Adapter{
             super(itemView);
             mTitle = itemView.findViewById(R.id.title);
             mTime = itemView.findViewById(R.id.time);
-            mShareBtn = itemView.findViewById(R.id.wrap_content);
+            mShareBtn = itemView.findViewById(R.id.share_btn);
             mImageView = itemView.findViewById(R.id.collect_image);
         }
     }

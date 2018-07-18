@@ -108,11 +108,11 @@ public class HomeSelectCoinFragment extends BaseFragment implements ISelectCoinV
             mSelectCoinListAdapter.setSelectCoinItemModelList(list);
             mSelectCoinListAdapter.notifyDataSetChanged();
         }
-        mSmartRefreshLayout.finishRefresh();
+        mSmartRefreshLayout.finishRefresh(0);
     }
 
     @Override
     public void onSelectCoinFail() {
-        mSmartRefreshLayout.finishRefresh();
+        mSmartRefreshLayout.finishRefresh(0,false);
     }
 }

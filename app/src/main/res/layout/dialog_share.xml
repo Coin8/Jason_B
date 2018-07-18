@@ -6,6 +6,7 @@
     android:background="@color/translate">
 
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="15dp"
@@ -14,19 +15,68 @@
         android:scrollbars="none"
         android:layout_above="@id/bottom_layout">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <ImageView
-                android:id="@+id/share_image"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/default_image_share_layout"
                 android:layout_width="match_parent"
-                android:layout_height="667dp"
-                android:src="@drawable/share_bg"
-                android:scaleType="fitXY"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/share_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="667dp"
+                    android:src="@drawable/share_bg"
+                    android:scaleType="fitXY"/>
 
-        </LinearLayout>
+            </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/quick_news_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:background="@color/white">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:src="@drawable/share_quick_news"
+                    android:scaleType="fitXY"/>
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textSize="12sp"
+                    android:textColor="#9b9b9b"/>
+
+                <TextView
+                    android:id="@+id/desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/title_text_color"/>
+
+                <ImageView
+                    android:layout_marginTop="50dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:src="@drawable/share_quick_qr"
+                    android:scaleType="fitXY"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
 
     </ScrollView>
 
@@ -107,7 +157,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center_horizontal"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <ImageView
                     android:id="@+id/share_weibo"

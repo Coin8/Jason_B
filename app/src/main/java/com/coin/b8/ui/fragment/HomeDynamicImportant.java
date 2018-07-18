@@ -1,16 +1,24 @@
 package com.coin.b8.ui.fragment;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.coin.b8.R;
+import com.coin.b8.constant.Constants;
+import com.coin.b8.help.PreferenceHelper;
 import com.coin.b8.model.DynamicImportNewsResponse;
 import com.coin.b8.model.ImportantNewsBannerResponse;
+import com.coin.b8.ui.activity.HomeActivity;
 import com.coin.b8.ui.adapter.DynamicImportNewsAdapter;
+import com.coin.b8.ui.dialog.ShareDialogFragment;
 import com.coin.b8.ui.iView.IDynamicImportView;
+import com.coin.b8.ui.listen.ShareListen;
 import com.coin.b8.ui.presenter.DynamicImportPresenter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -48,6 +56,13 @@ public class HomeDynamicImportant extends BaseFragment implements IDynamicImport
         mDynamicImportNewsAdapter = new DynamicImportNewsAdapter(null);
         mRecyclerView.setAdapter(mDynamicImportNewsAdapter);
 
+        mDynamicImportNewsAdapter.setItemOnclickListen(new DynamicImportNewsAdapter.ItemOnclickListen() {
+            @Override
+            public void onShareClick(DynamicImportNewsResponse.DataBean.ContentBean contentBean) {
+                startShare(contentBean);
+            }
+        });
+
         mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
@@ -62,6 +77,69 @@ public class HomeDynamicImportant extends BaseFragment implements IDynamicImport
             }
         });
         mSmartRefreshLayout.autoRefresh();
+
+    }
+
+    private String getShareUrl(long id){
+        StringBuilder stringBuilder = new StringBuilder(Constants.IMPORTANT_NEWS_SHARE_BASE_URL);
+        stringBuilder.append("&id=");
+        stringBuilder.append(id);
+        Context context = getContext();
+        stringBuilder.append("&uid=").append(PreferenceHelper.getUid(context));
+        String imei = PreferenceHelper.getIMEI(context);
+        if(!TextUtils.isEmpty(imei)){
+            stringBuilder.append("&imei=").append(imei);
+        }
+        String token = PreferenceHelper.getToken(context);
+        if(!TextUtils.isEmpty(token)){
+            stringBuilder.append("&token=").append(token);
+        }
+        return stringBuilder.toString();
+    }
+
+    private void startShare(DynamicImportNewsResponse.DataBean.ContentBean contentBean){
+        if(contentBean == null){
+            return;
+        }
+
+        ShareDialogFragment shareDialogFragment = new ShareDialogFragment();
+        shareDialogFragment.setDisplayImage(false);
+        shareDialogFragment.setShareListen(new ShareListen() {
+            @Override
+            public void onClickWxChat(Bitmap bitmap) {
+                HomeActivity activity = (HomeActivity) getActivity();
+                if(activity != null){
+
+                    String url = getShareUrl(contentBean.getId());
+                    activity.shareWebUrl(0,contentBean.getTitle(),contentBean.getAbs(),url );
+                }
+            }
+
+            @Override
+            public void onClickWxCircle(Bitmap bitmap) {
+                HomeActivity activity = (HomeActivity) getActivity();
+                if(activity != null){
+                    String url = getShareUrl(contentBean.getId());
+                    activity.shareWebUrl(1,contentBean.getTitle(),contentBean.getAbs(),url );
+                }
+            }
+
+            @Override
+            public void onClickWeiBo(Bitmap bitmap) {
+                HomeActivity activity = (HomeActivity) getActivity();
+                if(activity != null){
+                    String url = getShareUrl(contentBean.getId());
+                    activity.shareWebUrl(2,contentBean.getTitle(),contentBean.getAbs(),url );
+                }
+            }
+
+            @Override
+            public void onClickQq(Bitmap bitmap) {
+
+            }
+        });
+        shareDialogFragment.show(getFragmentManager(), "share");
+
 
     }
 
@@ -90,7 +168,7 @@ public class HomeDynamicImportant extends BaseFragment implements IDynamicImport
 
     @Override
     public void onNewError() {
-        mSmartRefreshLayout.finishRefresh(0);
+        mSmartRefreshLayout.finishRefresh(0,false);
     }
 
     @Override

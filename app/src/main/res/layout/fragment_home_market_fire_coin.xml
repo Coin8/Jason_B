@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/lineColor">
     <LinearLayout
         android:id="@+id/head_layout"
         android:layout_width="match_parent"
@@ -160,7 +161,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srlPrimaryColor="@color/lineColor"
-            app:srlAccentColor="@color/black">
+            app:srlAccentColor="@color/refresh_text_color">
         </com.scwang.smartrefresh.layout.header.ClassicsHeader>
 
         <android.support.v7.widget.RecyclerView
@@ -175,7 +176,7 @@
             android:layout_height="wrap_content"
             app:srlClassicsSpinnerStyle="Translate"
             app:srlPrimaryColor="@color/lineColor"
-            app:srlAccentColor="@color/black"/>
+            app:srlAccentColor="@color/refresh_text_color"/>
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 

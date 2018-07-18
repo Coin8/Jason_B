@@ -1,6 +1,7 @@
 package com.coin.b8.ui.fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.Image;
 import android.os.Bundle;
 import android.text.TextPaint;
@@ -21,6 +22,7 @@ import com.coin.b8.model.FeedBackResult;
 import com.coin.b8.model.UserInfoResponse;
 import com.coin.b8.ui.activity.BusinessCooperationActivity;
 import com.coin.b8.ui.activity.CollectionActivity;
+import com.coin.b8.ui.activity.HomeActivity;
 import com.coin.b8.ui.activity.PersonalInfoActivity;
 import com.coin.b8.ui.activity.SettingActivity;
 import com.coin.b8.ui.activity.YuJingRecordActivity;
@@ -59,7 +61,6 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
     private TextView mViewUserName;
     private TextView mViewUserId;
     private ImageView mUserImageView;
-    private WXShare mWXShare;
     private MyToast mToast;
     private HomeMinePresenterImpl mHomeMinePresenter;
     public static HomeMineFragment getInstance() {
@@ -94,7 +95,6 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
         mItemCheckUpdate.setOnClickListener(this);
         mUserLayout.setOnClickListener(this);
         mToast = new MyToast(getActivity());
-        initShare();
         mItemCheckUpdate.setRightText(getResources().getString(R.string.already_new_version));
         mHomeMinePresenter = new HomeMinePresenterImpl(this);
         mHomeMinePresenter.getUpdateInfo(true);
@@ -142,9 +142,6 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onStart() {
         super.onStart();
-        if (mWXShare != null) {
-            mWXShare.register();
-        }
     }
 
     @Override
@@ -162,9 +159,6 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mWXShare != null) {
-            mWXShare.unregister();
-        }
         mHomeMinePresenter.onDetach();
     }
 
@@ -201,54 +195,37 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
-    private void initShare() {
-        /**
-         * 微信分享
-         */
-        mWXShare = new WXShare(getContext());
-        mWXShare.setListener(new OnResponseListener() {
-            @Override
-            public void onSuccess() {
-                // 分享成功
-            }
-
-            @Override
-            public void onCancel() {
-                // 分享取消
-            }
-
-            @Override
-            public void onFail(String message) {
-                // 分享失败
-            }
-        });
-    }
 
 
     private void startShare() {
         ShareDialogFragment shareDialogFragment = new ShareDialogFragment();
         shareDialogFragment.setShareListen(new ShareListen() {
             @Override
-            public void onClickWxChat() {
-                if (mWXShare != null) {
-                    mWXShare.shareImage(0, R.drawable.share_bg);
+            public void onClickWxChat(Bitmap bitmap) {
+                HomeActivity activity = (HomeActivity) getActivity();
+                if(activity != null){
+                    activity.shareDefault(0);
                 }
             }
 
             @Override
-            public void onClickWxCircle() {
-                if (mWXShare != null) {
-                    mWXShare.shareImage(1, R.drawable.share_bg);
+            public void onClickWxCircle(Bitmap bitmap) {
+                HomeActivity activity = (HomeActivity) getActivity();
+                if(activity != null){
+                    activity.shareDefault(1);
                 }
             }
 
             @Override
-            public void onClickWeiBo() {
-
+            public void onClickWeiBo(Bitmap bitmap) {
+                HomeActivity activity = (HomeActivity) getActivity();
+                if(activity != null){
+                    activity.shareDefault(2);
+                }
             }
 
             @Override
-            public void onClickQq() {
+            public void onClickQq(Bitmap bitmap) {
 
             }
         });

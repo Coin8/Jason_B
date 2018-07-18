@@ -1,5 +1,6 @@
 package com.coin.b8.wxapi;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,13 @@ import android.util.Log;
 
 import com.coin.b8.R;
 import com.coin.b8.utils.CommonUtils;
+import com.sina.weibo.sdk.WbSdk;
+import com.sina.weibo.sdk.api.ImageObject;
+import com.sina.weibo.sdk.api.TextObject;
+import com.sina.weibo.sdk.api.WebpageObject;
+import com.sina.weibo.sdk.api.WeiboMultiMessage;
+import com.sina.weibo.sdk.auth.AuthInfo;
+import com.sina.weibo.sdk.share.WbShareHandler;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXImageObject;
@@ -38,8 +46,25 @@ public class WXShare {
     private OnResponseListener listener;
     private ResponseReceiver receiver;
 
-    public WXShare(Context context) {
+
+    //微博
+    private WbShareHandler mWbShareHandler;
+    public static final String WEIBO_APP_KEY = "3713372297";
+    public static final String WEIBO_APP_SECRET = "60f7402c338262df9196a31971707e1b";
+    public static final String REDIRECT_URL = "https://api.weibo.com/oauth2/default.html";
+    public static final String SCOPE =
+            "email,direct_messages_read,direct_messages_write,"
+                    + "friendships_groups_read,friendships_groups_write,statuses_to_me_read,"
+                    + "follow_app_official_microblog," + "invitation_write";
+
+    public WXShare(Context context, Activity activity) {
         api = WXAPIFactory.createWXAPI(context, APP_ID);
+
+        WbSdk.install(context,new AuthInfo(context, WEIBO_APP_KEY,REDIRECT_URL, SCOPE));//创建微博API接口类对象
+        if(activity != null){
+            mWbShareHandler = new WbShareHandler(activity);
+            mWbShareHandler.registerApp();
+        }
         this.context = context;
     }
 
@@ -84,86 +109,180 @@ public class WXShare {
 
     /**
      *
-     * @param type 0 朋友，1 、朋友圈
+     * @param type 0 朋友，1 、朋友圈 2、微博
      * @param resId
      * @return
      */
     public WXShare shareImage(int type,int resId) {
-        try {
-            Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), resId);
-            WXImageObject imgObj = new WXImageObject(bmp);
-            WXMediaMessage msg = new WXMediaMessage();
-            msg.mediaObject = imgObj;
-            Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, 150, 150, true);
-            bmp.recycle();
-            msg.thumbData = CommonUtils.bmpToByteArray(thumbBmp, true);
-            SendMessageToWX.Req req = new SendMessageToWX.Req();
-            req.transaction = buildTransaction("img");
-            req.message = msg;
-            if(type == 0){
-                req.scene = SendMessageToWX.Req.WXSceneSession;
-            }else {
-                req.scene = SendMessageToWX.Req.WXSceneTimeline;
+        switch (type){
+            case 0:
+            case 1:{
+                try {
+                    Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), resId);
+                    WXImageObject imgObj = new WXImageObject(bmp);
+                    WXMediaMessage msg = new WXMediaMessage();
+                    msg.mediaObject = imgObj;
+                    Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, 150, 150, true);
+                    bmp.recycle();
+                    msg.thumbData = CommonUtils.bmpToByteArray(thumbBmp, true);
+                    SendMessageToWX.Req req = new SendMessageToWX.Req();
+                    req.transaction = buildTransaction("img");
+                    req.message = msg;
+                    if(type == 0){
+                        req.scene = SendMessageToWX.Req.WXSceneSession;
+                    }else {
+                        req.scene = SendMessageToWX.Req.WXSceneTimeline;
+                    }
+                    api.sendReq(req);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-            api.sendReq(req);
-        } catch (Exception e) {
-            e.printStackTrace();
+                break;
+            case 2:{
+                try {
+                    Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), resId);
+                    ImageObject imageObject = new ImageObject();
+                    imageObject.setImageObject(bmp);
+                    WeiboMultiMessage weiboMessage = new WeiboMultiMessage();
+                    weiboMessage.imageObject = imageObject;
+                    if(mWbShareHandler != null){
+                        mWbShareHandler.shareMessage(weiboMessage, false);
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+                break;
         }
+
         return this;
     }
 
     public WXShare shareImage(int type,Bitmap bmp) {
-        try {
-            if(bmp == null){
-                return this;
+        switch (type){
+            case 0:
+            case 1:{
+                try {
+                    if(bmp == null){
+                        return this;
+                    }
+                    WXImageObject imgObj = new WXImageObject(bmp);
+                    WXMediaMessage msg = new WXMediaMessage();
+                    msg.mediaObject = imgObj;
+                    Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, 150, 150, true);
+                    bmp.recycle();
+                    msg.thumbData = CommonUtils.bmpToByteArray(thumbBmp, true);
+                    SendMessageToWX.Req req = new SendMessageToWX.Req();
+                    req.transaction = buildTransaction("img");
+                    req.message = msg;
+                    if(type == 0){
+                        req.scene = SendMessageToWX.Req.WXSceneSession;
+                    }else {
+                        req.scene = SendMessageToWX.Req.WXSceneTimeline;
+                    }
+                    api.sendReq(req);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
-            WXImageObject imgObj = new WXImageObject(bmp);
-            WXMediaMessage msg = new WXMediaMessage();
-            msg.mediaObject = imgObj;
-            Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, 150, 150, true);
-            bmp.recycle();
-            msg.thumbData = CommonUtils.bmpToByteArray(thumbBmp, true);
-            SendMessageToWX.Req req = new SendMessageToWX.Req();
-            req.transaction = buildTransaction("img");
-            req.message = msg;
-            if(type == 0){
-                req.scene = SendMessageToWX.Req.WXSceneSession;
-            }else {
-                req.scene = SendMessageToWX.Req.WXSceneTimeline;
+                break;
+            case 2:{
+                try {
+                    if(bmp == null){
+                        return this;
+                    }
+
+                    ImageObject imageObject = new ImageObject();
+                    imageObject.setImageObject(bmp);
+
+                    WeiboMultiMessage weiboMessage = new WeiboMultiMessage();
+                    weiboMessage.imageObject = imageObject;
+                    if(mWbShareHandler != null){
+                        mWbShareHandler.shareMessage(weiboMessage, false);
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
-            api.sendReq(req);
-        } catch (Exception e) {
-            e.printStackTrace();
+                break;
         }
+
         return this;
     }
 
     public WXShare shareWeb(int type,String title,String content,String webUrl) {
-        try {
-            WXWebpageObject webpage = new WXWebpageObject();
-            webpage.webpageUrl = webUrl;
-            WXMediaMessage msg = new WXMediaMessage(webpage);
-            msg.title = title;
-            msg.description = content;
-            Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.share_smal_icon);
-            Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
-            bmp.recycle();
-            msg.thumbData = CommonUtils.bmpToByteArray(thumbBmp, true);
 
-            SendMessageToWX.Req req = new SendMessageToWX.Req();
-            req.transaction = buildTransaction("webpage");
-            req.message = msg;
-            if(type == 0){
-                req.scene = SendMessageToWX.Req.WXSceneSession;
-            }else {
-                req.scene = SendMessageToWX.Req.WXSceneTimeline;
+        switch (type){
+            case 0:
+            case 1:{
+                try {
+                    WXWebpageObject webpage = new WXWebpageObject();
+                    webpage.webpageUrl = webUrl;
+                    WXMediaMessage msg = new WXMediaMessage(webpage);
+                    msg.title = title;
+                    msg.description = content;
+                    Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.share_smal_icon);
+                    Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
+                    bmp.recycle();
+                    msg.thumbData = CommonUtils.bmpToByteArray(thumbBmp, true);
+
+                    SendMessageToWX.Req req = new SendMessageToWX.Req();
+                    req.transaction = buildTransaction("webpage");
+                    req.message = msg;
+                    if(type == 0){
+                        req.scene = SendMessageToWX.Req.WXSceneSession;
+                    }else {
+                        req.scene = SendMessageToWX.Req.WXSceneTimeline;
+                    }
+                    api.sendReq(req);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
-            api.sendReq(req);
-        } catch (Exception e) {
-            e.printStackTrace();
+                break;
+            case 2:{
+                try {
+                    TextObject textObject = new TextObject();
+                    textObject.text = content;
+                    textObject.title = title;
+                    textObject.actionUrl = webUrl;
+
+
+                    Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.share_smal_icon);
+                    Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
+                    bmp.recycle();
+                    textObject.setThumbImage(thumbBmp);
+                    WeiboMultiMessage weiboMessage = new WeiboMultiMessage();
+                    weiboMessage.textObject = textObject;
+
+                    WebpageObject mediaObject = new WebpageObject();
+                    mediaObject.title = title;
+                    mediaObject.description = content;
+                    mediaObject.setThumbImage(thumbBmp);
+                    mediaObject.actionUrl = webUrl;
+                    weiboMessage.mediaObject = mediaObject;
+                    if(mWbShareHandler != null){
+                        mWbShareHandler.shareMessage(weiboMessage, false);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+                break;
         }
+
         return this;
     }
+
 
 
 

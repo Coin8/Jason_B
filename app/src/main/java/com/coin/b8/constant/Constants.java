@@ -19,4 +19,5 @@ public class Constants {
     public static String IMPORTANT_NEWS_DETAIL_BASE_URL = "http://app.diyli.cn/#/dynamic_details/focus?id=";
     public static String MART_DETAIL_URL = "http://app.diyli.cn/#/market-details?";
     public static String GLOBAL_DETAIL_URL = "http://app.diyli.cn/#/global-details?";
+    public static String IMPORTANT_NEWS_SHARE_BASE_URL = "http://app.diyli.cn/static/share-page/index.html?type=news";
 }

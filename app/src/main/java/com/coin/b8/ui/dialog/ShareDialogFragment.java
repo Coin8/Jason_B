@@ -1,5 +1,7 @@
 package com.coin.b8.ui.dialog;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +12,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.coin.b8.R;
@@ -28,9 +32,31 @@ public class ShareDialogFragment extends DialogFragment implements View.OnClickL
     private View mWeiBo;
     private View mQq;
     private ShareListen mShareListen;
+    private ScrollView mScrollView;
+    private LinearLayout mDefaultImageLayout;
+    private LinearLayout mQuickNewsLayout;
+    private boolean isDisplayImage = true;
+    private boolean isDisplayQuickNews = false;
+    private TextView mTextViewDesc;
+    private TextView mTextViewTime;
+
+    private String mDesc = "";
+    private String mTime = "";
+
+    public void setQuickNewDesc(String desc,String time){
+        mDesc = desc;
+        mTime = time;
+    }
+    public void setDisplayQuickNews(boolean displayQuickNews) {
+        isDisplayQuickNews = displayQuickNews;
+    }
 
     public void setShareListen(ShareListen shareListen) {
         mShareListen = shareListen;
+    }
+
+    public void setDisplayImage(boolean displayImage) {
+        isDisplayImage = displayImage;
     }
 
     @Override
@@ -74,6 +100,11 @@ public class ShareDialogFragment extends DialogFragment implements View.OnClickL
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 //        return super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.dialog_share, container, false);
+        mDefaultImageLayout = v.findViewById(R.id.default_image_share_layout);
+        mQuickNewsLayout = v.findViewById(R.id.quick_news_layout);
+        mTextViewDesc = v.findViewById(R.id.desc);
+        mTextViewTime = v.findViewById(R.id.date);
+        mScrollView = v.findViewById(R.id.scroll_view);
         mBtnCancel = v.findViewById(R.id.button_cancel);
         mWxChat = v.findViewById(R.id.mRlWechat);
         mWxCircle = v.findViewById(R.id.mRlWeixinCircle);
@@ -84,6 +115,20 @@ public class ShareDialogFragment extends DialogFragment implements View.OnClickL
         mWxCircle.setOnClickListener(this);
         mWeiBo.setOnClickListener(this);
         mQq.setOnClickListener(this);
+        if(isDisplayImage){
+           mScrollView.setVisibility(View.VISIBLE);
+        }else {
+            mScrollView.setVisibility(View.GONE);
+        }
+        if(isDisplayQuickNews){
+            mDefaultImageLayout.setVisibility(View.GONE);
+            mQuickNewsLayout.setVisibility(View.VISIBLE);
+            mTextViewTime.setText(mTime);
+            mTextViewDesc.setText(mDesc);
+        }else {
+            mDefaultImageLayout.setVisibility(View.VISIBLE);
+            mQuickNewsLayout.setVisibility(View.GONE);
+        }
         return v;
     }
 
@@ -92,34 +137,58 @@ public class ShareDialogFragment extends DialogFragment implements View.OnClickL
         if(v == null){
             return;
         }
+        Bitmap bm = null;
 
         switch (v.getId()){
             case R.id.button_cancel:
 
                 break;
             case R.id.mRlWechat:
+                if(isDisplayQuickNews){
+                    bm = makeView2Bitmap(mQuickNewsLayout);
+                }
                 if(mShareListen != null){
-                    mShareListen.onClickWxChat();
+                    mShareListen.onClickWxChat(bm);
                 }
                 break;
             case R.id.mRlWeixinCircle:
+                if(isDisplayQuickNews){
+                    bm = makeView2Bitmap(mQuickNewsLayout);
+                }
                 if(mShareListen != null){
-                    mShareListen.onClickWxCircle();
+                    mShareListen.onClickWxCircle(bm);
                 }
                 break;
             case R.id.mRlWeibo:
+                if(isDisplayQuickNews){
+                    bm = makeView2Bitmap(mQuickNewsLayout);
+                }
                 if(mShareListen != null){
-                    mShareListen.onClickWeiBo();
+                    mShareListen.onClickWeiBo(bm);
                 }
                 break;
             case R.id.mRlQQ:
+                if(isDisplayQuickNews){
+                    bm = makeView2Bitmap(mQuickNewsLayout);
+                }
                 if(mShareListen != null){
-                    mShareListen.onClickQq();
+                    mShareListen.onClickQq(bm);
                 }
                 break;
         }
 
         dismiss();
 
+    }
+
+    private Bitmap makeView2Bitmap(View view) {
+        //View是你需要绘画的View
+        int width = view.getWidth();
+        int height = view.getHeight();
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        //如果不设置canvas画布为白色，则生成透明   							canvas.drawColor(Color.WHITE);
+        view.draw(canvas);
+        return bitmap;
     }
 }

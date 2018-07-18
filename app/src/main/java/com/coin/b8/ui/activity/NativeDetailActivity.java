@@ -281,7 +281,7 @@ public class NativeDetailActivity extends BaseActivity implements View.OnClickLi
         /**
          * 微信分享
          */
-        mWXShare = new WXShare(this);
+        mWXShare = new WXShare(this,this);
         mWXShare.setListener(new OnResponseListener() {
             @Override
             public void onSuccess() {
@@ -638,26 +638,28 @@ public class NativeDetailActivity extends BaseActivity implements View.OnClickLi
         ShareDialogFragment shareDialogFragment = new ShareDialogFragment();
         shareDialogFragment.setShareListen(new ShareListen() {
             @Override
-            public void onClickWxChat() {
+            public void onClickWxChat(Bitmap bitmap) {
                 if (mWXShare != null) {
                     mWXShare.shareImage(0, R.drawable.share_bg);
                 }
             }
 
             @Override
-            public void onClickWxCircle() {
+            public void onClickWxCircle(Bitmap bitmap) {
                 if (mWXShare != null) {
                     mWXShare.shareImage(1, R.drawable.share_bg);
                 }
             }
 
             @Override
-            public void onClickWeiBo() {
-
+            public void onClickWeiBo(Bitmap bitmap) {
+                if (mWXShare != null) {
+                    mWXShare.shareImage(2, R.drawable.share_bg);
+                }
             }
 
             @Override
-            public void onClickQq() {
+            public void onClickQq(Bitmap bitmap) {
 
             }
         });

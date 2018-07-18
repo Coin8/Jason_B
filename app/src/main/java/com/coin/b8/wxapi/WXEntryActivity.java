@@ -21,7 +21,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        Logger.i("WXEntryActivity");
-        WXShare share = new WXShare(this);
+        WXShare share = new WXShare(this,this);
         api = share
                 //                .register()
                 .getApi();

@@ -21,8 +21,10 @@ allprojects {
     repositories {
         google()
         jcenter()
+        mavenCentral()
         maven { url 'https://maven.google.com' }
         maven { url "https://jitpack.io" }
+        maven { url "https://dl.bintray.com/thelasterstar/maven/" }
     }
 }
 

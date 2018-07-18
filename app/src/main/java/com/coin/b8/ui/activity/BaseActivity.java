@@ -1,10 +1,13 @@
 package com.coin.b8.ui.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +23,9 @@ import android.widget.Toast;
 
 import com.coin.b8.R;
 import com.coin.b8.constant.Constants;
+import com.coin.b8.help.PreferenceHelper;
+import com.coin.b8.utils.CommonUtils;
+import com.coin.b8.utils.PhoneUtils;
 import com.jaeger.library.StatusBarUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.yanzhenjie.permission.AndPermission;
@@ -62,6 +68,17 @@ public class BaseActivity extends AppCompatActivity {
             color = R.color.white;
         }
         StatusBarUtil.setColor(this, getResources().getColor(color), 0);
+
+    }
+
+    public void saveIMEI(){
+        if(!TextUtils.isEmpty(PreferenceHelper.getIMEI(getApplicationContext()))){
+            return;
+        }
+        if (AndPermission.hasPermissions(BaseActivity.this, Permission.READ_PHONE_STATE)) {
+            String str = PhoneUtils.getIMEI();
+            PreferenceHelper.setIMEI(this,str);
+        }
 
     }
 
@@ -124,6 +141,8 @@ public class BaseActivity extends AppCompatActivity {
                 .show();
     }
 
+
+
     /**
      * Set permissions.
      */
@@ -134,7 +153,9 @@ public class BaseActivity extends AppCompatActivity {
                 .onComeback(new Setting.Action() {
                     @Override
                     public void onAction() {
-                        Toast.makeText(BaseActivity.this, R.string.message_setting_comeback, Toast.LENGTH_SHORT).show();
+                        saveIMEI();
+                        CommonUtils.getUnLoginUid();
+//                        Toast.makeText(BaseActivity.this, R.string.message_setting_comeback, Toast.LENGTH_SHORT).show();
                     }
                 })
                 .start();

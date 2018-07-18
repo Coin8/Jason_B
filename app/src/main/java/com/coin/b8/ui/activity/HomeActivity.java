@@ -2,6 +2,7 @@ package com.coin.b8.ui.activity;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,8 +36,11 @@ import com.coin.b8.update.IUpdateChecker;
 import com.coin.b8.update.IUpdateParser;
 import com.coin.b8.update.UpdateInfo;
 import com.coin.b8.update.UpdateManager;
+import com.coin.b8.utils.CommonUtils;
 import com.coin.b8.utils.MyToast;
 import com.coin.b8.utils.PhoneUtils;
+import com.coin.b8.wxapi.OnResponseListener;
+import com.coin.b8.wxapi.WXShare;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
@@ -59,11 +63,13 @@ public class HomeActivity extends BaseActivity implements BottomNavigationView.O
     private int mLastFgIndex;
     private MyToast mToast;
     private HomePresenterImpl mHomePresenter;
+    private WXShare mWXShare;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        initShare();
         mHomePresenter = new HomePresenterImpl(this);
         mFragments = new ArrayList<>();
         initFragment();
@@ -77,6 +83,30 @@ public class HomeActivity extends BaseActivity implements BottomNavigationView.O
     private void initData(){
 
     }
+
+    private void initShare() {
+        /**
+         * 微信分享
+         */
+        mWXShare = new WXShare(this,this);
+        mWXShare.setListener(new OnResponseListener() {
+            @Override
+            public void onSuccess() {
+                // 分享成功
+            }
+
+            @Override
+            public void onCancel() {
+                // 分享取消
+            }
+
+            @Override
+            public void onFail(String message) {
+                // 分享失败
+            }
+        });
+    }
+
 
     private void initBottomNavigationView(){
         mBottomNavigationView = findViewById(R.id.bottom_navigation_view);
@@ -112,6 +142,41 @@ public class HomeActivity extends BaseActivity implements BottomNavigationView.O
         }
         ft.show(targetFg);
         ft.commitAllowingStateLoss();
+    }
+
+    public void shareDefault(int type){
+        if(mWXShare != null){
+            mWXShare.shareImage(type, R.drawable.share_bg);
+        }
+    }
+
+    public void shareWebUrl(int type,String title,String content,String webUrl){
+        if(mWXShare != null){
+            mWXShare.shareWeb(type, title,content,webUrl);
+        }
+    }
+
+    public void shareBitmap(int type, Bitmap bmp){
+        if(mWXShare != null){
+            mWXShare.shareImage(type, bmp);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mWXShare != null) {
+            mWXShare.register();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHomePresenter.onDetach();
+        if(mWXShare != null){
+            mWXShare.unregister();
+        }
     }
 
     @Override
@@ -174,17 +239,16 @@ public class HomeActivity extends BaseActivity implements BottomNavigationView.O
                     @Override
                     public void onAction(List<String> permissions) {
                         saveIMEI();
-                        if(!PreferenceHelper.getIsLogin(HomeActivity.this)){
-                            mHomePresenter.getUnLoginUid(PreferenceHelper.getIMEI(HomeActivity.this));
-                        }
+                        CommonUtils.getUnLoginUid();
                     }
                 })
                 .onDenied(new Action<List<String>>() {
                     @Override
                     public void onAction(@NonNull List<String> permissions) {
                         saveIMEI();
-                        if(!PreferenceHelper.getIsLogin(HomeActivity.this)){
-                            mHomePresenter.getUnLoginUid(PreferenceHelper.getIMEI(HomeActivity.this));
+                        CommonUtils.getUnLoginUid();
+                        if (AndPermission.hasAlwaysDeniedPermission(HomeActivity.this, permissions)) {
+                            showSettingDialog(HomeActivity.this, permissions);
                         }
                     }
                 })
@@ -212,16 +276,7 @@ public class HomeActivity extends BaseActivity implements BottomNavigationView.O
         }
     }
 
-    private void saveIMEI(){
-        if(!TextUtils.isEmpty(PreferenceHelper.getIMEI(getApplicationContext()))){
-            return;
-        }
-        if (ActivityCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
-            String str = PhoneUtils.getIMEI();
-            PreferenceHelper.setIMEI(this,str);
-        }
 
-    }
 
     private void check(final B8UpdateInfo b8UpdateInfo, final boolean hasUpdate, final boolean isForce, final boolean isSilent) {
         UpdateManager.create(this).setChecker(new IUpdateChecker() {

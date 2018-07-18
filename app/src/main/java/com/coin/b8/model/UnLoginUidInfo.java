@@ -15,6 +15,24 @@ public class UnLoginUidInfo {
     private int uid;
     private int code;
     private String message;
+    private String password;
+    private String easename;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEasename() {
+        return easename;
+    }
+
+    public void setEasename(String easename) {
+        this.easename = easename;
+    }
 
     public int getUid() {
         return uid;

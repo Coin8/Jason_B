@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srlPrimaryColor="@color/lineColor"
-            app:srlAccentColor="@color/black">
+            app:srlAccentColor="@color/refresh_text_color">
         </com.scwang.smartrefresh.layout.header.ClassicsHeader>
 
         <android.support.v7.widget.RecyclerView
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             app:srlClassicsSpinnerStyle="Translate"
             app:srlPrimaryColor="@color/lineColor"
-            app:srlAccentColor="@color/black"/>
+            app:srlAccentColor="@color/refresh_text_color"/>
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 </LinearLayout>

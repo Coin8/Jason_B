@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,12 +16,18 @@ import com.coin.b8.R;
 import com.coin.b8.help.DemoHelper;
 import com.coin.b8.help.PreferenceHelper;
 import com.coin.b8.model.LoginResponseInfo;
+import com.coin.b8.permission.RuntimeRationale;
 import com.coin.b8.ui.dialog.LoadingDialog;
 import com.coin.b8.ui.iView.ILoginView;
 import com.coin.b8.ui.presenter.LoginPresenterImpl;
 import com.coin.b8.utils.CommonUtils;
 import com.coin.b8.utils.MyToast;
 import com.google.gson.Gson;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.Permission;
+
+import java.util.List;
 
 /**
  * Created by zhangyi on 2018/7/3.
@@ -42,6 +49,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         mMyToast = new MyToast(this);
         mLoginPresenter = new LoginPresenterImpl(this);
         initView();
+        requestPhonePermission();
     }
 
     private void initView(){
@@ -65,6 +73,33 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         mLoginPresenter.onDetach();
     }
 
+    private void requestPhonePermission(){
+        AndPermission.with(this)
+                .runtime()
+                .permission(Permission.READ_PHONE_STATE)
+                .rationale(new RuntimeRationale())
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> permissions) {
+                        saveIMEI();
+                        CommonUtils.getUnLoginUid();
+                    }
+                })
+                .onDenied(new Action<List<String>>() {
+                    @Override
+                    public void onAction(@NonNull List<String> permissions) {
+                        saveIMEI();
+                        CommonUtils.getUnLoginUid();
+                        if (AndPermission.hasAlwaysDeniedPermission(LoginActivity.this, permissions)) {
+                            showSettingDialog(LoginActivity.this, permissions);
+                        }
+                    }
+                })
+                .start();
+
+    }
+
+
     @Override
     public void onClick(View v) {
         if(v == null){
@@ -75,9 +110,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         switch (v.getId()){
             case R.id.right_title:
+                if(!checkPhonePermission()){
+                    return;
+                }
                 startRegister();
                 break;
             case R.id.login_btn:
+                if(!checkPhonePermission()){
+                    return;
+                }
                 email = mAccountEdit.getText().toString();
                 password = mPasswordEdit.getText().toString();
                 if(TextUtils.isEmpty(email)){
@@ -96,9 +137,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 mLoginPresenter.getLoginInfo(email,password);
                 break;
             case R.id.forget_password:
+                if(!checkPhonePermission()){
+                    return;
+                }
                 startForgetPassword();
                 break;
         }
+    }
+
+    private boolean checkPhonePermission(){
+        boolean value = AndPermission.hasPermissions(this,Permission.READ_PHONE_STATE);
+        if(!value){
+            requestPhonePermission();
+        }
+        return value;
     }
 
     private void startForgetPassword(){
@@ -127,9 +179,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         hideLoading();
         if(loginResponseInfo != null){
             if(loginResponseInfo.isResult() && loginResponseInfo.getData() != null){
-//                Gson gson = new Gson();
-//                String s = gson.toJson(loginResponseInfo);
-//                Log.e("zy","LoginResponseInfo = " + s);
                 PreferenceHelper.saveLoinInfo(this,loginResponseInfo);
                 if(DemoHelper.getInstance().isLoggedIn()){
                     DemoHelper.getInstance().logout();
