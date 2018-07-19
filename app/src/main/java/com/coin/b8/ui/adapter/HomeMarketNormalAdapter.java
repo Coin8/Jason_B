@@ -16,6 +16,7 @@ import com.coin.b8.help.PreferenceHelper;
 import com.coin.b8.model.MarketListSearchResponse;
 import com.coin.b8.ui.activity.NativeDetailActivity;
 import com.coin.b8.utils.CommonUtils;
+import com.coin.b8.utils.EventReportUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,8 +82,10 @@ public class HomeMarketNormalAdapter extends RecyclerView.Adapter{
 
                 StringBuilder stringBuilder = new StringBuilder();
                 if(mCoinType == 1){
+                    EventReportUtil.marketListItemReport(v.getContext(),dataBean.getBase(),"value");
                     stringBuilder.append(Constants.MART_DETAIL_URL);
                 }else {
+                    EventReportUtil.marketListItemReport(v.getContext(),dataBean.getBase(),"hotCoin");
                     stringBuilder.append(Constants.GLOBAL_DETAIL_URL);
                 }
 
@@ -123,11 +126,9 @@ public class HomeMarketNormalAdapter extends RecyclerView.Adapter{
                         .append("lowCny").append("=").append(CommonUtils.encode(dataBean.getLowCny())).append("&")
                         .append("highCny").append("=").append(CommonUtils.encode(dataBean.getHighCny()));
 
-
-
                 String web_url = stringBuilder.toString();
-//                Log.e("zy","web_url = " + web_url);
                 NativeDetailActivity.startNativeDetailActivity(v.getContext(),web_url);
+
 
             }
         });

@@ -13,6 +13,7 @@ import com.coin.b8.model.SelectCoinListResponse;
 import com.coin.b8.ui.adapter.SelectCoinListAdapter;
 import com.coin.b8.ui.iView.ISelectCoinView;
 import com.coin.b8.ui.presenter.SelectCoinPresenterImpl;
+import com.coin.b8.utils.CommonUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -71,6 +72,14 @@ public class HomeSelectCoinFragment extends BaseFragment implements ISelectCoinV
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSelectCoinPresenter = new SelectCoinPresenterImpl(this);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            CommonUtils.umengReport(getContext()," coin_exposure");
+        }
     }
 
     @Override

@@ -20,6 +20,7 @@ import com.coin.b8.ui.dialog.LoadingDialog;
 import com.coin.b8.ui.iView.IHomeMarketSelfView;
 import com.coin.b8.ui.presenter.HomeMarketSelfPresenter;
 import com.coin.b8.ui.view.BlankView;
+import com.coin.b8.utils.CommonUtils;
 import com.coin.b8.utils.MyToast;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -185,6 +186,14 @@ public class HomeMarketSelfFragment extends BaseFragment implements IHomeMarketS
         mHeadViewPrice.setOnClickListener(this);
         mHeadViewOneDayJump.setOnClickListener(this);
 
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            CommonUtils.umengReport(getContext(),"hq_optional_exposure");
+        }
     }
 
     @Override

@@ -25,13 +25,29 @@
             app:srlAccentColor="@color/refresh_text_color">
         </com.scwang.smartrefresh.layout.header.ClassicsHeader>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/lineColor">
+            android:layout_height="match_parent">
 
-        </android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/lineColor">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <com.coin.b8.ui.view.BlankView
+                android:id="@+id/blank_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+            </com.coin.b8.ui.view.BlankView>
+
+        </FrameLayout>
+
+
 
         <com.scwang.smartrefresh.layout.footer.ClassicsFooter
             android:layout_width="match_parent"

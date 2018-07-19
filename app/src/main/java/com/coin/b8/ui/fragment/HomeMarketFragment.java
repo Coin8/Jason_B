@@ -12,7 +12,10 @@ import android.widget.ImageView;
 import com.coin.b8.R;
 import com.coin.b8.ui.activity.SearchActivity;
 import com.coin.b8.ui.adapter.HomeMarketMainAdapter;
+import com.coin.b8.utils.CommonUtils;
+import com.coin.b8.utils.EventReportUtil;
 import com.flyco.tablayout.SlidingTabLayout;
+import com.flyco.tablayout.listener.OnTabSelectListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +44,20 @@ public class HomeMarketFragment extends BaseFragment{
         mTabLayout = view.findViewById(R.id.tablayout_market);
         mViewPager = view.findViewById(R.id.vp_market);
         mSearchBtn = view.findViewById(R.id.btn_search);
+
+
+        mTabLayout.setOnTabSelectListener(new OnTabSelectListener() {
+            @Override
+            public void onTabSelect(int position) {
+                EventReportUtil.marketTabClick(getContext(),position);
+            }
+
+            @Override
+            public void onTabReselect(int position) {
+                EventReportUtil.marketTabClick(getContext(),position);
+            }
+        });
+
         List<String> list = new ArrayList<>();
         list.add(getString(R.string.home_market_self));
         list.add(getString(R.string.home_market_value));
@@ -54,6 +71,7 @@ public class HomeMarketFragment extends BaseFragment{
             @Override
             public void onClick(View v) {
                 SearchActivity.startSearchActivity(v.getContext());
+                CommonUtils.umengReport(getContext(),"hq_top_search_click");
             }
         });
 

@@ -20,6 +20,7 @@ import com.coin.b8.ui.dialog.ShareDialogFragment;
 import com.coin.b8.ui.iView.IDynamicImportView;
 import com.coin.b8.ui.listen.ShareListen;
 import com.coin.b8.ui.presenter.DynamicImportPresenter;
+import com.coin.b8.utils.CommonUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -44,6 +45,14 @@ public class HomeDynamicImportant extends BaseFragment implements IDynamicImport
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDynamicImportPresenter = new DynamicImportPresenter(this);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            CommonUtils.umengReport(getContext(),"dynamic_news_exposure");
+        }
     }
 
     @Override

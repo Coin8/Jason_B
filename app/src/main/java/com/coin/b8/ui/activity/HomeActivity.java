@@ -37,6 +37,7 @@ import com.coin.b8.update.IUpdateParser;
 import com.coin.b8.update.UpdateInfo;
 import com.coin.b8.update.UpdateManager;
 import com.coin.b8.utils.CommonUtils;
+import com.coin.b8.utils.EventReportUtil;
 import com.coin.b8.utils.MyToast;
 import com.coin.b8.utils.PhoneUtils;
 import com.coin.b8.wxapi.OnResponseListener;
@@ -184,15 +185,19 @@ public class HomeActivity extends BaseActivity implements BottomNavigationView.O
         switch (item.getItemId()){
             case R.id.tab_market:
                 switchFragment(0);
+                EventReportUtil.mainTabClick(this,0);
                 break;
             case R.id.tab_dynamic:
                 switchFragment(1);
+                EventReportUtil.mainTabClick(this,1);
                 break;
             case R.id.tab_select_coin:
                 switchFragment(2);
+                EventReportUtil.mainTabClick(this,2);
                 break;
             case R.id.tab_mine:
                 switchFragment(3);
+                EventReportUtil.mainTabClick(this,3);
                 break;
         }
         return true;

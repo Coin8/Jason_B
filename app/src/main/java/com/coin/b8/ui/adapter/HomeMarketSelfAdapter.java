@@ -17,6 +17,7 @@ import com.coin.b8.model.MarketSelfListResponse;
 import com.coin.b8.swipe.SwipeMenuLayout;
 import com.coin.b8.ui.activity.NativeDetailActivity;
 import com.coin.b8.utils.CommonUtils;
+import com.coin.b8.utils.EventReportUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,7 +123,7 @@ public class HomeMarketSelfAdapter extends RecyclerView.Adapter{
 
                 String web_url = stringBuilder.toString();
                 NativeDetailActivity.startNativeDetailActivity(v.getContext(),web_url);
-
+                EventReportUtil.marketListItemReport(v.getContext(),dataBean.getBase(),"self");
             }
         });
 

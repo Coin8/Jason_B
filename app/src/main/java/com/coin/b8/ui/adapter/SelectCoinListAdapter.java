@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.coin.b8.R;
 import com.coin.b8.model.SelectCoinItemModel;
 import com.coin.b8.ui.activity.SelectCoinTypeListActivity;
+import com.coin.b8.utils.EventReportUtil;
 
 import java.util.List;
 
@@ -107,6 +108,7 @@ public class SelectCoinListAdapter extends RecyclerView.Adapter{
                             SelectCoinTypeListActivity.startSelectCoinTypeListActivity(v.getContext(),
                                     selectCoinItemModel.getItemsBean().getName(),
                                     selectCoinItemModel.getItemsBean().getId());
+                            EventReportUtil.selectCoinItemClick(v.getContext(),selectCoinItemModel.getItemsBean().getName());
                         }
                     });
                 }

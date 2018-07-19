@@ -45,6 +45,7 @@ import com.coin.b8.update.IUpdateParser;
 import com.coin.b8.update.UpdateInfo;
 import com.coin.b8.update.UpdateManager;
 import com.coin.b8.utils.AppUtil;
+import com.coin.b8.utils.CommonUtils;
 import com.coin.b8.utils.DialogUtil;
 import com.coin.b8.utils.MyToast;
 import com.coin.b8.utils.PhoneUtils;
@@ -263,6 +264,8 @@ public class NativeDetailActivity extends BaseActivity implements View.OnClickLi
         initShare();
         printScreen();
         mMainPresenter = new MainPresenterImpl(this, this);
+
+        CommonUtils.umengReport(this,"trade_detail_exposure");
 
     }
 

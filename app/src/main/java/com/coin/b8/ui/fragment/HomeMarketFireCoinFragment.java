@@ -16,6 +16,7 @@ import com.coin.b8.model.MarketListSearchResponse;
 import com.coin.b8.ui.adapter.HomeMarketNormalAdapter;
 import com.coin.b8.ui.iView.IHomeMarketNormalView;
 import com.coin.b8.ui.presenter.HomeMarketNormalPresenter;
+import com.coin.b8.utils.CommonUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
@@ -89,6 +90,14 @@ public class HomeMarketFireCoinFragment extends BaseFragment implements IHomeMar
         super.onCreate(savedInstanceState);
         mHomeMarketNormalPresenter = new HomeMarketNormalPresenter(this);
         mMyHandler = new MyHandler(this);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            CommonUtils.umengReport(getContext(),"hq_fire_coin_exposure");
+        }
     }
 
     @Override

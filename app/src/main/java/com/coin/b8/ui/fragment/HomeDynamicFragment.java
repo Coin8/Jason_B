@@ -4,7 +4,10 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import com.coin.b8.R;
 import com.coin.b8.ui.adapter.HomeDynamicMainAdapter;
+import com.coin.b8.utils.CommonUtils;
+import com.coin.b8.utils.EventReportUtil;
 import com.flyco.tablayout.SlidingTabLayout;
+import com.flyco.tablayout.listener.OnTabSelectListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +35,18 @@ public class HomeDynamicFragment extends BaseFragment{
 
         mTabLayout = view.findViewById(R.id.tablayout_dynamic);
         mViewPager = view.findViewById(R.id.vp_dynamic);
+        mTabLayout.setOnTabSelectListener(new OnTabSelectListener() {
+            @Override
+            public void onTabSelect(int position) {
+                EventReportUtil.dynamicTabClick(getContext(),position);
+            }
+
+            @Override
+            public void onTabReselect(int position) {
+                EventReportUtil.dynamicTabClick(getContext(),position);
+            }
+        });
+
         List<String> list = new ArrayList<>();
         list.add(getString(R.string.home_dynamic_quick_news));
         list.add(getString(R.string.home_dynamic_important_news));

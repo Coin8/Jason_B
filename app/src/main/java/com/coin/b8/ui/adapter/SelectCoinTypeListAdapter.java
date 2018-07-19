@@ -14,6 +14,7 @@ import com.coin.b8.constant.Constants;
 import com.coin.b8.model.SelectCoinTypeListResponse;
 import com.coin.b8.ui.activity.NativeDetailActivity;
 import com.coin.b8.utils.CommonUtils;
+import com.coin.b8.utils.EventReportUtil;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -28,6 +29,11 @@ public class SelectCoinTypeListAdapter extends RecyclerView.Adapter{
     private String mHeadContent = "";
     private long  mHeadTime;
     private DateFormat DEFAULT_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private String mCoinTypeTitle;
+
+    public void setCoinTypeTitle(String coinTypeTitle) {
+        mCoinTypeTitle = coinTypeTitle;
+    }
 
     public void setList(List<SelectCoinTypeListResponse.DataBean.ItemsBean> list) {
         mList = list;
@@ -120,6 +126,7 @@ public class SelectCoinTypeListAdapter extends RecyclerView.Adapter{
                         String web_url = stringBuilder.toString();
 //                        Log.e("zy","web_url = " +web_url );
                         NativeDetailActivity.startNativeDetailActivity(v.getContext(),web_url);
+                        EventReportUtil.selectCoinSubjectItemClick(v.getContext(),mCoinTypeTitle,itemsBean.getBase());
                     }
                 });
             }

@@ -30,6 +30,7 @@ import com.coin.b8.ui.iView.ISearchView;
 import com.coin.b8.ui.presenter.SearchPresenterImpl;
 import com.coin.b8.ui.view.BlankView;
 import com.coin.b8.ui.view.EditTextClear;
+import com.coin.b8.utils.CommonUtils;
 import com.coin.b8.utils.MyToast;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -76,6 +77,7 @@ public class SearchActivity extends BaseActivity implements ISearchView{
         mMyToast = new MyToast(this);
         initView();
         getData();
+        CommonUtils.umengReport(this,"search_exposure");
     }
 
 

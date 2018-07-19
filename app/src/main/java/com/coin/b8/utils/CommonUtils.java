@@ -16,6 +16,7 @@ import com.coin.b8.help.DemoHelper;
 import com.coin.b8.help.PreferenceHelper;
 import com.coin.b8.http.B8Api;
 import com.coin.b8.model.UnLoginUidInfo;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
@@ -163,8 +164,9 @@ public class CommonUtils {
                                 && !TextUtils.isEmpty(unLoginUidInfo.getPassword())){
                             PreferenceHelper.setEaseName(B8Application.getIntstance(),unLoginUidInfo.getEasename());
                             PreferenceHelper.setEasePassword(B8Application.getIntstance(),unLoginUidInfo.getPassword());
-
-                            DemoHelper.getInstance().logout();
+                            if(DemoHelper.getInstance().isLoggedIn()){
+                                DemoHelper.getInstance().logout();
+                            }
                             DemoHelper.getInstance().login(unLoginUidInfo.getEasename(),
                                     unLoginUidInfo.getPassword());
                         }
@@ -185,5 +187,25 @@ public class CommonUtils {
         };
         B8Api.getUnLoginUidInfo(disposableObserver,imei);
     }
+
+    public static HashMap<String,String> getCommonPara(){
+        HashMap<String,String> map = new HashMap<String,String>();
+        map.put("uuid",PreferenceHelper.getIMEI(B8Application.getIntstance()));
+        map.put("ip_address","");
+        map.put("system_version",Build.VERSION.RELEASE);
+        map.put("device_version",Build.DEVICE);
+        map.put("uid",PreferenceHelper.getUid(B8Application.getIntstance()));
+        map.put("user_mail",PreferenceHelper.getEaseName(B8Application.getIntstance()));
+        return map;
+    }
+
+    public static void umengReport(Context context,String id){
+        if(context == null){
+            return;
+        }
+        HashMap<String,String> map = getCommonPara();
+        MobclickAgent.onEvent(context, id, map);
+    }
+
 
 }

@@ -49,6 +49,14 @@ public class HomeDynamicQuickNewsFragment extends BaseFragment implements IQuick
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            CommonUtils.umengReport(getContext(),"dynamic_flash_exposure");
+        }
+    }
+
+    @Override
     protected void initView(View view) {
         mSmartRefreshLayout = view.findViewById(R.id.refreshLayout);
         mRecyclerView = view.findViewById(R.id.recyclerview);

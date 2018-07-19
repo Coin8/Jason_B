@@ -14,6 +14,7 @@ import com.coin.b8.model.SelectCoinTypeListResponse;
 import com.coin.b8.ui.adapter.SelectCoinTypeListAdapter;
 import com.coin.b8.ui.iView.ISelectCoinTypeListView;
 import com.coin.b8.ui.presenter.SelectCoinTypeListPresenter;
+import com.coin.b8.utils.CommonUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -41,6 +42,7 @@ public class SelectCoinTypeListActivity extends BaseActivity implements ISelectC
         handleIntent();
         setInitToolBar(mCoinTypeTitle);
         initView();
+        CommonUtils.umengReport(this,"coin_subject_exposure");
     }
 
     @Override
@@ -57,6 +59,7 @@ public class SelectCoinTypeListActivity extends BaseActivity implements ISelectC
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mSelectCoinTypeListAdapter = new SelectCoinTypeListAdapter();
         mRecyclerView.setAdapter(mSelectCoinTypeListAdapter);
+        mSelectCoinTypeListAdapter.setCoinTypeTitle(mCoinTypeTitle);
 
         mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
