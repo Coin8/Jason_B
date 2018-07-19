@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.coin.b8.constant.Constants;
 import com.coin.b8.help.DemoHelper;
+import com.coin.b8.help.PreferenceHelper;
 import com.coin.b8.update.UpdateManager;
 import com.coin.b8.utils.AppUtil;
 import com.coin.b8.utils.CommonUtils;
@@ -40,6 +41,12 @@ public class B8Application extends Application {
         UpdateManager.setUrl("b8", CHANNEL);
         this.registerNetWorkReceiver();
         this.initUMeng();
+        if(PreferenceHelper.getIsLogin(this)){
+           if(!DemoHelper.getInstance().isLoggedIn()){
+               DemoHelper.getInstance().login(PreferenceHelper.getEaseName(this),
+                       PreferenceHelper.getEasePassword(this));
+           }
+        }
     }
 
     /**
