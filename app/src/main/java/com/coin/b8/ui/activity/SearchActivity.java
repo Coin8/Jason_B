@@ -98,12 +98,23 @@ public class SearchActivity extends BaseActivity implements ISearchView{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         mSearchPresenter = new SearchPresenterImpl(this);
-        mSearchHistoryDB = new SearchHistoryDB(this);
+        mSearchHistoryDB = SearchHistoryDB.getIntstance();
         mMyToast = new MyToast(this);
         mMyHandler = new MyHandler(this);
         initView();
-        getData();
+
         CommonUtils.umengReport(this,"search_exposure");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String string = mEditTextClear.getText().toString();
+        if(TextUtils.isEmpty(string)){
+            getData();
+        }else {
+            startSearch(string);
+        }
     }
 
     @Override

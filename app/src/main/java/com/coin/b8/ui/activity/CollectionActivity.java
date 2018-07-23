@@ -159,6 +159,12 @@ public class CollectionActivity extends BaseActivity implements IMyCollectionVie
                 startRefresh();
             }
         });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         mSmartRefreshLayout.autoRefresh();
     }
 

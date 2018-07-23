@@ -47,6 +47,7 @@ public class HomeMarketSelfFragment extends BaseFragment implements IHomeMarketS
     private HomeMarketSelfAdapter mHomeMarketSelfAdapter;
     private HomeMarketSelfPresenter mHomeMarketSelfPresenter;
 
+    private View mHeadLayout;
     private View mHeadViewValue;
     private View mHeadViewPrice;
     private View mHeadViewOneDayJump;
@@ -109,6 +110,7 @@ public class HomeMarketSelfFragment extends BaseFragment implements IHomeMarketS
     @Override
     protected void initView(View view) {
         mMyToast = new MyToast(getActivity());
+        mHeadLayout = view.findViewById(R.id.head_layout);
         mBlankView = view.findViewById(R.id.blank_view);
         mHeadViewValue = view.findViewById(R.id.head_name_layout);
         mHeadViewPrice = view.findViewById(R.id.head_latest_layout);
@@ -255,10 +257,13 @@ public class HomeMarketSelfFragment extends BaseFragment implements IHomeMarketS
 
     private void showBlank(){
         mBlankView.setVisibility(View.VISIBLE);
+        mHeadLayout.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.GONE);
+
     }
     private void hideBlank(){
         mBlankView.setVisibility(View.GONE);
+        mHeadLayout.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 

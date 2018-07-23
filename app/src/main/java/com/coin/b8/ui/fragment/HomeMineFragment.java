@@ -23,6 +23,7 @@ import com.coin.b8.model.UserInfoResponse;
 import com.coin.b8.ui.activity.BusinessCooperationActivity;
 import com.coin.b8.ui.activity.CollectionActivity;
 import com.coin.b8.ui.activity.HomeActivity;
+import com.coin.b8.ui.activity.LoginActivity;
 import com.coin.b8.ui.activity.PersonalInfoActivity;
 import com.coin.b8.ui.activity.SettingActivity;
 import com.coin.b8.ui.activity.YuJingRecordActivity;
@@ -175,7 +176,11 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
                 startCollection();
                 break;
             case R.id.mine_early_warning_record:
-                YuJingRecordActivity.startYuJingRecordActivity(getContext());
+                if(PreferenceHelper.getIsLogin(getContext())){
+                    YuJingRecordActivity.startYuJingRecordActivity(getContext());
+                }else {
+                    LoginActivity.startLoginActivity(getContext());
+                }
                 break;
             case R.id.mine_business_cooperation:
                 BusinessCooperationActivity.startBusinessCooperationActivity(getContext());

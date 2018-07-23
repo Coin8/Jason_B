@@ -2,7 +2,10 @@ package com.coin.b8.ui.fragment;
 
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.ImageView;
+
 import com.coin.b8.R;
+import com.coin.b8.ui.activity.SearchActivity;
 import com.coin.b8.ui.adapter.HomeDynamicMainAdapter;
 import com.coin.b8.utils.CommonUtils;
 import com.coin.b8.utils.EventReportUtil;
@@ -19,6 +22,8 @@ public class HomeDynamicFragment extends BaseFragment{
 
     private ViewPager mViewPager;
     private SlidingTabLayout mTabLayout;
+    private ImageView mSearchImageView;
+
     public static HomeDynamicFragment getInstance() {
         HomeDynamicFragment fragment = new HomeDynamicFragment();
         return fragment;
@@ -35,6 +40,7 @@ public class HomeDynamicFragment extends BaseFragment{
 
         mTabLayout = view.findViewById(R.id.tablayout_dynamic);
         mViewPager = view.findViewById(R.id.vp_dynamic);
+        mSearchImageView = view.findViewById(R.id.btn_search);
         mTabLayout.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
@@ -44,6 +50,12 @@ public class HomeDynamicFragment extends BaseFragment{
             @Override
             public void onTabReselect(int position) {
                 EventReportUtil.dynamicTabClick(getContext(),position);
+            }
+        });
+        mSearchImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SearchActivity.startSearchActivity(v.getContext());
             }
         });
 

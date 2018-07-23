@@ -16,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.View;
 
 import com.coin.b8.R;
+import com.coin.b8.db.SearchHistoryDB;
 import com.coin.b8.help.PreferenceHelper;
 import com.coin.b8.model.AddMarketSelfResponse;
 import com.coin.b8.model.CommonResponse;
@@ -53,7 +54,7 @@ public class SearchOnExchangeActivity extends BaseActivity implements ISearchVie
 
     private SearchPresenterImpl mSearchPresenter;
     private MyToast mMyToast;
-
+    private SearchHistoryDB mSearchHistoryDB;
 
     private final int MESSAGE_SEARCH = 100;
     private MyHandler mMyHandler;
@@ -84,6 +85,7 @@ public class SearchOnExchangeActivity extends BaseActivity implements ISearchVie
         super.onCreate(savedInstanceState);
         handleData();
         mSearchPresenter = new SearchPresenterImpl(this);
+        mSearchHistoryDB = SearchHistoryDB.getIntstance();
         setContentView(R.layout.activity_search_on_exchange);
         mMyToast = new MyToast(this);
         mMyHandler = new MyHandler(this);
@@ -204,6 +206,10 @@ public class SearchOnExchangeActivity extends BaseActivity implements ISearchVie
     private void startSearch(String text){
         showLoading();
         mSearchPresenter.search(text,1,20,mExchange);
+        if(!TextUtils.isEmpty(text)){
+            mSearchHistoryDB.deleteHistory(text);
+            mSearchHistoryDB.insertHistory(text);
+        }
     }
 
     private void startSearchMore(String text){

@@ -8,6 +8,7 @@ import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.coin.b8.constant.Constants;
+import com.coin.b8.db.SearchHistoryDB;
 import com.coin.b8.help.DemoHelper;
 import com.coin.b8.help.PreferenceHelper;
 import com.coin.b8.update.UpdateManager;
@@ -47,6 +48,7 @@ public class B8Application extends Application {
                        PreferenceHelper.getEasePassword(this));
            }
         }
+        SearchHistoryDB.getIntstance();
     }
 
     /**

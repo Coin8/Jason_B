@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.coin.b8.app.B8Application;
+
 import java.util.ArrayList;
 
 /**
@@ -22,8 +24,17 @@ public class SearchHistoryDB extends SQLiteOpenHelper {
             + "id integer primary key autoincrement, "
             + "history text)";
 
-    public SearchHistoryDB(Context context) {
+    private static SearchHistoryDB sSearchHistoryDB;
+
+    private SearchHistoryDB(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+    }
+
+    public static SearchHistoryDB getIntstance() {
+        if(sSearchHistoryDB == null){
+            sSearchHistoryDB = new SearchHistoryDB(B8Application.getIntstance());
+        }
+        return sSearchHistoryDB;
     }
 
     @Override
@@ -48,7 +59,11 @@ public class SearchHistoryDB extends SQLiteOpenHelper {
         //获取name列的索引
         for (cursor.moveToFirst(); !(cursor.isAfterLast()); cursor.moveToNext()) {
             String history = cursor.getString(1);
-            historys.add(history);
+            if(historys.size() < 8){
+                historys.add(history);
+            }else {
+                db.delete(TABLE_NAME, "history=?", new String[]{history});
+            }
         }
         cursor.close();//关闭结果集
         db.close();//关闭数据库对象

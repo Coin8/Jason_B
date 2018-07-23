@@ -78,8 +78,8 @@ public class HomeMarketSelfAdapter extends RecyclerView.Adapter{
             normalViewHolder.mQuote.setText(dataBean.getQuote().toUpperCase());
         }
         normalViewHolder.mAmount.setText("量"+dataBean.getAmount());
-        normalViewHolder.mClose.setText(dataBean.getClose());
-        normalViewHolder.mCloseCny.setText("¥"+dataBean.getCloseCny());
+        normalViewHolder.mClose.setText("¥"+dataBean.getCloseCny());
+        normalViewHolder.mCloseCny.setText(dataBean.getClose());
 
         normalViewHolder.mContentView.setOnClickListener(new View.OnClickListener() {
             @Override
