@@ -71,8 +71,12 @@ public class HomeMarketSelfAdapter extends RecyclerView.Adapter{
             return;
         }
         normalViewHolder.mExchangeName.setText(dataBean.getExchangeName());
-        normalViewHolder.mBase.setText(dataBean.getBase());
-        normalViewHolder.mQuote.setText(dataBean.getQuote());
+        if(dataBean.getBase() != null){
+            normalViewHolder.mBase.setText(dataBean.getBase().toUpperCase());
+        }
+        if(dataBean.getQuote() != null){
+            normalViewHolder.mQuote.setText(dataBean.getQuote().toUpperCase());
+        }
         normalViewHolder.mAmount.setText("量"+dataBean.getAmount());
         normalViewHolder.mClose.setText(dataBean.getClose());
         normalViewHolder.mCloseCny.setText("¥"+dataBean.getCloseCny());

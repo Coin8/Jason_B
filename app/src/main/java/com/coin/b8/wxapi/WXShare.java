@@ -10,9 +10,12 @@ import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.widget.Toast;
 
 import com.coin.b8.R;
 import com.coin.b8.utils.CommonUtils;
+import com.coin.b8.utils.MyToast;
 import com.sina.weibo.sdk.WbSdk;
 import com.sina.weibo.sdk.api.ImageObject;
 import com.sina.weibo.sdk.api.TextObject;
@@ -57,8 +60,13 @@ public class WXShare {
                     + "friendships_groups_read,friendships_groups_write,statuses_to_me_read,"
                     + "follow_app_official_microblog," + "invitation_write";
 
+    private MyToast mMyToast;
+
     public WXShare(Context context, Activity activity) {
         api = WXAPIFactory.createWXAPI(context, APP_ID);
+
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        mMyToast = new MyToast(layoutInflater);
 
         WbSdk.install(context,new AuthInfo(context, WEIBO_APP_KEY,REDIRECT_URL, SCOPE));//创建微博API接口类对象
         if(activity != null){
@@ -107,6 +115,7 @@ public class WXShare {
 
 
 
+
     /**
      *
      * @param type 0 朋友，1 、朋友圈 2、微博
@@ -118,6 +127,10 @@ public class WXShare {
             case 0:
             case 1:{
                 try {
+                    if(!api.isWXAppInstalled()){
+                        mMyToast.showToast("微信未安装");
+                        return this;
+                    }
                     Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), resId);
                     WXImageObject imgObj = new WXImageObject(bmp);
                     WXMediaMessage msg = new WXMediaMessage();
@@ -167,6 +180,10 @@ public class WXShare {
             case 0:
             case 1:{
                 try {
+                    if(!api.isWXAppInstalled()){
+                        mMyToast.showToast("微信未安装");
+                        return this;
+                    }
                     if(bmp == null){
                         return this;
                     }
@@ -224,6 +241,10 @@ public class WXShare {
             case 0:
             case 1:{
                 try {
+                    if(!api.isWXAppInstalled()){
+                        mMyToast.showToast("微信未安装");
+                        return this;
+                    }
                     WXWebpageObject webpage = new WXWebpageObject();
                     webpage.webpageUrl = webUrl;
                     WXMediaMessage msg = new WXMediaMessage(webpage);

@@ -63,15 +63,19 @@ public class HomeMarketNormalAdapter extends RecyclerView.Adapter{
             return;
         }
         MarketListSearchResponse.DataBean dataBean = mList.get(position);
-        normalViewHolder.mBase.setText(dataBean.getBase());
+        if(dataBean.getBase() != null){
+            normalViewHolder.mBase.setText(dataBean.getBase().toUpperCase());
+        }
         if(mCoinType == 1){
-            normalViewHolder.mChineseName.setText(dataBean.getQuote());
+            if(dataBean.getQuote() != null){
+                normalViewHolder.mChineseName.setText(dataBean.getQuote().toUpperCase());
+            }
             normalViewHolder.mVol.setText("量"+dataBean.getAmount());
             normalViewHolder.mCloseCny.setText(dataBean.getClose());
             normalViewHolder.mClose.setText("¥"+dataBean.getCloseCny());
         }else {
             normalViewHolder.mChineseName.setText(dataBean.getChineseName());
-            normalViewHolder.mVol.setText("¥"+dataBean.getVol());
+            normalViewHolder.mVol.setText("¥"+dataBean.getStockValue());
             normalViewHolder.mCloseCny.setText("¥"+dataBean.getCloseCny());
             normalViewHolder.mClose.setText("$"+dataBean.getClose());
         }

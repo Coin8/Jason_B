@@ -157,6 +157,9 @@ public class YuJingRecordActivity extends BaseActivity implements IYuJingRecordV
 
     @Override
     public void onYuJingListError() {
+        mBlankView.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
+        mYuJingRecordAdapter.setList(null);
         mSmartRefreshLayout.finishRefresh(0,false);
         hideLoading();
     }

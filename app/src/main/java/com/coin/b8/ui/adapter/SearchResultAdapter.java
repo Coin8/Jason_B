@@ -65,8 +65,12 @@ public class SearchResultAdapter extends RecyclerView.Adapter{
         if(normalViewHolder == null || dataBean == null){
             return;
         }
-        normalViewHolder.mBase.setText(dataBean.getBase());
-        normalViewHolder.mQuote.setText(dataBean.getQuote());
+        if(dataBean.getBase() != null){
+            normalViewHolder.mBase.setText(dataBean.getBase().toUpperCase());
+        }
+        if(dataBean.getQuote() != null){
+            normalViewHolder.mQuote.setText(dataBean.getQuote().toUpperCase());
+        }
         normalViewHolder.mExchangeName.setText(dataBean.getExchangeName());
         normalViewHolder.mClose.setText(dataBean.getClose());
         normalViewHolder.mCloseCny.setText("¥"+dataBean.getCloseCny());
