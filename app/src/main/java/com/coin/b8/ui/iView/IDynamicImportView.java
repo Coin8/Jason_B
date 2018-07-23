@@ -1,7 +1,7 @@
 package com.coin.b8.ui.iView;
 
 import com.coin.b8.model.DynamicImportNewsResponse;
-import com.coin.b8.model.ImportantNewsBannerResponse;
+import com.coin.b8.model.BannerResponse;
 
 /**
  * Created by zhangyi on 2018/7/9.
@@ -11,6 +11,6 @@ public interface IDynamicImportView {
     void onNewError();
     void onNewsLoadMoreSuccess(DynamicImportNewsResponse dynamicImportNewsResponse);
     void onNewsLoadMoreError();
-    void onBannerSuccess(ImportantNewsBannerResponse importantNewsBannerResponse);
+    void onBannerSuccess(BannerResponse importantNewsBannerResponse);
     void onBannerError();
 }

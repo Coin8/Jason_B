@@ -24,8 +24,8 @@
         android:textColor="#728bae"
         android:textColorHint="#728bae"
         android:textSize="14sp"
-        android:imeOptions="actionSearch"
-        android:singleLine="true"/>
+        android:singleLine="true"
+        android:focusable="true" />
 
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
@@ -53,7 +53,8 @@
                 android:id="@+id/search_result_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/lineColor">
+                android:background="@color/lineColor"
+                android:focusable="false">
 
             </android.support.v7.widget.RecyclerView>
 

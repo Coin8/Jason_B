@@ -1,7 +1,9 @@
 package com.coin.b8.ui.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +11,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.coin.b8.R;
+import com.coin.b8.constant.Constants;
+import com.coin.b8.help.BannerImageLoader;
+import com.coin.b8.help.PreferenceHelper;
 import com.coin.b8.model.SelectCoinItemModel;
+import com.coin.b8.ui.activity.NativeDetailActivity;
 import com.coin.b8.ui.activity.SelectCoinTypeListActivity;
 import com.coin.b8.utils.EventReportUtil;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.Transformer;
+import com.youth.banner.listener.OnBannerListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -81,7 +92,42 @@ public class SelectCoinListAdapter extends RecyclerView.Adapter{
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         int type = holder.getItemViewType();
         switch (type){
-            case SELECT_HEAD:
+            case SELECT_HEAD: {
+                BannerViewHolder bannerViewHolder = (BannerViewHolder) holder;
+                SelectCoinItemModel selectCoinItemModel = mSelectCoinItemModelList.get(position);
+                if (bannerViewHolder != null
+                        && selectCoinItemModel != null
+                        && selectCoinItemModel.getBannerDatas() != null){
+                    List<String> pics = new ArrayList<>();
+                    for (int i = 0; i < selectCoinItemModel.getBannerDatas().size(); i++) {
+                        pics.add(selectCoinItemModel.getBannerDatas().get(i).getPic());
+                    }
+                    bannerViewHolder.mBanner.setImages(pics);
+                    bannerViewHolder.mBanner.setOnBannerListener(new OnBannerListener() {
+                        @Override
+                        public void OnBannerClick(int position) {
+                            StringBuilder stringBuilder = new StringBuilder(Constants.IMPORTANT_NEWS_DETAIL_BASE_URL);
+                            stringBuilder.append(selectCoinItemModel.getBannerDatas().get(position).getId());
+                            stringBuilder.append("&type=banner");
+                            Context context = bannerViewHolder.itemView.getContext();
+                            stringBuilder.append("&uid=").append(PreferenceHelper.getUid(context));
+                            String imei = PreferenceHelper.getIMEI(context);
+                            if(!TextUtils.isEmpty(imei)){
+                                stringBuilder.append("&imei=").append(imei);
+                            }
+                            String token = PreferenceHelper.getToken(context);
+                            if(!TextUtils.isEmpty(token)){
+                                stringBuilder.append("&token=").append(token);
+                            }
+
+                            String web_url =  stringBuilder.toString();
+                            NativeDetailActivity.startNativeDetailActivity(bannerViewHolder.itemView.getContext(), web_url );
+                        }
+                    });
+                    bannerViewHolder.mBanner.start();
+
+                }
+            }
                 break;
             case SELECT_TITLE:{
                 TitleViewHolder titleViewHolder = (TitleViewHolder) holder;
@@ -132,9 +178,14 @@ public class SelectCoinListAdapter extends RecyclerView.Adapter{
 
 
     private class BannerViewHolder extends RecyclerView.ViewHolder{
-
+        public Banner mBanner;
         public BannerViewHolder(View itemView) {
             super(itemView);
+            mBanner = itemView.findViewById(R.id.news_banner);
+            mBanner.setIndicatorGravity(BannerConfig.CENTER);
+            mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
+            mBanner.setImageLoader(new BannerImageLoader());
+            mBanner.setBannerAnimation(Transformer.DepthPage);
         }
     }
 

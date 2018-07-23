@@ -1,5 +1,6 @@
 package com.coin.b8.ui.iView;
 
+import com.coin.b8.model.BannerResponse;
 import com.coin.b8.model.SelectCoinListResponse;
 
 /**
@@ -8,4 +9,6 @@ import com.coin.b8.model.SelectCoinListResponse;
 public interface ISelectCoinView {
     void onSelectCoinSuccess(SelectCoinListResponse selectCoinListResponse);
     void onSelectCoinFail();
+    void onBannerSuccess(BannerResponse response);
+    void onBannerFail();
 }

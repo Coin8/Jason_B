@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,7 @@ import com.coin.b8.constant.Constants;
 import com.coin.b8.help.BannerImageLoader;
 import com.coin.b8.help.PreferenceHelper;
 import com.coin.b8.model.DynamicImportNewsResponse;
-import com.coin.b8.model.ImportantNewsBannerResponse;
+import com.coin.b8.model.BannerResponse;
 import com.coin.b8.ui.activity.NativeDetailActivity;
 import com.coin.b8.utils.CommonUtils;
 import com.coin.b8.utils.GlideUtil;
@@ -37,7 +36,7 @@ public class DynamicImportNewsAdapter extends RecyclerView.Adapter{
 
     private DateFormat DEFAULT_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private List<DynamicImportNewsResponse.DataBean.ContentBean> mList;
-    private List<ImportantNewsBannerResponse.DataBean> mBannerBeanList;
+    private List<BannerResponse.DataBean> mBannerBeanList;
 
     public interface ItemOnclickListen{
         void onShareClick(DynamicImportNewsResponse.DataBean.ContentBean contentBean);
@@ -64,7 +63,7 @@ public class DynamicImportNewsAdapter extends RecyclerView.Adapter{
         }
     }
 
-    public void addBanner(List<ImportantNewsBannerResponse.DataBean> list){
+    public void addBanner(List<BannerResponse.DataBean> list){
         if(list == null || list.size() <1){
             return;
         }

@@ -13,7 +13,7 @@ import com.coin.b8.R;
 import com.coin.b8.constant.Constants;
 import com.coin.b8.help.PreferenceHelper;
 import com.coin.b8.model.DynamicImportNewsResponse;
-import com.coin.b8.model.ImportantNewsBannerResponse;
+import com.coin.b8.model.BannerResponse;
 import com.coin.b8.ui.activity.HomeActivity;
 import com.coin.b8.ui.adapter.DynamicImportNewsAdapter;
 import com.coin.b8.ui.dialog.ShareDialogFragment;
@@ -198,7 +198,7 @@ public class HomeDynamicImportant extends BaseFragment implements IDynamicImport
     }
 
     @Override
-    public void onBannerSuccess(ImportantNewsBannerResponse importantNewsBannerResponse) {
+    public void onBannerSuccess(BannerResponse importantNewsBannerResponse) {
         if(importantNewsBannerResponse != null
                 && importantNewsBannerResponse.getData() != null
                 && importantNewsBannerResponse.getData().size() > 0){

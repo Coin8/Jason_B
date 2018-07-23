@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.coin.b8.R;
+import com.coin.b8.model.BannerResponse;
 import com.coin.b8.model.SelectCoinItemModel;
 import com.coin.b8.model.SelectCoinListResponse;
 import com.coin.b8.ui.adapter.SelectCoinListAdapter;
@@ -29,6 +30,10 @@ public class HomeSelectCoinFragment extends BaseFragment implements ISelectCoinV
     private SmartRefreshLayout mSmartRefreshLayout;
     private RecyclerView mRecyclerView;
     private SelectCoinListAdapter mSelectCoinListAdapter;
+    private boolean mIsBannerOk = false;
+    private boolean mIsListOk = false;
+    private SelectCoinListResponse mSelectCoinListResponse;
+    private BannerResponse mBannerResponse;
 
     public static HomeSelectCoinFragment getInstance() {
         HomeSelectCoinFragment fragment = new HomeSelectCoinFragment();
@@ -62,7 +67,7 @@ public class HomeSelectCoinFragment extends BaseFragment implements ISelectCoinV
         mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
-                mSelectCoinPresenter.getSelectCoinList();
+                startRefresh();
             }
         });
         mSmartRefreshLayout.autoRefresh();
@@ -88,18 +93,32 @@ public class HomeSelectCoinFragment extends BaseFragment implements ISelectCoinV
         mSelectCoinPresenter.onDetach();
     }
 
+    private void startRefresh(){
+        mIsBannerOk = false;
+        mIsListOk = false;
+        mSelectCoinPresenter.getBanner();
+        mSelectCoinPresenter.getSelectCoinList();
+    }
 
+    private void onRefresh(){
 
-    @Override
-    public void onSelectCoinSuccess(SelectCoinListResponse selectCoinListResponse) {
-        if(selectCoinListResponse != null
-                && selectCoinListResponse.getData() != null){
-            List<SelectCoinItemModel> list = new ArrayList<>();
+        if(!mIsListOk || !mIsBannerOk){
+            return;
+        }
+        List<SelectCoinItemModel> list = new ArrayList<>();
+        if(mBannerResponse != null
+                && mBannerResponse.getData() != null
+                && mBannerResponse.getData().size() > 0){
             SelectCoinItemModel model = new SelectCoinItemModel();
             model.setType(SelectCoinListAdapter.SELECT_HEAD);
+            model.setBannerDatas(mBannerResponse.getData());
             list.add(model);
-            for (int i = 0; i < selectCoinListResponse.getData().size(); i++) {
-                SelectCoinListResponse.DataBean dataBean = selectCoinListResponse.getData().get(i);
+        }
+
+        if(mSelectCoinListResponse != null
+                && mSelectCoinListResponse.getData() != null){
+            for (int i = 0; i < mSelectCoinListResponse.getData().size(); i++) {
+                SelectCoinListResponse.DataBean dataBean = mSelectCoinListResponse.getData().get(i);
                 if(dataBean != null && dataBean.getItems() != null && dataBean.getItems().size() > 0){
                     SelectCoinItemModel selectCoinItemModel = new SelectCoinItemModel();
                     selectCoinItemModel.setType(SelectCoinListAdapter.SELECT_TITLE);
@@ -113,15 +132,38 @@ public class HomeSelectCoinFragment extends BaseFragment implements ISelectCoinV
                     }
                 }
             }
-
-            mSelectCoinListAdapter.setSelectCoinItemModelList(list);
-            mSelectCoinListAdapter.notifyDataSetChanged();
         }
+
+        mSelectCoinListAdapter.setSelectCoinItemModelList(list);
+        mSelectCoinListAdapter.notifyDataSetChanged();
         mSmartRefreshLayout.finishRefresh(0);
+
+    }
+
+
+    @Override
+    public void onSelectCoinSuccess(SelectCoinListResponse selectCoinListResponse) {
+        mSelectCoinListResponse = selectCoinListResponse;
+        mIsListOk = true;
+        onRefresh();
     }
 
     @Override
     public void onSelectCoinFail() {
-        mSmartRefreshLayout.finishRefresh(0,false);
+        mIsListOk = true;
+        onRefresh();
+    }
+
+    @Override
+    public void onBannerSuccess(BannerResponse response) {
+        mBannerResponse = response;
+        mIsBannerOk = true;
+        onRefresh();
+    }
+
+    @Override
+    public void onBannerFail() {
+        mIsBannerOk = true;
+        onRefresh();
     }
 }

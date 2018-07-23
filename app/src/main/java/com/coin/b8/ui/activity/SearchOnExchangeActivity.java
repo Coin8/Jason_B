@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +35,8 @@ import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by zhangyi on 2018/7/17.
  */
@@ -50,6 +54,31 @@ public class SearchOnExchangeActivity extends BaseActivity implements ISearchVie
     private SearchPresenterImpl mSearchPresenter;
     private MyToast mMyToast;
 
+
+    private final int MESSAGE_SEARCH = 100;
+    private MyHandler mMyHandler;
+
+    private class MyHandler extends Handler {
+        private WeakReference<SearchOnExchangeActivity> mWeakReference;
+
+        public MyHandler(SearchOnExchangeActivity activity) {
+            mWeakReference = new WeakReference<SearchOnExchangeActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            SearchOnExchangeActivity activity = mWeakReference.get();
+            if(activity == null){
+                return;
+            }
+            switch (msg.what){
+                case MESSAGE_SEARCH:
+                    activity.handlerSearch();
+                    break;
+            }
+        }
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,9 +86,21 @@ public class SearchOnExchangeActivity extends BaseActivity implements ISearchVie
         mSearchPresenter = new SearchPresenterImpl(this);
         setContentView(R.layout.activity_search_on_exchange);
         mMyToast = new MyToast(this);
+        mMyHandler = new MyHandler(this);
         setInitToolBar(mExchange);
         initView();
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mMyHandler != null){
+            mMyHandler.removeMessages(MESSAGE_SEARCH);
+            mMyHandler.removeCallbacksAndMessages(null);
+        }
+        if(mSearchPresenter != null){
+            mSearchPresenter.onDetach();
+        }
     }
 
     private void initView(){
@@ -124,10 +165,14 @@ public class SearchOnExchangeActivity extends BaseActivity implements ISearchVie
 
             @Override
             public void afterTextChanged(Editable s) {
-                String text = mEditTextClear.getText().toString();
-                if(TextUtils.isEmpty(text)){
-                    startSearch("");
-                }
+//                String text = mEditTextClear.getText().toString();
+//                if(TextUtils.isEmpty(text)){
+//                    startSearch("");
+//                }else {
+//                    startSearch(text);
+//                }
+                mMyHandler.removeMessages(MESSAGE_SEARCH);
+                mMyHandler.sendEmptyMessageDelayed(MESSAGE_SEARCH,200);
             }
         });
 
@@ -145,6 +190,15 @@ public class SearchOnExchangeActivity extends BaseActivity implements ISearchVie
 
         showLoading();
         mSearchPresenter.search("",1,20,mExchange);
+
+    }
+
+    private void handlerSearch(){
+        String text = mEditTextClear.getText().toString();
+        if(TextUtils.isEmpty(text)){
+            text = "";
+        }
+        startSearch(text);
     }
 
     private void startSearch(String text){
@@ -159,14 +213,13 @@ public class SearchOnExchangeActivity extends BaseActivity implements ISearchVie
 
 
     private void showLoading(){
+        hideLoading();
         mLoadingDialog = new LoadingDialog();
         mLoadingDialog.show(getSupportFragmentManager(),"loading");
     }
 
     private void hideLoading(){
-        if(mLoadingDialog != null
-                && mLoadingDialog.getDialog() != null
-                && mLoadingDialog.getDialog().isShowing()){
+        if(mLoadingDialog != null){
             mLoadingDialog.dismiss();
         }
     }
@@ -183,6 +236,10 @@ public class SearchOnExchangeActivity extends BaseActivity implements ISearchVie
             mBlankView.setVisibility(View.VISIBLE);
             mSearchResultRecyclerView.setVisibility(View.GONE);
         }
+
+//        mEditTextClear.setFocusable(true);
+//        mEditTextClear.setFocusableInTouchMode(true);
+//        mEditTextClear.requestFocus();
     }
 
     private void updateSearchDataMore(MarketListSearchResponse response){

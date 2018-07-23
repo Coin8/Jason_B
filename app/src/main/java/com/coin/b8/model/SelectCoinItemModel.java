@@ -1,12 +1,23 @@
 package com.coin.b8.model;
 
+import java.util.List;
+
 /**
  * Created by zhangyi on 2018/7/9.
  */
 public class SelectCoinItemModel {
     private SelectCoinListResponse.DataBean.ItemsBean mItemsBean;
+    private List<BannerResponse.DataBean> mBannerDatas;
     private String title;
     private int type;
+
+    public List<BannerResponse.DataBean> getBannerDatas() {
+        return mBannerDatas;
+    }
+
+    public void setBannerDatas(List<BannerResponse.DataBean> bannerDatas) {
+        mBannerDatas = bannerDatas;
+    }
 
     public SelectCoinListResponse.DataBean.ItemsBean getItemsBean() {
         return mItemsBean;

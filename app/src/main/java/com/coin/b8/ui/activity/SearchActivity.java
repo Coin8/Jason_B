@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +40,7 @@ import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,11 +65,33 @@ public class SearchActivity extends BaseActivity implements ISearchView{
     private SearchResultAdapter mSearchResultAdapter;
     private BlankView mBlankView;
     private ClassicsFooter mClassicsFooter;
-
     private SearchHistoryDB mSearchHistoryDB;
     private List<String> mHistoryList;
-
     private MyToast mMyToast;
+
+    private final int MESSAGE_SEARCH = 100;
+    private MyHandler mMyHandler;
+
+    private class MyHandler extends Handler{
+        private WeakReference<SearchActivity> mWeakReference;
+
+        public MyHandler(SearchActivity activity) {
+            mWeakReference = new WeakReference<SearchActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            SearchActivity activity = mWeakReference.get();
+            if(activity == null){
+                return;
+            }
+            switch (msg.what){
+                case MESSAGE_SEARCH:
+                    activity.handlerSearch();
+                    break;
+            }
+        }
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,11 +100,24 @@ public class SearchActivity extends BaseActivity implements ISearchView{
         mSearchPresenter = new SearchPresenterImpl(this);
         mSearchHistoryDB = new SearchHistoryDB(this);
         mMyToast = new MyToast(this);
+        mMyHandler = new MyHandler(this);
         initView();
         getData();
         CommonUtils.umengReport(this,"search_exposure");
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mMyHandler != null){
+            mMyHandler.removeMessages(MESSAGE_SEARCH);
+            mMyHandler.removeCallbacksAndMessages(null);
+        }
+        if(mSearchPresenter != null){
+            mSearchPresenter.onDetach();
+        }
+        hideLoading();
+    }
 
     private void initView(){
         mCancelBtn = findViewById(R.id.search_cancel);
@@ -104,7 +142,7 @@ public class SearchActivity extends BaseActivity implements ISearchView{
                 if(!TextUtils.isEmpty(text)){
                     mEditTextClear.setSelection(text.length());
                 }
-                startSearch(text);
+//                startSearch(text);
             }
         });
 
@@ -180,6 +218,9 @@ public class SearchActivity extends BaseActivity implements ISearchView{
                 String text = mEditTextClear.getText().toString();
                 if(TextUtils.isEmpty(text)){
                     getData();
+                }else {
+                    mMyHandler.removeMessages(MESSAGE_SEARCH);
+                    mMyHandler.sendEmptyMessageDelayed(MESSAGE_SEARCH,200);
                 }
             }
         });
@@ -197,9 +238,18 @@ public class SearchActivity extends BaseActivity implements ISearchView{
                 return false;
             }
         });
-
     }
 
+
+    public void handlerSearch(){
+        String text = mEditTextClear.getText().toString();
+        if(TextUtils.isEmpty(text)){
+            return;
+        }
+        startSearch(text);
+        mSearchHistoryDB.deleteHistory(text);
+        mSearchHistoryDB.insertHistory(text);
+    }
 
     private void startSearch(String text){
         if(TextUtils.isEmpty(text)){
@@ -228,14 +278,15 @@ public class SearchActivity extends BaseActivity implements ISearchView{
 
 
     private void showLoading(){
+        if(mLoadingDialog != null){
+            mLoadingDialog.dismiss();
+        }
         mLoadingDialog = new LoadingDialog();
         mLoadingDialog.show(getSupportFragmentManager(),"loading");
     }
 
     private void hideLoading(){
-        if(mLoadingDialog != null
-                && mLoadingDialog.getDialog() != null
-                && mLoadingDialog.getDialog().isShowing()){
+        if(mLoadingDialog != null){
             mLoadingDialog.dismiss();
         }
     }

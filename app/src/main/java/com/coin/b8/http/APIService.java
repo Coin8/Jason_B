@@ -4,13 +4,12 @@ import com.coin.b8.model.AddMarketSelfResponse;
 import com.coin.b8.model.CancelCollectionResponse;
 import com.coin.b8.model.CollectionListInfoResponse;
 import com.coin.b8.model.CommonResponse;
-import com.coin.b8.model.DeleteMarketSelfResponse;
 import com.coin.b8.model.DeleteYuJingResponse;
 import com.coin.b8.model.DynamicImportNewsResponse;
 import com.coin.b8.model.ExchangeListResponse;
 import com.coin.b8.model.FeedBackResult;
 import com.coin.b8.model.HotCoinResponse;
-import com.coin.b8.model.ImportantNewsBannerResponse;
+import com.coin.b8.model.BannerResponse;
 import com.coin.b8.model.LoginResponseInfo;
 import com.coin.b8.model.MarketListSearchResponse;
 import com.coin.b8.model.MarketSelfListResponse;
@@ -155,11 +154,11 @@ public interface APIService {
     Observable<DynamicImportNewsResponse> getDynamicImportantNews(@Query("page") int page);
 
     /**
-     *  获取要闻banner
+     *  获取要闻banner  0,要闻，1，选币
      * @return
      */
-    @GET("b/a/v2/banner/list/0")
-    Observable<ImportantNewsBannerResponse> getDynamicImportantNewsBanner();
+    @GET("b/a/v2/banner/list/{type}")
+    Observable<BannerResponse> getBanner(@Path("type")  int type);
 
 
     /**

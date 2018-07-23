@@ -39,11 +39,11 @@
             android:textColor="#728bae"
             android:textColorHint="#728bae"
             android:textSize="14sp"
-            android:imeOptions="actionSearch"
             android:singleLine="true"/>
 
     </RelativeLayout>
 
+    <!--android:imeOptions="actionSearch"-->
 
 
 

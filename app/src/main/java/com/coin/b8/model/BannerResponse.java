@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by zhangyi on 2018/7/9.
  */
-public class ImportantNewsBannerResponse {
+public class BannerResponse {
 
 
     /**

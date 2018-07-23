@@ -2,7 +2,7 @@ package com.coin.b8.ui.presenter;
 
 import com.coin.b8.http.B8Api;
 import com.coin.b8.model.DynamicImportNewsResponse;
-import com.coin.b8.model.ImportantNewsBannerResponse;
+import com.coin.b8.model.BannerResponse;
 import com.coin.b8.ui.iView.IDynamicImportView;
 
 import io.reactivex.observers.DisposableObserver;
@@ -68,9 +68,9 @@ public class DynamicImportPresenter extends BasePresenterImpl<IDynamicImportView
 
 
     public void getBanner(){
-        DisposableObserver<ImportantNewsBannerResponse> disposableObserver = new DisposableObserver<ImportantNewsBannerResponse>() {
+        DisposableObserver<BannerResponse> disposableObserver = new DisposableObserver<BannerResponse>() {
             @Override
-            public void onNext(ImportantNewsBannerResponse importantNewsBannerResponse) {
+            public void onNext(BannerResponse importantNewsBannerResponse) {
                 if(mView != null){
                     mView.onBannerSuccess(importantNewsBannerResponse);
                 }
@@ -88,7 +88,7 @@ public class DynamicImportPresenter extends BasePresenterImpl<IDynamicImportView
 
             }
         };
-        B8Api.getDynamicImportantNewsBanner(disposableObserver);
+        B8Api.getBanner(disposableObserver,0);
         mCompositeDisposable.add(disposableObserver);
     }
 

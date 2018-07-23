@@ -237,7 +237,6 @@ public class HomeActivity extends BaseActivity implements BottomNavigationView.O
         AndPermission.with(this)
                 .runtime()
                 .permission(Permission.WRITE_EXTERNAL_STORAGE,
-                        Permission.CAMERA,
                         Permission.READ_PHONE_STATE)
                 .rationale(new RuntimeRationale())
                 .onGranted(new Action<List<String>>() {

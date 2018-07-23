@@ -13,7 +13,7 @@ import com.coin.b8.model.ExchangeListResponse;
 import com.coin.b8.model.FeedBackParameter;
 import com.coin.b8.model.FeedBackResult;
 import com.coin.b8.model.HotCoinResponse;
-import com.coin.b8.model.ImportantNewsBannerResponse;
+import com.coin.b8.model.BannerResponse;
 import com.coin.b8.model.LoginParameter;
 import com.coin.b8.model.LoginResponseInfo;
 import com.coin.b8.model.MarketListSearchResponse;
@@ -258,8 +258,13 @@ public class B8Api {
                 .subscribe(observer);
     }
 
-    public static void getDynamicImportantNewsBanner(Observer<ImportantNewsBannerResponse> observer){
-        BuildApi.getAPIService().getDynamicImportantNewsBanner()
+    /**
+     *
+     * @param observer
+     * @param type 0 要闻 1 选币
+     */
+    public static void getBanner(Observer<BannerResponse> observer,int type){
+        BuildApi.getAPIService().getBanner(type)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
