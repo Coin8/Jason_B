@@ -76,16 +76,21 @@ public class YuJingRecordAdapter extends RecyclerView.Adapter{
             }else {
                 normalViewHolder.mDeleteBtn.setVisibility(View.INVISIBLE);
             }
-            String title = dataBean.getExchangeName() + " " + dataBean.getBase() + "/"
-                    + dataBean.getQuote() + "的最新价格";
+            String base = dataBean.getBase() == null ? "":dataBean.getBase().toUpperCase();
+            String quote = dataBean.getQuote() == null ? "":dataBean.getQuote().toUpperCase();
+            String title = dataBean.getExchangeName() + " " + base + "/"
+                    + quote + "的最新价格";
             normalViewHolder.mRecordTitle.setText(title);
             String desc = "下跌至 ";
+            boolean isUp = false;
             if(dataBean.getType() == 1){
                 desc = "上涨至 ";
+                isUp = true;
             }else {
                 desc = "下跌至 ";
+                isUp = false;
             }
-            setDesc(normalViewHolder.mRecordDesc, desc, dataBean.getPrice(), " 时");
+            setDesc(normalViewHolder.mRecordDesc, desc, "¥"+dataBean.getPrice(), " 时",isUp);
             normalViewHolder.mSwitchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(SwitchButton view, boolean isChecked) {
@@ -119,10 +124,16 @@ public class YuJingRecordAdapter extends RecyclerView.Adapter{
         return 0;
     }
 
-    private void setDesc(TextView textView,String first,String second, String three){
+    private void setDesc(TextView textView,String first,String second, String three, boolean isUp){
 
         ForegroundColorSpan normalSpan = new ForegroundColorSpan(Color.parseColor("#191919"));
-        ForegroundColorSpan yellowSpan = new ForegroundColorSpan(Color.parseColor("#008B00"));
+        ForegroundColorSpan yellowSpan;
+        if(isUp){
+            yellowSpan = new ForegroundColorSpan(Color.parseColor("#ff0000"));
+        }else {
+            yellowSpan = new ForegroundColorSpan(Color.parseColor("#008B00"));
+        }
+
         SpannableStringBuilder builder = new SpannableStringBuilder();
         builder.append(first).append(second).append(three);
 

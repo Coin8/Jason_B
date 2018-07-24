@@ -93,10 +93,10 @@ public class YuJingRecordActivity extends BaseActivity implements IYuJingRecordV
             @Override
             public void onClick(View v) {
                 if(mEnableDelete){
-                    mToolbarRightTitle.setText("完成");
+                    mToolbarRightTitle.setText("编辑");
                     mEnableDelete = false;
                 }else {
-                    mToolbarRightTitle.setText("编辑");
+                    mToolbarRightTitle.setText("完成");
                     mEnableDelete = true;
                 }
                 mYuJingRecordAdapter.setDeleteEnable(mEnableDelete);

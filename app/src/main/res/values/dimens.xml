@@ -17,4 +17,6 @@
     <dimen name="tab_padding">5dp</dimen>
     <dimen name="line_width">1dp</dimen>
 
+    <dimen name="mine_item_height">46dp</dimen>
+
 </resources>

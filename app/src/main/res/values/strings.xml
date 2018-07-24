@@ -68,6 +68,15 @@
     <string name="business_cooperation">商务合作</string>
     <string name="business_message">商务合作请发送邮箱至</string>
     <string name="business_email">bifa2018vip@163.com</string>
+    <string name="verify_code">验证码</string>
 
     <string name="search_hint">请输入币种/市场搜索</string>
+
+    <string name="rule_text">0123456789abcdefghijklmnopqrstuvwxyz
+ABCDEFGHIJKLMNOPQRSTUVWXYZ`¬!"£$%^*()~=#{}[];':,./?/*-_+&#060;&#062;&#064;&#038;</string>
+
+
+    <item name="type_header" type="integer"/>
+    <item name="type_footer" type="integer"/>
+    <item name="type_child" type="integer"/>
 </resources>

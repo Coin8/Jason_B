@@ -16,7 +16,7 @@
     <com.coin.b8.ui.view.SettingItemView
         android:id="@+id/item_about_us"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/mine_item_height"
         android:background="@drawable/ripple_one_item_bg"
         app:setting_red_dot="false"
         app:setting_right_text=""
@@ -31,7 +31,7 @@
     <com.coin.b8.ui.view.SettingItemView
         android:id="@+id/item_clean_cache"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/mine_item_height"
         android:background="@drawable/ripple_one_item_bg"
         app:setting_red_dot="false"
         app:setting_right_text="0M"

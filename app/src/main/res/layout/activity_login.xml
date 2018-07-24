@@ -31,7 +31,8 @@
         android:layout_marginRight="30dp"
         android:drawableLeft="@drawable/username_icon"
         android:drawablePadding="15dp"
-        android:background="@null"/>
+        android:background="@null"
+        android:digits="@string/rule_text"/>
 
     <View
         android:layout_width="match_parent"

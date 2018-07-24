@@ -31,7 +31,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="15dp"
             android:src="@drawable/icon_search"
-            android:scaleType="centerInside"/>
+            android:scaleType="centerInside"
+            android:visibility="gone"/>
 
         <com.flyco.tablayout.SlidingTabLayout
             android:id="@+id/tablayout_dynamic"

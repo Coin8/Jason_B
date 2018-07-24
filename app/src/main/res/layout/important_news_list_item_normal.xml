@@ -25,7 +25,8 @@
         android:layout_alignTop="@id/collect_image"
         android:maxLines="2"
         android:textColor="@color/black"
-        android:textSize="15sp"/>
+        android:textSize="15sp"
+        android:ellipsize="end"/>
 
 
     <LinearLayout

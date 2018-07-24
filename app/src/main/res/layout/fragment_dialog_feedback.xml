@@ -140,7 +140,8 @@
             android:paddingRight="10dp"
             android:textColor="#728bae"
             android:textColorHint="#728bae"
-            android:textSize="@dimen/feedback_text_size_12" />
+            android:textSize="@dimen/feedback_text_size_12"
+            android:digits="@string/rule_text"/>
 
 
         <TextView

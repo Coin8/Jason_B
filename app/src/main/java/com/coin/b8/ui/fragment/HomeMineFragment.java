@@ -320,6 +320,7 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
             if(b8UpdateInfo.getData().isIsNew()){
                 mItemCheckUpdate.setRedDot(false);
                 mItemCheckUpdate.setRightText(getResources().getString(R.string.already_new_version));
+                mToast.showToast("已是最新版本");
             }else {
                 mItemCheckUpdate.setRedDot(true);
                 mItemCheckUpdate.setRightText(getResources().getString(R.string.find_new_version));

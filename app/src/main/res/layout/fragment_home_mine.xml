@@ -20,8 +20,8 @@
 
             <ImageView
                 android:id="@+id/user_icon"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginLeft="15dp"
                 android:layout_gravity="center_vertical"
                 android:scaleType="fitXY"
@@ -55,7 +55,7 @@
         <com.coin.b8.ui.view.SettingItemView
             android:id="@+id/mine_invite_friends"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/mine_item_height"
             android:layout_marginTop="15dp"
             android:background="@drawable/ripple_one_item_bg"
             app:setting_red_dot="false"
@@ -70,7 +70,7 @@
         <com.coin.b8.ui.view.SettingItemView
             android:id="@+id/mine_collection"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/mine_item_height"
             android:background="@drawable/ripple_one_item_bg"
             app:setting_red_dot="false"
             app:setting_right_text=""
@@ -80,7 +80,7 @@
         <com.coin.b8.ui.view.SettingItemView
             android:id="@+id/mine_early_warning_record"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/mine_item_height"
             android:layout_marginTop="15dp"
             android:background="@drawable/ripple_one_item_bg"
             app:setting_red_dot="false"
@@ -96,7 +96,7 @@
         <com.coin.b8.ui.view.SettingItemView
             android:id="@+id/mine_business_cooperation"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/mine_item_height"
             android:background="@drawable/ripple_one_item_bg"
             app:setting_red_dot="false"
             app:setting_right_text=""
@@ -109,7 +109,7 @@
         <com.coin.b8.ui.view.SettingItemView
             android:id="@+id/mine_feedback"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/mine_item_height"
             android:background="@drawable/ripple_one_item_bg"
             app:setting_red_dot="false"
             app:setting_right_text=""
@@ -119,7 +119,7 @@
         <com.coin.b8.ui.view.SettingItemView
             android:id="@+id/mine_system_setting"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/mine_item_height"
             android:layout_marginTop="15dp"
             android:background="@drawable/ripple_one_item_bg"
             app:setting_red_dot="false"
@@ -133,7 +133,7 @@
         <com.coin.b8.ui.view.SettingItemView
             android:id="@+id/mine_check_update"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/mine_item_height"
             android:background="@drawable/ripple_one_item_bg"
             app:setting_red_dot="false"
             app:setting_right_text=""

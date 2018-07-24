@@ -87,9 +87,7 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
         mLoginBtn.setOnClickListener(this);
         mAuthority = getPackageName() + ".chosehead";
         mMyToast = new MyToast(this);
-        if(PreferenceHelper.getIsLogin(this)){
-            mLoginBtn.setText("切换账号");
-        }
+
     }
 
     private void updateUser(){
@@ -118,6 +116,9 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
+        if(PreferenceHelper.getIsLogin(this)){
+            mLoginBtn.setText("切换账号");
+        }
         updateUser();
         if(mIsHeadNewCreate){
             mIsHeadNewCreate = false;

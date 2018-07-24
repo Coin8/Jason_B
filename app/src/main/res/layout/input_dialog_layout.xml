@@ -56,11 +56,11 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginRight="15dp"
-                android:background="@drawable/feedback_btn_bg"
+                android:background="@drawable/corner_bg_light_input_dialog"
                 android:clickable="true"
                 android:gravity="center"
                 android:text="取消"
-                android:textColor="@color/white"
+                android:textColor="@color/title_text_color"
                 android:textSize="17dp" />
 
 
