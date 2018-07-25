@@ -120,9 +120,10 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="7dp"
-            android:textColor="#728bae"
+            android:textColor="@color/title_text_color"
             android:textColorHint="#728bae"
-            android:textSize="@dimen/feedback_text_size_12" />
+            android:textSize="@dimen/feedback_text_size_13"
+            android:textCursorDrawable="@drawable/shape_et_cursor_color"/>
 
 
         <EditText
@@ -138,10 +139,11 @@
             android:maxLength="40"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:textColor="#728bae"
+            android:textColor="@color/title_text_color"
             android:textColorHint="#728bae"
-            android:textSize="@dimen/feedback_text_size_12"
-            android:digits="@string/rule_text"/>
+            android:textSize="@dimen/feedback_text_size_13"
+            android:digits="@string/rule_text"
+            android:textCursorDrawable="@drawable/shape_et_cursor_color"/>
 
 
         <TextView

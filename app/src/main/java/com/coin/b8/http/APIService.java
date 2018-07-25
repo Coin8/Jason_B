@@ -118,7 +118,10 @@ public interface APIService {
      * @return
      */
     @GET("b/a/u/article/{uid}")
-    Observable<CollectionListInfoResponse> getCollectionList(@Path("uid")  String uid, @Query("start")  long start);
+    Observable<CollectionListInfoResponse> getCollectionList(
+            @Path("uid")  String uid,
+            @Query("start")  long start,
+            @Query("limit")  long limit);
 
 
     /**

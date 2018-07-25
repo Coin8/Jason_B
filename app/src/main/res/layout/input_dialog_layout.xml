@@ -31,12 +31,14 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/feedback_edit_bg"
             android:gravity="center_vertical"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:singleLine="true"
             android:text="输入文本"
-            android:textColor="#000000"
-            android:textSize="14dp"
+            android:textColor="@color/title_text_color"
+            android:textColorHint="@color/et_text_hit"
+            android:textCursorDrawable="@drawable/shape_et_cursor_color"
+            android:textSize="14sp"
             android:visibility="gone" />
 
 

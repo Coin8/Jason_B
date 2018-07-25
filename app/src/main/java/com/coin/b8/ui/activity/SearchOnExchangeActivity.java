@@ -204,7 +204,7 @@ public class SearchOnExchangeActivity extends BaseActivity implements ISearchVie
     }
 
     private void startSearch(String text){
-        showLoading();
+//        showLoading();
         mSearchPresenter.search(text,1,20,mExchange);
         if(!TextUtils.isEmpty(text)){
             mSearchHistoryDB.deleteHistory(text);
@@ -243,9 +243,6 @@ public class SearchOnExchangeActivity extends BaseActivity implements ISearchVie
             mSearchResultRecyclerView.setVisibility(View.GONE);
         }
 
-//        mEditTextClear.setFocusable(true);
-//        mEditTextClear.setFocusableInTouchMode(true);
-//        mEditTextClear.requestFocus();
     }
 
     private void updateSearchDataMore(MarketListSearchResponse response){

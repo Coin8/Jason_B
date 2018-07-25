@@ -17,19 +17,18 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/default_image_share_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <ImageView
                     android:id="@+id/share_image"
                     android:layout_width="match_parent"
-                    android:layout_height="667dp"
-                    android:src="@drawable/share_bg"
-                    android:scaleType="fitXY"/>
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/share_bg" />
 
             </LinearLayout>
 
@@ -39,7 +38,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="gone"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:layout_gravity="center_horizontal">
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -70,9 +70,8 @@
                 <ImageView
                     android:layout_marginTop="50dp"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:src="@drawable/share_quick_qr"
-                    android:scaleType="fitXY"/>
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/share_quick_qr" />
 
             </LinearLayout>
 

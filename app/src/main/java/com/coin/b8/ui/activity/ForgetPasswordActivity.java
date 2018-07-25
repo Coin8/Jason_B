@@ -4,7 +4,9 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,6 +16,7 @@ import com.coin.b8.model.ResetPasswordResponseInfo;
 import com.coin.b8.ui.dialog.LoadingDialog;
 import com.coin.b8.ui.iView.IForgetPasswordView;
 import com.coin.b8.ui.presenter.ForgetPasswordPresenterImpl;
+import com.coin.b8.ui.view.EditTextClear;
 import com.coin.b8.utils.CommonUtils;
 import com.coin.b8.utils.MyToast;
 
@@ -24,9 +27,9 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
     private TextView mForgetTitle;
     private TextView mBtnSubmit;
     private TextView mBtnVerifyCode;
-    private EditText mAccountEdit;
-    private EditText mPasswordEdit;
-    private EditText mPasswordConfirmEdit;
+    private EditTextClear mAccountEdit;
+    private EditTextClear mPasswordEdit;
+    private EditTextClear mPasswordConfirmEdit;
     private EditText mVerifyCodeEdit;
     private boolean mCodeIsSend = false;
     private LoadingDialog mLoadingDialog;
@@ -49,8 +52,96 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
         mVerifyCodeEdit = findViewById(R.id.verify_confirm_edit);
         mBtnVerifyCode = findViewById(R.id.verify_confirm_btn);
         mForgetTitle .setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+
+        mAccountEdit.setLeftIcon(R.drawable.username_icon);
+        mPasswordEdit.setLeftIcon(R.drawable.password_icon);
+        mPasswordConfirmEdit.setLeftIcon(R.drawable.password_icon);
+
+        mAccountEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkState();
+            }
+        });
+        mPasswordEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkState();
+            }
+        });
+        mPasswordConfirmEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkState();
+            }
+        });
+
+        mVerifyCodeEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkState();
+            }
+        });
+
+
         mBtnSubmit.setOnClickListener(this);
         mBtnVerifyCode.setOnClickListener(this);
+    }
+
+    private void checkState(){
+        String username = mAccountEdit.getText().toString();
+        String password = mPasswordEdit.getText().toString();
+        String password1 = mPasswordConfirmEdit.getText().toString();
+        String verify = mVerifyCodeEdit.getText().toString();
+
+        if(TextUtils.isEmpty(username)
+                || TextUtils.isEmpty(password)
+                || TextUtils.isEmpty(password1)
+                || TextUtils.isEmpty(verify)){
+            mBtnSubmit.setBackgroundResource(R.drawable.corner_bg_light_personsal);
+        }else {
+            mBtnSubmit.setBackgroundResource(R.drawable.feedback_btn_bg);
+        }
     }
 
     @Override

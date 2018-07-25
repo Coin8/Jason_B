@@ -16,7 +16,7 @@ public class MyCollectionPresenterImpl extends BasePresenterImpl<IMyCollectionVi
         mView = iMyCollectionView;
     }
 
-    public void getCollectionList(String uid ,long start){
+    public void getCollectionList(String uid ,long start, long limit){
         DisposableObserver<CollectionListInfoResponse> disposableObserver = new DisposableObserver<CollectionListInfoResponse>() {
             @Override
             public void onNext(CollectionListInfoResponse collectionListInfoResponse) {
@@ -37,11 +37,11 @@ public class MyCollectionPresenterImpl extends BasePresenterImpl<IMyCollectionVi
 
             }
         };
-        B8Api.getCollectionList(disposableObserver,uid,start);
+        B8Api.getCollectionList(disposableObserver,uid,start,limit);
         mCompositeDisposable.add(disposableObserver);
     }
 
-    public void getCollectionListMore(String uid ,long start){
+    public void getCollectionListMore(String uid ,long start,long limit){
         DisposableObserver<CollectionListInfoResponse> disposableObserver = new DisposableObserver<CollectionListInfoResponse>() {
             @Override
             public void onNext(CollectionListInfoResponse collectionListInfoResponse) {
@@ -62,7 +62,7 @@ public class MyCollectionPresenterImpl extends BasePresenterImpl<IMyCollectionVi
 
             }
         };
-        B8Api.getCollectionList(disposableObserver,uid,start);
+        B8Api.getCollectionList(disposableObserver,uid,start,limit);
         mCompositeDisposable.add(disposableObserver);
     }
 

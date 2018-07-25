@@ -6,12 +6,15 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.coin.b8.R;
 import com.coin.b8.help.DemoHelper;
@@ -21,8 +24,10 @@ import com.coin.b8.permission.RuntimeRationale;
 import com.coin.b8.ui.dialog.LoadingDialog;
 import com.coin.b8.ui.iView.ILoginView;
 import com.coin.b8.ui.presenter.LoginPresenterImpl;
+import com.coin.b8.ui.view.EditTextClear;
 import com.coin.b8.utils.CommonUtils;
 import com.coin.b8.utils.MyToast;
+import com.coin.b8.utils.ToastUtil;
 import com.google.gson.Gson;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
@@ -39,9 +44,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private TextView mLoginBtn;
     private MyToast mMyToast;
     private LoginPresenterImpl mLoginPresenter;
-    private EditText mAccountEdit;
-    private EditText mPasswordEdit;
+    private EditTextClear mAccountEdit;
+    private EditTextClear mPasswordEdit;
     private LoadingDialog mLoadingDialog;
+
+    private Toast mToast;
+
+    private void showToast(String text){
+        if (mToast == null) {
+            mToast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+        } else {
+            mToast.setText(text);
+            mToast.setDuration(Toast.LENGTH_SHORT);
+        }
+        mToast.show();
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,8 +81,90 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         mForgetBtn.setOnClickListener(this);
         mAccountEdit = findViewById(R.id.login_account_edit);
         mPasswordEdit = findViewById(R.id.login_password_edit);
+
+        mAccountEdit.setLeftIcon(R.drawable.username_icon);
+        mPasswordEdit.setLeftIcon(R.drawable.password_icon);
+
+        mAccountEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkCanLogin();
+            }
+        });
+
+        mPasswordEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkCanLogin();
+            }
+        });
+
+        mAccountEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    return;
+                }
+                String user = mAccountEdit.getText().toString();
+                if(TextUtils.isEmpty(user)){
+                    mMyToast.showToast("账号不能为空");
+                    return;
+                }
+                if(!CommonUtils.isEmail(user)){
+                    mMyToast.showToast("请输入正确的邮箱地址");
+                    return;
+                }
+
+            }
+        });
+
+        mPasswordEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    return;
+                }
+                String user = mPasswordEdit.getText().toString();
+                if(TextUtils.isEmpty(user)){
+                    mMyToast.showToast("密码不能为空");
+                    return;
+                }
+            }
+        });
+
         mLoginBtn = findViewById(R.id.login_btn);
         mLoginBtn.setOnClickListener(this);
+    }
+
+
+    private void checkCanLogin(){
+        String user = mAccountEdit.getText().toString();
+        String password = mPasswordEdit.getText().toString();
+        if(TextUtils.isEmpty(user) || TextUtils.isEmpty(password)){
+            mLoginBtn.setBackgroundResource(R.drawable.corner_bg_light_personsal);
+        }else {
+            mLoginBtn.setBackgroundResource(R.drawable.feedback_btn_bg);
+        }
     }
 
     @Override
@@ -101,9 +200,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
 
+    int count = 0;
     @Override
     public void onClick(View v) {
         if(v == null){
+//            mMyToast.showToast("222222222");
             return;
         }
         String email;
@@ -118,12 +219,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 break;
             case R.id.login_btn:
                 if(!checkPhonePermission()){
+//                    mMyToast.showToast("111111111");
                     return;
                 }
                 email = mAccountEdit.getText().toString();
                 password = mPasswordEdit.getText().toString();
                 if(TextUtils.isEmpty(email)){
+//                    Log.e("zy","5555555 = "+ count++);
+
                     mMyToast.showToast("账号不能为空");
+//                    showToast("账号不能为空");
+//                    ToastUtil.showShortToast("账号不能为空");
+
                     return;
                 }
                 if(!CommonUtils.isEmail(email)){

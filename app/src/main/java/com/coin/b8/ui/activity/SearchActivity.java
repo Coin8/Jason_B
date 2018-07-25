@@ -266,7 +266,7 @@ public class SearchActivity extends BaseActivity implements ISearchView{
         if(TextUtils.isEmpty(text)){
             return;
         }
-        showLoading();
+//        showLoading();
         mSearchPresenter.search(text,1,20,"");
     }
 

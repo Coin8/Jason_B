@@ -16,7 +16,7 @@
     <color name="blue">#426ab3</color>
     <color name="green">#32a853</color>
 
-
+    <color name="et_text_hit">#728BAE</color>
     <color name="title_text_color">#191919</color>
     <color name="setting_text_color">#191919</color>     <!--二级字体颜色日间-->
     <color name="setting_small_text_color">#9b9b9b</color>
@@ -42,5 +42,7 @@
 
 
     <color name="refresh_text_color">#728bae</color>
+
+    <color name="home_bottom_text_color_default">#4a4a4a</color>
 
 </resources>

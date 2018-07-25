@@ -19,14 +19,16 @@
         android:textSize="24sp"/>
 
 
-    <EditText
+    <com.coin.b8.ui.view.EditTextClear
         android:id="@+id/login_account_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="43dp"
         android:hint="@string/login_account_hint"
-        android:textColorHint="#CAD7EF"
+        android:textColorHint="@color/et_text_hit"
+        android:textColor="@color/title_text_color"
         android:textSize="16sp"
+        android:textCursorDrawable="@drawable/shape_et_cursor_color"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:drawableLeft="@drawable/username_icon"
@@ -42,14 +44,16 @@
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"/>
 
-    <EditText
+    <com.coin.b8.ui.view.EditTextClear
         android:id="@+id/login_password_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:hint="@string/login_password_hint"
-        android:textColorHint="#CAD7EF"
+        android:textColorHint="@color/et_text_hit"
+        android:textColor="@color/title_text_color"
         android:textSize="16sp"
+        android:textCursorDrawable="@drawable/shape_et_cursor_color"
         android:inputType="textPassword"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
@@ -83,7 +87,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:background="@drawable/feedback_btn_bg"
+        android:background="@drawable/corner_bg_light_personsal"
         android:textColor="@color/title_text_color"
         android:textSize="16sp"
         android:gravity="center"

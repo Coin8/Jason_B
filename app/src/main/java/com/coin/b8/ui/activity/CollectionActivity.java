@@ -135,6 +135,9 @@ public class CollectionActivity extends BaseActivity implements IMyCollectionVie
                 if(dataBean != null){
                     mMyCollectionPresenter.deleteCollection(dataBean.getArticleId(),dataBean.getTargetType());
                 }
+                if(mCollectionAdapter.getItemCount() == 0){
+                    setContent(null);
+                }
             }
         });
 
@@ -169,6 +172,7 @@ public class CollectionActivity extends BaseActivity implements IMyCollectionVie
     }
 
     private void setBlankCollection(){
+        mCollectionAdapter.setList(null);
         mSmartRefreshLayout.setVisibility(View.GONE);
         mBlankView.setVisibility(View.VISIBLE);
         mBlankView.setDesc("还没有收藏哦");
@@ -176,30 +180,13 @@ public class CollectionActivity extends BaseActivity implements IMyCollectionVie
         mBlankView.setEnableButton(false);
     }
 
-    private void setContent(){
-        mBlankView.setVisibility(View.GONE);
-        mSmartRefreshLayout.setVisibility(View.VISIBLE);
-    }
-
-    private void startRefresh(){
-        mCurrentPosition = 0;
-        String uid = PreferenceHelper.getUid(this);
-        mMyCollectionPresenter.getCollectionList(uid,1);
-    }
-
-    private void startLoadMore(){
-        String uid = PreferenceHelper.getUid(this);
-        long start = mCurrentPosition + 21;
-        mMyCollectionPresenter.getCollectionListMore(uid,start);
-    }
-
-
-    @Override
-    public void onCollectionList(CollectionListInfoResponse collectionListInfoResponse) {
-        if(collectionListInfoResponse != null
-                && collectionListInfoResponse.getData() != null
-                && collectionListInfoResponse.getData().size() > 0){
-            mCollectionAdapter.setList(collectionListInfoResponse.getData());
+    private void setContent(CollectionListInfoResponse response){
+        if(response != null
+                && response.getData() != null
+                && response.getData().size() > 0){
+            mBlankView.setVisibility(View.GONE);
+            mSmartRefreshLayout.setVisibility(View.VISIBLE);
+            mCollectionAdapter.setList(response.getData());
             mCollectionAdapter.notifyDataSetChanged();
             mSmartRefreshLayout.finishRefresh(true);
         }else {
@@ -208,9 +195,29 @@ public class CollectionActivity extends BaseActivity implements IMyCollectionVie
         }
     }
 
+    private void startRefresh(){
+        mCurrentPosition = 0;
+        String uid = PreferenceHelper.getUid(this);
+        mMyCollectionPresenter.getCollectionList(uid,1,20);
+    }
+
+    private void startLoadMore(){
+        String uid = PreferenceHelper.getUid(this);
+
+        long start = mCollectionAdapter.getItemCount() + 1;
+
+        mMyCollectionPresenter.getCollectionListMore(uid,start,20);
+    }
+
+
+    @Override
+    public void onCollectionList(CollectionListInfoResponse collectionListInfoResponse) {
+        setContent(collectionListInfoResponse);
+    }
+
     @Override
     public void onCollectionError() {
-        setBlankCollection();
+        setContent(null);
         mSmartRefreshLayout.finishRefresh(false);
     }
 

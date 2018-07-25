@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <dimen name="feedback_title_height">46dp</dimen>
     <dimen name="feedback_text_size_16">16sp</dimen>
@@ -18,5 +18,8 @@
     <dimen name="line_width">1dp</dimen>
 
     <dimen name="mine_item_height">46dp</dimen>
+
+    <dimen tools:override="true" name="design_bottom_navigation_text_size">12sp</dimen>
+    <dimen tools:override="true" name="design_bottom_navigation_active_text_size">12sp</dimen>
 
 </resources>

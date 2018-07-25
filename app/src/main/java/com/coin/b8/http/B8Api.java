@@ -226,8 +226,8 @@ public class B8Api {
                 .subscribe(observer);
     }
 
-    public static void getCollectionList(Observer<CollectionListInfoResponse> observer, String uid,long start){
-        BuildApi.getAPIService().getCollectionList(uid,start)
+    public static void getCollectionList(Observer<CollectionListInfoResponse> observer, String uid,long start,long limit){
+        BuildApi.getAPIService().getCollectionList(uid,start,limit)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

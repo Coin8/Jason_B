@@ -52,7 +52,7 @@
             android:layout_marginLeft="16dp"
             android:layout_centerVertical="true"
             android:textColor="@color/setting_text_color"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:text="推送管理"/>
         <com.coin.b8.ui.view.SwitchButton
             android:id="@+id/switch_button"

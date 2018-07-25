@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatCheckBox;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,6 +18,7 @@ import com.coin.b8.model.RegisterResponseInfo;
 import com.coin.b8.ui.dialog.LoadingDialog;
 import com.coin.b8.ui.iView.IRegisterView;
 import com.coin.b8.ui.presenter.RegisterPresenterImpl;
+import com.coin.b8.ui.view.EditTextClear;
 import com.coin.b8.utils.CommonUtils;
 import com.coin.b8.utils.MyToast;
 
@@ -29,9 +32,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private TextView mBtnSubmit;
     private MyCountDownTimer mMyCountDownTimer;
     private TextView mBtnGetVerifyCode;
-    private EditText mAccountEdit;
-    private EditText mPasswordEdit;
-    private EditText mPasswordConfirmEdit;
+    private EditTextClear mAccountEdit;
+    private EditTextClear mPasswordEdit;
+    private EditTextClear mPasswordConfirmEdit;
     private EditText mVerifyCodeEdit;
     private RegisterPresenterImpl mRegisterPresenter;
     private boolean mCodeIsSend = false;
@@ -60,11 +63,100 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         mBtnSubmit = findViewById(R.id.submit_btn);
         mForgetTitle = findViewById(R.id.content_title);
         mForgetTitle .setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+
+        mAccountEdit.setLeftIcon(R.drawable.username_icon);
+        mPasswordEdit.setLeftIcon(R.drawable.password_icon);
+        mPasswordEdit.setLeftIcon(R.drawable.password_icon);
+
+        mAccountEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkState();
+            }
+        });
+        mPasswordEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkState();
+            }
+        });
+        mPasswordConfirmEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkState();
+            }
+        });
+        mVerifyCodeEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkState();
+            }
+        });
+
+
         mBtnAgreement.setOnClickListener(this);
         mCheckboxAgreement.setOnClickListener(this);
         mBtnSubmit.setOnClickListener(this);
         mBtnGetVerifyCode.setOnClickListener(this);
     }
+
+    private void checkState(){
+        String username = mAccountEdit.getText().toString();
+        String password = mPasswordEdit.getText().toString();
+        String password1 = mPasswordConfirmEdit.getText().toString();
+        String verify = mVerifyCodeEdit.getText().toString();
+
+        if(!mCheckboxAgreement.isChecked()
+                ||TextUtils.isEmpty(username)
+                || TextUtils.isEmpty(password)
+                || TextUtils.isEmpty(password1)
+                || TextUtils.isEmpty(verify)){
+            mBtnSubmit.setBackgroundResource(R.drawable.corner_bg_light_personsal);
+        }else {
+            mBtnSubmit.setBackgroundResource(R.drawable.feedback_btn_bg);
+        }
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -145,11 +237,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 mRegisterPresenter.register(email,password,code);
                 break;
             case R.id.checkbox_agreement:
-                if(mCheckboxAgreement.isChecked()){
-                    mBtnSubmit.setBackgroundResource(R.drawable.feedback_btn_bg);
-                }else {
-                    mBtnSubmit.setBackgroundResource(R.drawable.corner_bg_gray);
-                }
+                checkState();
                 break;
         }
 
