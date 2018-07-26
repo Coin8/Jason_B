@@ -190,6 +190,15 @@ public class SearchActivity extends BaseActivity implements ISearchView{
                 }
 
             }
+
+            @Override
+            public void onWholeItemClick() {
+                String string = mEditTextClear.getText().toString();
+                if(!TextUtils.isEmpty(string)){
+                        mSearchHistoryDB.deleteHistory(string);
+                        mSearchHistoryDB.insertHistory(string);
+                }
+            }
         });
         mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -241,9 +250,9 @@ public class SearchActivity extends BaseActivity implements ISearchView{
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
                     String string = mEditTextClear.getText().toString();
                     if(!TextUtils.isEmpty(string)){
-                        startSearch(mEditTextClear.getText().toString());
-                        mSearchHistoryDB.deleteHistory(string);
-                        mSearchHistoryDB.insertHistory(string);
+//                        startSearch(mEditTextClear.getText().toString());
+//                        mSearchHistoryDB.deleteHistory(string);
+//                        mSearchHistoryDB.insertHistory(string);
                     }
                 }
                 return false;
@@ -258,8 +267,8 @@ public class SearchActivity extends BaseActivity implements ISearchView{
             return;
         }
         startSearch(text);
-        mSearchHistoryDB.deleteHistory(text);
-        mSearchHistoryDB.insertHistory(text);
+//        mSearchHistoryDB.deleteHistory(text);
+//        mSearchHistoryDB.insertHistory(text);
     }
 
     private void startSearch(String text){

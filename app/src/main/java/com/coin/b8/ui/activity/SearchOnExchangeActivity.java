@@ -140,6 +140,15 @@ public class SearchOnExchangeActivity extends BaseActivity implements ISearchVie
                 }
 
             }
+
+            @Override
+            public void onWholeItemClick() {
+                String string = mEditTextClear.getText().toString();
+                if(!TextUtils.isEmpty(string)){
+                    mSearchHistoryDB.deleteHistory(string);
+                    mSearchHistoryDB.insertHistory(string);
+                }
+            }
         });
         mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -206,10 +215,10 @@ public class SearchOnExchangeActivity extends BaseActivity implements ISearchVie
     private void startSearch(String text){
 //        showLoading();
         mSearchPresenter.search(text,1,20,mExchange);
-        if(!TextUtils.isEmpty(text)){
-            mSearchHistoryDB.deleteHistory(text);
-            mSearchHistoryDB.insertHistory(text);
-        }
+//        if(!TextUtils.isEmpty(text)){
+//            mSearchHistoryDB.deleteHistory(text);
+//            mSearchHistoryDB.insertHistory(text);
+//        }
     }
 
     private void startSearchMore(String text){

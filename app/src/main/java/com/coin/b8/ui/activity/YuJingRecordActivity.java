@@ -37,6 +37,8 @@ public class YuJingRecordActivity extends BaseActivity implements IYuJingRecordV
     private LoadingDialog mLoadingDialog;
     private MyToast mMyToast;
 
+    private boolean mLoadingShowing = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,15 +128,14 @@ public class YuJingRecordActivity extends BaseActivity implements IYuJingRecordV
 
 
     private void showLoading(){
+        hideLoading();
         mLoadingDialog = new LoadingDialog();
         mLoadingDialog.setLoadingText("请稍后...");
         mLoadingDialog.show(getSupportFragmentManager(),"loading");
     }
 
     private void hideLoading(){
-        if(mLoadingDialog != null
-                && mLoadingDialog.getDialog() != null
-                && mLoadingDialog.getDialog().isShowing()){
+        if(mLoadingDialog != null){
             mLoadingDialog.dismiss();
         }
     }

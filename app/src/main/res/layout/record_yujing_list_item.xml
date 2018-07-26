@@ -36,7 +36,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/line_width"
-        android:background="@color/lineColor"/>
+        android:background="@color/lineColor"
+        android:layout_marginLeft="15dp"/>
 
 
     <RelativeLayout

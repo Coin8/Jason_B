@@ -22,6 +22,7 @@ import com.coin.b8.help.PreferenceHelper;
 import com.coin.b8.model.CancelCollectionResponse;
 import com.coin.b8.model.CollectionListInfoResponse;
 import com.coin.b8.ui.adapter.CollectionAdapter;
+import com.coin.b8.ui.dialog.LoadingDialog;
 import com.coin.b8.ui.iView.IMyCollectionView;
 import com.coin.b8.ui.presenter.MyCollectionPresenterImpl;
 import com.coin.b8.ui.view.BlankView;
@@ -46,6 +47,7 @@ public class CollectionActivity extends BaseActivity implements IMyCollectionVie
 
     private long mCurrentPosition = 0;
     private MyToast mMyToast;
+    private LoadingDialog mLoadingDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -145,7 +147,7 @@ public class CollectionActivity extends BaseActivity implements IMyCollectionVie
         mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
-                startRefresh();
+//                startRefresh();
             }
         });
 
@@ -162,13 +164,27 @@ public class CollectionActivity extends BaseActivity implements IMyCollectionVie
                 startRefresh();
             }
         });
+        mSmartRefreshLayout.setEnableRefresh(false);
 
+    }
+
+    private void showLoading(){
+        hideLoading();
+        mLoadingDialog = new LoadingDialog();
+        mLoadingDialog.show(getSupportFragmentManager(),"loading");
+    }
+
+    private void hideLoading(){
+        if(mLoadingDialog != null){
+            mLoadingDialog.dismiss();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mSmartRefreshLayout.autoRefresh();
+        startRefresh();
+//        mSmartRefreshLayout.autoRefresh();
     }
 
     private void setBlankCollection(){
@@ -188,14 +204,15 @@ public class CollectionActivity extends BaseActivity implements IMyCollectionVie
             mSmartRefreshLayout.setVisibility(View.VISIBLE);
             mCollectionAdapter.setList(response.getData());
             mCollectionAdapter.notifyDataSetChanged();
-            mSmartRefreshLayout.finishRefresh(true);
+//            mSmartRefreshLayout.finishRefresh(true);
         }else {
             setBlankCollection();
-            mSmartRefreshLayout.finishRefresh(false);
+//            mSmartRefreshLayout.finishRefresh(false);
         }
     }
 
     private void startRefresh(){
+        showLoading();
         mCurrentPosition = 0;
         String uid = PreferenceHelper.getUid(this);
         mMyCollectionPresenter.getCollectionList(uid,1,20);
@@ -213,12 +230,14 @@ public class CollectionActivity extends BaseActivity implements IMyCollectionVie
     @Override
     public void onCollectionList(CollectionListInfoResponse collectionListInfoResponse) {
         setContent(collectionListInfoResponse);
+        hideLoading();
     }
 
     @Override
     public void onCollectionError() {
         setContent(null);
-        mSmartRefreshLayout.finishRefresh(false);
+        hideLoading();
+//        mSmartRefreshLayout.finishRefresh(false);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.coin.b8.ui.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,11 @@ public class DynamicQuickNewsAdapter extends RecyclerView.Adapter{
         NormalViewHolder normalViewHolder = (NormalViewHolder) holder;
         QuickNewsResponse.DataBean.ContentBean contentBean = mContentBeanList.get(position);
         if(normalViewHolder != null && contentBean != null){
-            normalViewHolder.mTime.setText(CommonUtils.millis2String(contentBean.getPublishTime()*1000,DEFAULT_FORMAT));
+            if(TextUtils.isEmpty(contentBean.getShowPubTime())){
+                normalViewHolder.mTime.setText(CommonUtils.millis2String(contentBean.getPublishTime()*1000,DEFAULT_FORMAT));
+            }else {
+                normalViewHolder.mTime.setText(contentBean.getShowPubTime());
+            }
             normalViewHolder.mContent.setText(contentBean.getContentWithoutTag());
             normalViewHolder.mContent.setMaxLines(3);
             normalViewHolder.mShareBtn.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +92,7 @@ public class DynamicQuickNewsAdapter extends RecyclerView.Adapter{
     private class NormalViewHolder extends RecyclerView.ViewHolder{
         public TextView mTime;
         public TextView mContent;
-        public TextView mShareBtn;
+        public View mShareBtn;
 
         private int mMaxLine = 3;
 
@@ -95,7 +100,7 @@ public class DynamicQuickNewsAdapter extends RecyclerView.Adapter{
             super(itemView);
             mTime = itemView.findViewById(R.id.time);
             mContent = itemView.findViewById(R.id.content);
-            mShareBtn = itemView.findViewById(R.id.share_btn);
+            mShareBtn = itemView.findViewById(R.id.share_layout);
             mContent.setMaxLines(3);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

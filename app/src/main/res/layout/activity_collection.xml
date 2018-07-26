@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/toolbar"
-        android:background="@color/lineColor"/>
+        android:background="@color/top_line_color"/>
 
     <com.coin.b8.ui.view.BlankView
         android:id="@+id/blank_view"

@@ -162,12 +162,12 @@ public class DynamicImportNewsAdapter extends RecyclerView.Adapter{
             NormalViewHolder normalViewHolder = (NormalViewHolder) holder;
             DynamicImportNewsResponse.DataBean.ContentBean contentBean = mList.get(position);
             if(normalViewHolder != null){
-                GlideUtil.setImageRes(normalViewHolder.itemView.getContext(),
+                int radius = normalViewHolder.itemView.getContext().getResources().getDimensionPixelSize(R.dimen.dp_4);
+                GlideUtil.setCornerImageRes(normalViewHolder.itemView.getContext(),
                         normalViewHolder.mImageView,
                         contentBean.getPic(),
-                        R.drawable.share_smal_icon,
-                        R.drawable.share_smal_icon,
-                        false);
+                        radius,
+                        R.drawable.pic_default);
                 normalViewHolder.mTitle.setText(contentBean.getTitle());
                 normalViewHolder.mTime.setText(CommonUtils.millis2String(contentBean.getPublishTime()*1000,DEFAULT_FORMAT));
                 normalViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -191,14 +191,17 @@ public class DynamicImportNewsAdapter extends RecyclerView.Adapter{
                     }
                 });
 
-                normalViewHolder.mShareBtn.setOnClickListener(new View.OnClickListener() {
+                View.OnClickListener onClickListener = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if(mItemOnclickListen != null){
                             mItemOnclickListen.onShareClick(contentBean);
                         }
                     }
-                });
+                };
+                normalViewHolder.mShareBtn.setOnClickListener(onClickListener);
+                normalViewHolder.mShareImage.setOnClickListener(onClickListener);
+
             }
         }
     }
@@ -222,7 +225,8 @@ public class DynamicImportNewsAdapter extends RecyclerView.Adapter{
         public TextView mTitle;
         public TextView mTime;
         public TextView mShareBtn;
-        private ImageView mImageView;
+        public ImageView mImageView;
+        public ImageView mShareImage;
 
         public NormalViewHolder(View itemView) {
             super(itemView);
@@ -230,6 +234,7 @@ public class DynamicImportNewsAdapter extends RecyclerView.Adapter{
             mTime = itemView.findViewById(R.id.time);
             mShareBtn = itemView.findViewById(R.id.share_btn);
             mImageView = itemView.findViewById(R.id.collect_image);
+            mShareImage = itemView.findViewById(R.id.share_image);
         }
     }
 

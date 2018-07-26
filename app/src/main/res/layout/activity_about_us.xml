@@ -5,11 +5,18 @@
 
     <include layout="@layout/toolbar" />
 
+    <View
+        android:id="@+id/top_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_width"
+        android:background="@color/top_line_color"
+        android:layout_below="@id/toolbar"/>
+
     <ImageView
         android:id="@+id/app_icon"
         android:layout_width="76dp"
         android:layout_height="117dp"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/top_line"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
         android:src="@drawable/about_icon" />

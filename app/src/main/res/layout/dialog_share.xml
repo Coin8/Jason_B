@@ -65,6 +65,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:textSize="14sp"
+                    android:lineSpacingExtra="19dp"
                     android:textColor="@color/title_text_color"/>
 
                 <ImageView

@@ -13,39 +13,49 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="15dp">
 
-        <TextView
-            android:id="@+id/symbol"
+        <LinearLayout
+            android:id="@+id/symbol_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/title_text_color"
-            android:textSize="16sp"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:includeFontPadding="false"/>
-        <TextView
-            android:id="@+id/chinese_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/symbol"
-            android:layout_alignBottom="@id/symbol"
-            android:layout_marginLeft="2dp"
-            android:textSize="12sp"
-            android:textColor="#9b9b9b"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:includeFontPadding="false"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/symbol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/title_text_color"
+                android:textSize="16sp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:text="1111111"
+                android:gravity="center"/>
+            <TextView
+                android:id="@+id/chinese_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:layout_gravity="center_vertical"
+                android:textSize="12sp"
+                android:textColor="#9b9b9b"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:text="2222"
+                android:gravity="center"/>
+        </LinearLayout>
+
+
 
         <TextView
             android:id="@+id/vol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/symbol"
-            android:layout_alignLeft="@id/symbol"
+            android:layout_below="@id/symbol_layout"
+            android:layout_alignLeft="@id/symbol_layout"
             android:textSize="9sp"
             android:textColor="#9b9b9b"
             android:singleLine="true"
-            android:ellipsize="end"
-            android:includeFontPadding="false"/>
+            android:ellipsize="end" />
 
     </RelativeLayout>
 

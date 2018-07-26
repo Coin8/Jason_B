@@ -125,8 +125,7 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
     private void initNickName(){
         String nickName = PreferenceHelper.getNickName(getContext());
         if(TextUtils.isEmpty(nickName)){
-            int random = (int)((Math.random()*9+1)*1000000);
-            nickName = "币友"+random;
+            nickName = "币发用户";
             PreferenceHelper.setNickName(getContext(),nickName);
         }
         mViewUserName.setText(nickName);

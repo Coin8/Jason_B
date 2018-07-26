@@ -40,21 +40,40 @@
             android:text=""
             android:textColor="@color/title_text_color"
             android:textSize="15sp"
+            android:lineSpacingExtra="19dp"
             android:ellipsize="end"/>
 
-        <TextView
-            android:id="@+id/share_btn"
+        <LinearLayout
+            android:id="@+id/share_layout"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginTop="10dp"
             android:layout_gravity="right"
-            android:gravity="center"
-            android:drawableLeft="@drawable/list_item_icon_share"
-            android:drawablePadding="5dp"
-            android:singleLine="true"
-            android:textColor="#728bae"
-            android:textSize="12sp"
-            android:text="分享"/>
+            android:gravity="bottom">
+
+            <ImageView
+                android:id="@+id/share_image"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:padding="1dp"
+                android:src="@drawable/icon_details_share"
+                android:layout_marginRight="4dp"
+                android:scaleType="fitXY"/>
+            <TextView
+                android:id="@+id/share_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="#728bae"
+                android:textSize="12sp"
+                android:text="分享"/>
+
+        </LinearLayout>
+
+
 
         
 

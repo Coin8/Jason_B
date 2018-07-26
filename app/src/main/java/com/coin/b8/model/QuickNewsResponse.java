@@ -280,6 +280,15 @@ public class QuickNewsResponse {
             private String content;
             private long publishTime;
             private String contentWithoutTag;
+            private String showPubTime;
+
+            public String getShowPubTime() {
+                return showPubTime;
+            }
+
+            public void setShowPubTime(String showPubTime) {
+                this.showPubTime = showPubTime;
+            }
 
             public String getContentWithoutTag() {
                 return contentWithoutTag;

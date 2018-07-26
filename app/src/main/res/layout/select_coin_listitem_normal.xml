@@ -29,8 +29,10 @@
             android:layout_height="25dp"
             android:layout_marginLeft="5dp"
             android:layout_alignParentRight="true"
-            android:background="@drawable/corner_bg_light_personsal"
+            android:background="@drawable/corner_bg_select_coin_btn"
             android:layout_centerVertical="true"
+            android:textSize="12sp"
+            android:textColor="#163B7D"
             android:gravity="center"/>
         <TextView
             android:id="@+id/title"

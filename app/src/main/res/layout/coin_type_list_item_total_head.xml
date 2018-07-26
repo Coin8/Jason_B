@@ -13,7 +13,8 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:textSize="14sp"
-        android:textColor="@color/title_text_color" />
+        android:textColor="@color/title_text_color"
+        android:lineSpacingExtra="18dp"/>
 
     <TextView
         android:id="@+id/update_time"
@@ -49,7 +50,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:text="最新价"
             android:textColor="#4a4a4a"
             android:textSize="12sp"/>
@@ -58,7 +59,7 @@
             android:layout_width="70dp"
             android:layout_height="30dp"
             android:layout_marginLeft="5dp"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:text="24H涨幅"
             android:textColor="#4a4a4a"
             android:textSize="12sp"/>

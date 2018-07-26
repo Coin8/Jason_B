@@ -25,7 +25,7 @@
         android:layout_marginTop="15dp"
         android:gravity="center"
         android:text="点击刷新"
-        android:textColor="#16387c"
-        android:background="@drawable/corner_bg_gray"/>
+        android:textColor="#163B7D"
+        android:background="@drawable/corner_blank_btn"/>
 
 </merge>

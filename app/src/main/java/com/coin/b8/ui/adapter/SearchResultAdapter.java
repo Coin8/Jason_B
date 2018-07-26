@@ -28,6 +28,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter{
 
     public interface OnItemClickListen{
         void onItemClick(MarketListSearchResponse.DataBean dataBean);
+        void onWholeItemClick();
     }
     private OnItemClickListen mOnItemClickListen;
     private List<MarketListSearchResponse.DataBean> mList;
@@ -121,6 +122,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter{
                 String web_url = stringBuilder.toString();
                 NativeDetailActivity.startNativeDetailActivity(v.getContext(),web_url);
 
+                if(mOnItemClickListen != null){
+                    mOnItemClickListen.onWholeItemClick();
+                }
             }
         });
 

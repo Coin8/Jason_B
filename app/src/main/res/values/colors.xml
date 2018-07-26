@@ -22,6 +22,8 @@
     <color name="setting_small_text_color">#9b9b9b</color>
     <color name="lineColor">#F3F6FA</color>
 
+    <color name="top_line_color">#EAEDF3</color>
+
     <color name="comment_text">#5b5d5c</color>
 
     <!--item的水波纹颜色，灰色1-->
