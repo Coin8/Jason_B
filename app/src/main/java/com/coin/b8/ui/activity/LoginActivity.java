@@ -295,7 +295,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     DemoHelper.getInstance().login(loginResponseInfo.getData().getEasename(),
                             loginResponseInfo.getData().getPassword());
                 }else {
-                    mMyToast.showToast("登录失败");
+                    mMyToast.showToast(loginResponseInfo.getMessage());
                 }
                 mMyToast.showToast("登录成功");
                 finish();
