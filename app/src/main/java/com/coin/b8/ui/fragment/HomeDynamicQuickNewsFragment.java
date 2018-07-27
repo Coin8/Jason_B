@@ -16,7 +16,9 @@ import com.coin.b8.ui.dialog.ShareDialogFragment;
 import com.coin.b8.ui.iView.IQuickNewsView;
 import com.coin.b8.ui.listen.ShareListen;
 import com.coin.b8.ui.presenter.DynamicQuickNewsPresenter;
+import com.coin.b8.ui.view.BlankView;
 import com.coin.b8.utils.CommonUtils;
+import com.coin.b8.utils.NetworkUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -30,6 +32,7 @@ import java.text.SimpleDateFormat;
  */
 public class HomeDynamicQuickNewsFragment extends BaseFragment implements IQuickNewsView{
 
+    private BlankView mBlankView;
     private SmartRefreshLayout mSmartRefreshLayout;
     private RecyclerView mRecyclerView;
     private DynamicQuickNewsAdapter mDynamicQuickNewsAdapter;
@@ -58,6 +61,17 @@ public class HomeDynamicQuickNewsFragment extends BaseFragment implements IQuick
 
     @Override
     protected void initView(View view) {
+        mBlankView = view.findViewById(R.id.blank_view);
+        mBlankView.setImageViewTye(BlankView.BLANK_SELF);
+        mBlankView.setButtonOnclick(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFragmentLoading();
+                mCurrentPage = 1;
+                mDynamicQuickNewsPresenter.getQuickNews();
+            }
+        });
+
         mSmartRefreshLayout = view.findViewById(R.id.refreshLayout);
         mRecyclerView = view.findViewById(R.id.recyclerview);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -88,9 +102,37 @@ public class HomeDynamicQuickNewsFragment extends BaseFragment implements IQuick
             }
         });
 
-        mSmartRefreshLayout.autoRefresh();
+        showFragmentLoading();
+        mCurrentPage = 1;
+        mDynamicQuickNewsPresenter.getQuickNews();
+    }
+
+
+    private void showFragmentLoading(){
+        mSmartRefreshLayout.setVisibility(View.GONE);
+        mBlankView.showLoading();
+        mBlankView.setVisibility(View.VISIBLE);
+    }
+
+    private void showBlank(){
+        if(NetworkUtils.isConnected()){
+            mBlankView.setImageViewTye(BlankView.BLANK_SELF);
+            mBlankView.setDesc(getResources().getString(R.string.no_data));
+        }else {
+            mBlankView.setImageViewTye(BlankView.BLANK_WIFI);
+            mBlankView.setDesc("网络连接失败");
+        }
+        mBlankView.setVisibility(View.VISIBLE);
+        mSmartRefreshLayout.setVisibility(View.GONE);
 
     }
+
+    private void hideBlank(){
+        mBlankView.setVisibility(View.GONE);
+        mSmartRefreshLayout.setVisibility(View.VISIBLE);
+    }
+
+
 
     private void startShare(QuickNewsResponse.DataBean.ContentBean contentBean){
         if(contentBean == null){
@@ -151,6 +193,9 @@ public class HomeDynamicQuickNewsFragment extends BaseFragment implements IQuick
                 && quickNewsResponse.getData().getContent() != null
                 && quickNewsResponse.getData().getContent().size() > 0){
             mDynamicQuickNewsAdapter.setContentBeanList(quickNewsResponse.getData().getContent());
+            hideBlank();
+        }else {
+            showBlank();
         }
         mSmartRefreshLayout.finishRefresh(0);
     }
@@ -158,6 +203,7 @@ public class HomeDynamicQuickNewsFragment extends BaseFragment implements IQuick
     @Override
     public void onNewsError() {
         mSmartRefreshLayout.finishRefresh(0);
+        showBlank();
     }
 
     @Override

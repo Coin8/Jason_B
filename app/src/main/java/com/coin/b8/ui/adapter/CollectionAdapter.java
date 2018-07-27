@@ -81,14 +81,14 @@ public class CollectionAdapter extends RecyclerView.Adapter{
             return;
         }
         if(collectionVH != null ){
+            int radius = collectionVH.itemView.getContext().getResources().getDimensionPixelSize(R.dimen.dp_4);
             collectionVH.title.setText(dataBean.getTitle() );
             collectionVH.time.setText(CommonUtils.millis2String(dataBean.getCreateTime(),DEFAULT_FORMAT));
-            GlideUtil.setImageRes(holder.itemView.getContext(),
+            GlideUtil.setCornerImageRes(holder.itemView.getContext(),
                     collectionVH.mImageView,
                     dataBean.getPic(),
-                    R.drawable.share_smal_icon,
-                    R.drawable.share_smal_icon,
-                    false);
+                    radius,
+                    R.drawable.pic_default);
             collectionVH.content.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

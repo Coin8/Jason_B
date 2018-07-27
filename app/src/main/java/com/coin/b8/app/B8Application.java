@@ -14,6 +14,7 @@ import com.coin.b8.help.PreferenceHelper;
 import com.coin.b8.update.UpdateManager;
 import com.coin.b8.utils.AppUtil;
 import com.coin.b8.utils.CommonUtils;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.umeng.commonsdk.UMConfigure;
 
 /**
@@ -49,6 +50,7 @@ public class B8Application extends Application {
            }
         }
         SearchHistoryDB.getIntstance();
+        ClassicsHeader.REFRESH_HEADER_LASTTIME = "最后更新: 今天HH:mm";
     }
 
     /**

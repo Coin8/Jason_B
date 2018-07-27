@@ -49,6 +49,10 @@ public class DynamicImportNewsAdapter extends RecyclerView.Adapter{
         mList = list;
     }
 
+    public void setBannerBeanList(List<BannerResponse.DataBean> bannerBeanList) {
+        mBannerBeanList = bannerBeanList;
+    }
+
     public void setItemOnclickListen(ItemOnclickListen itemOnclickListen) {
         mItemOnclickListen = itemOnclickListen;
     }
@@ -91,14 +95,14 @@ public class DynamicImportNewsAdapter extends RecyclerView.Adapter{
     }
 
     public void setList(List<DynamicImportNewsResponse.DataBean.ContentBean> list) {
-        if(mList != null
-                && mList.size() > 0
-                && mList.get(0).getViewType() == 1
-                && list != null){
-            DynamicImportNewsResponse.DataBean.ContentBean contentBean = new DynamicImportNewsResponse.DataBean.ContentBean();
-            contentBean.setViewType(1);
-            list.add(0,contentBean);
-        }
+//        if(mList != null
+//                && mList.size() > 0
+//                && mList.get(0).getViewType() == 1
+//                && list != null){
+//            DynamicImportNewsResponse.DataBean.ContentBean contentBean = new DynamicImportNewsResponse.DataBean.ContentBean();
+//            contentBean.setViewType(1);
+//            list.add(0,contentBean);
+//        }
         mList = list;
 
 
@@ -169,7 +173,13 @@ public class DynamicImportNewsAdapter extends RecyclerView.Adapter{
                         radius,
                         R.drawable.pic_default);
                 normalViewHolder.mTitle.setText(contentBean.getTitle());
-                normalViewHolder.mTime.setText(CommonUtils.millis2String(contentBean.getPublishTime()*1000,DEFAULT_FORMAT));
+
+                if(TextUtils.isEmpty(contentBean.getShowPubTime())){
+                    normalViewHolder.mTime.setText(CommonUtils.millis2String(contentBean.getPublishTime()*1000,DEFAULT_FORMAT));
+                }else {
+                    normalViewHolder.mTime.setText(contentBean.getShowPubTime());
+                }
+
                 normalViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

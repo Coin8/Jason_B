@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.coin.b8.R;
+import com.coin.b8.ui.activity.SearchActivity;
 
 /**
  * Created by zhangyi on 2018/7/9.
@@ -24,6 +25,9 @@ public class BlankView extends LinearLayout{
     private ImageView mImageView;
     private TextView mDesc;
     private TextView mClickBtn;
+    private LinearLayout mLoadingLayout;
+    private LinearLayout mEmptyLayout;
+    private TextView mLoadingText;
     public BlankView(Context context) {
         super(context);
         init(context);
@@ -44,12 +48,25 @@ public class BlankView extends LinearLayout{
         mImageView = findViewById(R.id.blank_image);
         mDesc = findViewById(R.id.blank_desc);
         mClickBtn = findViewById(R.id.blank_btn);
-        setOrientation(VERTICAL);
-        setGravity(Gravity.CENTER);
+        mLoadingLayout = findViewById(R.id.layout_loading);
+        mEmptyLayout = findViewById(R.id.empty_layout);
+        mLoadingText = findViewById(R.id.toast_text);
     }
+
+    public void setLoadingText(String text){
+        mLoadingText.setText(text);
+    }
+
+    public void showLoading(){
+        mLoadingLayout.setVisibility(VISIBLE);
+        mEmptyLayout.setVisibility(GONE);
+    }
+
 
     public void setImageViewTye(int type){
         int id = R.drawable.img_blank_wifi;
+        mLoadingLayout.setVisibility(GONE);
+        mEmptyLayout.setVisibility(VISIBLE);
         switch (type){
             case BLANK_COLLECT:
                 id = R.drawable.img_blank_collect;
@@ -73,8 +90,10 @@ public class BlankView extends LinearLayout{
     public void setDesc(String text){
         if(TextUtils.isEmpty(text)){
             mDesc.setVisibility(GONE);
+        }else {
+            mDesc.setVisibility(VISIBLE);
+            mDesc.setText(text);
         }
-        mDesc.setText(text);
     }
 
     public void setButtonOnclick(OnClickListener onclick){

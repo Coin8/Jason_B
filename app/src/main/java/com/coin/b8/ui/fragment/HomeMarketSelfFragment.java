@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.coin.b8.R;
@@ -22,6 +23,7 @@ import com.coin.b8.ui.presenter.HomeMarketSelfPresenter;
 import com.coin.b8.ui.view.BlankView;
 import com.coin.b8.utils.CommonUtils;
 import com.coin.b8.utils.MyToast;
+import com.coin.b8.utils.NetworkUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
@@ -70,9 +72,6 @@ public class HomeMarketSelfFragment extends BaseFragment implements IHomeMarketS
     private static final int MESSAGE_UPDATE = 100;
     private static final int MESSAGE_DELAY_TIME = 5000;
     private MyHandler mMyHandler;
-
-    private boolean mIsFirst = true;
-
 
     private class MyHandler extends Handler {
         private WeakReference<HomeMarketSelfFragment> mWeakReference;
@@ -169,7 +168,7 @@ public class HomeMarketSelfFragment extends BaseFragment implements IHomeMarketS
         mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
-                startRefresh();
+                startRefresh(false);
             }
         });
 
@@ -179,10 +178,6 @@ public class HomeMarketSelfFragment extends BaseFragment implements IHomeMarketS
                 startLoadMore();
             }
         });
-
-        mIsFirst = true;
-        mSmartRefreshLayout.autoRefresh();
-
 
         mHeadViewValue.setOnClickListener(this);
         mHeadViewPrice.setOnClickListener(this);
@@ -207,12 +202,14 @@ public class HomeMarketSelfFragment extends BaseFragment implements IHomeMarketS
     @Override
     public void onResume() {
         super.onResume();
-//        mMyHandler.removeMessages(MESSAGE_UPDATE);
-        if(mIsFirst){
-            mIsFirst = false;
-        }else {
-            mSmartRefreshLayout.autoRefresh();
-        }
+        startRefresh(true);
+    }
+
+    private void showFragmentLoading(){
+        mHeadLayout.setVisibility(View.GONE);
+        mSmartRefreshLayout.setVisibility(View.GONE);
+        mBlankView.showLoading();
+        mBlankView.setVisibility(View.VISIBLE);
 
     }
 
@@ -222,25 +219,32 @@ public class HomeMarketSelfFragment extends BaseFragment implements IHomeMarketS
         if(mHomeMarketSelfPresenter != null){
             mHomeMarketSelfPresenter.onDetach();
         }
-        hideLoading();
+        hideDialogLoading();
         if(mMyHandler != null){
             mMyHandler.removeMessages(MESSAGE_UPDATE);
             mMyHandler.removeCallbacksAndMessages(null);
         }
     }
 
-    private void startRefresh(){
+
+    private void startRefresh(boolean isShowLoading){
+        if(isShowLoading){
+            showFragmentLoading();
+        }
+        mMyHandler.removeMessages(MESSAGE_UPDATE);
         String uid = PreferenceHelper.getUid(getContext());
         int start = 1;
         mHomeMarketSelfPresenter.getRefreshList(uid,mSort,start,mLimit,mSortType);
     }
     private void startLoadMore(){
+        mMyHandler.removeMessages(MESSAGE_UPDATE);
         String uid = PreferenceHelper.getUid(getContext());
         int start = mHomeMarketSelfAdapter.getItemCount() + 1;
         mHomeMarketSelfPresenter.getLoadMoreList(uid,mSort,start,mLimit,mSortType);
     }
 
     public void startUpdate(){
+
         if(mSmartRefreshLayout.isRefreshing()
                 || mSmartRefreshLayout.isLoading()
                 || mRecyclerView.getScrollState() != RecyclerView.SCROLL_STATE_IDLE
@@ -251,43 +255,66 @@ public class HomeMarketSelfFragment extends BaseFragment implements IHomeMarketS
         }
         int start = 1;
         int limit = mHomeMarketSelfAdapter.getItemCount();
+        if(limit < 20){
+            limit = 20;
+        }
         String uid = PreferenceHelper.getUid(getContext());
         mHomeMarketSelfPresenter.getRefreshList(uid,mSort,start,limit,mSortType);
     }
 
     private void showBlank(){
+        if(NetworkUtils.isConnected()){
+            mBlankView.setImageViewTye(BlankView.BLANK_SELF);
+            mBlankView.setDesc("");
+            mBlankView.setButtonText("添加自选行情");
+            mBlankView.setButtonOnclick(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SearchActivity.startSearchActivity(v.getContext());
+                }
+            });
+        }else {
+            mBlankView.setImageViewTye(BlankView.BLANK_WIFI);
+            mBlankView.setDesc("网络连接失败");
+            mBlankView.setButtonText("点击刷新");
+            mBlankView.setButtonOnclick(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startRefresh(true);
+                }
+            });
+        }
         mBlankView.setVisibility(View.VISIBLE);
         mHeadLayout.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.GONE);
+        mSmartRefreshLayout.setVisibility(View.GONE);
 
     }
     private void hideBlank(){
         mBlankView.setVisibility(View.GONE);
         mHeadLayout.setVisibility(View.VISIBLE);
-        mRecyclerView.setVisibility(View.VISIBLE);
+        mSmartRefreshLayout.setVisibility(View.VISIBLE);
     }
 
-    private void showLoading(){
+    private void showDialogLoading(){
+        hideDialogLoading();
         mLoadingDialog = new LoadingDialog();
         mLoadingDialog.setLoadingText("请稍后...");
         mLoadingDialog.show(getFragmentManager(),"loading");
     }
 
-    private void hideLoading(){
-        if(mLoadingDialog != null
-                && mLoadingDialog.getDialog() != null
-                && mLoadingDialog.getDialog().isShowing()){
+    private void hideDialogLoading(){
+        if(mLoadingDialog != null){
             mLoadingDialog.dismiss();
         }
     }
 
     private void startTop(long ucid){
-        showLoading();
+        showDialogLoading();
         mHomeMarketSelfPresenter.toTop(ucid);
     }
 
     private void startDelete(long ucid){
-        showLoading();
+        showDialogLoading();
         mHomeMarketSelfPresenter.toDelete(ucid);
     }
 
@@ -340,6 +367,7 @@ public class HomeMarketSelfFragment extends BaseFragment implements IHomeMarketS
                 mMyHandler.sendEmptyMessageDelayed(MESSAGE_UPDATE,MESSAGE_DELAY_TIME);
                 break;
         }
+
     }
 
     @Override
@@ -350,13 +378,13 @@ public class HomeMarketSelfFragment extends BaseFragment implements IHomeMarketS
         }else {
             mMyToast.showToast("置顶失败");
         }
-        hideLoading();
+        hideDialogLoading();
     }
 
     @Override
     public void onTopError() {
         mMyToast.showToast("置顶失败");
-        hideLoading();
+        hideDialogLoading();
     }
 
     @Override
@@ -367,13 +395,13 @@ public class HomeMarketSelfFragment extends BaseFragment implements IHomeMarketS
         }else {
             mMyToast.showToast("删除失败");
         }
-        hideLoading();
+        hideDialogLoading();
     }
 
     @Override
     public void onDeleteError() {
         mMyToast.showToast("删除失败");
-        hideLoading();
+        hideDialogLoading();
     }
 
     /**
@@ -402,11 +430,11 @@ public class HomeMarketSelfFragment extends BaseFragment implements IHomeMarketS
         if(v == null){
             return;
         }
+        mBlankView.setVisibility(View.VISIBLE);
+        mBlankView.showLoading();
         switch (v.getId()){
             case R.id.head_name_layout:
-                if(mSmartRefreshLayout.isRefreshing()){
-                    return;
-                }
+
                 if(mCheckBoxValueUp.isChecked()){
                     mCheckBoxValueUp.setChecked(false);
                     mCheckBoxValueDown.setChecked(false);
@@ -425,12 +453,11 @@ public class HomeMarketSelfFragment extends BaseFragment implements IHomeMarketS
                     mSortType = DEFAULT_SORT_TYPE;
                     mSort = -1;
                 }
-                mSmartRefreshLayout.autoRefresh(0);
+
+
                 break;
             case R.id.head_latest_layout:
-                if(mSmartRefreshLayout.isRefreshing()){
-                    return;
-                }
+
                 if(mCheckBoxPriceUp.isChecked()){
                     mCheckBoxPriceUp.setChecked(false);
                     mCheckBoxPriceDown.setChecked(false);
@@ -449,12 +476,8 @@ public class HomeMarketSelfFragment extends BaseFragment implements IHomeMarketS
                     mSortType = 3;
                     mSort = -1;
                 }
-                mSmartRefreshLayout.autoRefresh(0);
                 break;
             case R.id.head_one_day_layout:
-                if(mSmartRefreshLayout.isRefreshing()){
-                    return;
-                }
                 if(mCheckBoxJumpUp.isChecked()){
                     mCheckBoxJumpUp.setChecked(false);
                     mCheckBoxJumpDown.setChecked(false);
@@ -473,9 +496,10 @@ public class HomeMarketSelfFragment extends BaseFragment implements IHomeMarketS
                     mSortType = 4;
                     mSort = -1;
                 }
-                mSmartRefreshLayout.autoRefresh(0);
                 break;
         }
+
+        startRefresh(false);
     }
 
 }

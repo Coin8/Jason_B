@@ -20,21 +20,33 @@ import com.coin.b8.ui.dialog.ShareDialogFragment;
 import com.coin.b8.ui.iView.IDynamicImportView;
 import com.coin.b8.ui.listen.ShareListen;
 import com.coin.b8.ui.presenter.DynamicImportPresenter;
+import com.coin.b8.ui.view.BlankView;
 import com.coin.b8.utils.CommonUtils;
+import com.coin.b8.utils.NetworkUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by zhangyi on 2018/6/28.
  */
 public class HomeDynamicImportant extends BaseFragment implements IDynamicImportView{
+    private BlankView mBlankView;
     private SmartRefreshLayout mSmartRefreshLayout;
     private RecyclerView mRecyclerView;
     private DynamicImportPresenter mDynamicImportPresenter;
     private int mCurrentPage = 1;
     private DynamicImportNewsAdapter mDynamicImportNewsAdapter;
+
+    private DynamicImportNewsResponse mDynamicImportNewsResponse;
+    private BannerResponse mBannerResponse;
+
+    private boolean mIsBannerOk = false;
+    private boolean mIsListOk = false;
 
     @Override
     protected int getLayoutId() {
@@ -65,6 +77,15 @@ public class HomeDynamicImportant extends BaseFragment implements IDynamicImport
         mDynamicImportNewsAdapter = new DynamicImportNewsAdapter(null);
         mRecyclerView.setAdapter(mDynamicImportNewsAdapter);
 
+        mBlankView = view.findViewById(R.id.blank_view);
+        mBlankView.setImageViewTye(BlankView.BLANK_SELF);
+        mBlankView.setButtonOnclick(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startRefresh(true);
+            }
+        });
+
         mDynamicImportNewsAdapter.setItemOnclickListen(new DynamicImportNewsAdapter.ItemOnclickListen() {
             @Override
             public void onShareClick(DynamicImportNewsResponse.DataBean.ContentBean contentBean) {
@@ -75,7 +96,7 @@ public class HomeDynamicImportant extends BaseFragment implements IDynamicImport
         mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
-                startRefresh();
+                startRefresh(false);
             }
         });
 
@@ -85,7 +106,7 @@ public class HomeDynamicImportant extends BaseFragment implements IDynamicImport
                 startLoadMore();
             }
         });
-        mSmartRefreshLayout.autoRefresh();
+        startRefresh(true);
 
     }
 
@@ -152,32 +173,91 @@ public class HomeDynamicImportant extends BaseFragment implements IDynamicImport
 
     }
 
+    private void showFragmentLoading(){
+        mSmartRefreshLayout.setVisibility(View.GONE);
+        mBlankView.showLoading();
+        mBlankView.setVisibility(View.VISIBLE);
+    }
+
+    private void showBlank(){
+        if(NetworkUtils.isConnected()){
+            mBlankView.setImageViewTye(BlankView.BLANK_SELF);
+            mBlankView.setDesc(getResources().getString(R.string.no_data));
+        }else {
+            mBlankView.setImageViewTye(BlankView.BLANK_WIFI);
+            mBlankView.setDesc("网络连接失败");
+        }
+        mBlankView.setVisibility(View.VISIBLE);
+        mSmartRefreshLayout.setVisibility(View.GONE);
+
+    }
+
+    private void hideBlank(){
+        mBlankView.setVisibility(View.GONE);
+        mSmartRefreshLayout.setVisibility(View.VISIBLE);
+    }
+
+
     private void startLoadMore(){
         int page = mCurrentPage + 1;
         mDynamicImportPresenter.getImportNewsLoadMore(page);
     }
 
-    private void startRefresh(){
+    private void startRefresh( boolean isShowLoading){
+        if(isShowLoading){
+            showFragmentLoading();
+        }
+        mIsBannerOk = false;
+        mIsListOk = false;
         mCurrentPage = 1;
         mDynamicImportPresenter.getImportNews();
         mDynamicImportPresenter.getBanner();
     }
 
+    private void onRefresh(){
+        if(!mIsListOk || !mIsBannerOk){
+            return;
+        }
+        List<DynamicImportNewsResponse.DataBean.ContentBean> list = new ArrayList<>();
+        if(mBannerResponse != null
+                && mBannerResponse.getData() != null
+                && mBannerResponse.getData().size() > 0){
+            DynamicImportNewsResponse.DataBean.ContentBean contentBean = new DynamicImportNewsResponse.DataBean.ContentBean();
+            contentBean.setViewType(1);
+            list.add(0,contentBean);
+            mDynamicImportNewsAdapter.setBannerBeanList(mBannerResponse.getData());
+        }
+
+        if(mDynamicImportNewsResponse != null
+                && mDynamicImportNewsResponse.getData() != null
+                && mDynamicImportNewsResponse.getData().getContent() != null
+                && mDynamicImportNewsResponse.getData().getContent().size() > 0){
+            list.addAll(mDynamicImportNewsResponse.getData().getContent());
+        }
+        mDynamicImportNewsAdapter.setList(list);
+        mDynamicImportNewsAdapter.notifyDataSetChanged();
+        mSmartRefreshLayout.finishRefresh(0);
+        if(list.size() > 0){
+            hideBlank();
+        }else {
+            showBlank();
+        }
+
+    }
+
     @Override
     public void onNewsSuccess(DynamicImportNewsResponse dynamicImportNewsResponse) {
-        if(dynamicImportNewsResponse != null
-                && dynamicImportNewsResponse.getData() != null
-                && dynamicImportNewsResponse.getData().getContent() != null
-                && dynamicImportNewsResponse.getData().getContent().size() > 0){
-            mDynamicImportNewsAdapter.setList(dynamicImportNewsResponse.getData().getContent());
-            mDynamicImportNewsAdapter.notifyDataSetChanged();
-        }
-        mSmartRefreshLayout.finishRefresh(0);
+        mDynamicImportNewsResponse = dynamicImportNewsResponse;
+        mIsListOk = true;
+        onRefresh();
+
     }
 
     @Override
     public void onNewError() {
-        mSmartRefreshLayout.finishRefresh(0,false);
+        mIsListOk = true;
+        onRefresh();
+//        mSmartRefreshLayout.finishRefresh(0,false);
     }
 
     @Override
@@ -199,15 +279,15 @@ public class HomeDynamicImportant extends BaseFragment implements IDynamicImport
 
     @Override
     public void onBannerSuccess(BannerResponse importantNewsBannerResponse) {
-        if(importantNewsBannerResponse != null
-                && importantNewsBannerResponse.getData() != null
-                && importantNewsBannerResponse.getData().size() > 0){
-            mDynamicImportNewsAdapter.addBanner(importantNewsBannerResponse.getData());
-        }
+
+        mBannerResponse = importantNewsBannerResponse;
+        mIsBannerOk = true;
+        onRefresh();
     }
 
     @Override
     public void onBannerError() {
-
+        mIsBannerOk = true;
+        onRefresh();
     }
 }

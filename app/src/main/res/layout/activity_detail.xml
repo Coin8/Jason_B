@@ -15,6 +15,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+
+        <com.coin.b8.ui.view.BlankView
+            android:id="@+id/blank_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+        </com.coin.b8.ui.view.BlankView>
+
         <LinearLayout
             android:id="@+id/layout_loading"
             android:layout_width="99dp"

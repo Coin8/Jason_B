@@ -16,14 +16,7 @@
         android:textSize="18sp"
         android:background="@color/white"/>
 
-    <com.coin.b8.ui.view.BlankView
-        android:id="@+id/blank_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/select_coin_title"
-        android:visibility="gone">
 
-    </com.coin.b8.ui.view.BlankView>
 
 
 
@@ -39,7 +32,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srlPrimaryColor="@color/lineColor"
-            app:srlAccentColor="@color/refresh_text_color">
+            app:srlAccentColor="@color/refresh_text_color"
+            app:srlTextSizeTitle="@dimen/sp_12"
+            app:srlTextSizeTime="@dimen/sp_12">
         </com.scwang.smartrefresh.layout.header.ClassicsHeader>
 
         <android.support.v7.widget.RecyclerView
@@ -54,8 +49,18 @@
             android:layout_height="wrap_content"
             app:srlClassicsSpinnerStyle="Translate"
             app:srlPrimaryColor="@color/lineColor"
-            app:srlAccentColor="@color/refresh_text_color"/>
+            app:srlAccentColor="@color/refresh_text_color"
+            app:srlTextSizeTitle="@dimen/refresh_text_size"/>
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    <com.coin.b8.ui.view.BlankView
+        android:id="@+id/blank_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/select_coin_title"
+        android:visibility="gone">
+
+    </com.coin.b8.ui.view.BlankView>
 
 
 </RelativeLayout>

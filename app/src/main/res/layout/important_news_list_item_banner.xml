@@ -4,7 +4,7 @@
     android:id="@+id/news_banner"
     android:layout_width="match_parent"
     android:layout_height="130dp"
-    app:banner_default_image="@drawable/share_smal_icon"
+    app:banner_default_image="@drawable/news_pic_blank"
     app:indicator_drawable_selected="@drawable/banner_indicator_selected"
     app:indicator_drawable_unselected="@drawable/banner_indicator_unselected"
     app:indicator_width="10dp"

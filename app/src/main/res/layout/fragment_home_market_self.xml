@@ -163,28 +163,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srlPrimaryColor="@color/lineColor"
-            app:srlAccentColor="@color/refresh_text_color">
+            app:srlAccentColor="@color/refresh_text_color"
+            app:srlTextSizeTitle="@dimen/sp_12"
+            app:srlTextSizeTime="@dimen/sp_12">
         </com.scwang.smartrefresh.layout.header.ClassicsHeader>
 
-        <FrameLayout
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.coin.b8.ui.view.BlankView
-                android:id="@+id/blank_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            </android.support.v7.widget.RecyclerView>
-
-        </FrameLayout>
-
+        </android.support.v7.widget.RecyclerView>
 
 
         <com.scwang.smartrefresh.layout.footer.ClassicsFooter
@@ -193,7 +183,14 @@
             android:layout_height="wrap_content"
             app:srlClassicsSpinnerStyle="Translate"
             app:srlPrimaryColor="@color/lineColor"
-            app:srlAccentColor="@color/refresh_text_color"/>
+            app:srlAccentColor="@color/refresh_text_color"
+            app:srlTextSizeTitle="@dimen/refresh_text_size"/>
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    <com.coin.b8.ui.view.BlankView
+        android:id="@+id/blank_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
 </RelativeLayout>

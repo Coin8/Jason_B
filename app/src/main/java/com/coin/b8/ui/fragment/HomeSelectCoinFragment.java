@@ -14,7 +14,9 @@ import com.coin.b8.model.SelectCoinListResponse;
 import com.coin.b8.ui.adapter.SelectCoinListAdapter;
 import com.coin.b8.ui.iView.ISelectCoinView;
 import com.coin.b8.ui.presenter.SelectCoinPresenterImpl;
+import com.coin.b8.ui.view.BlankView;
 import com.coin.b8.utils.CommonUtils;
+import com.coin.b8.utils.NetworkUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -27,6 +29,7 @@ import java.util.List;
  */
 public class HomeSelectCoinFragment extends BaseFragment implements ISelectCoinView{
     private SelectCoinPresenterImpl mSelectCoinPresenter;
+    private BlankView mBlankView;
     private SmartRefreshLayout mSmartRefreshLayout;
     private RecyclerView mRecyclerView;
     private SelectCoinListAdapter mSelectCoinListAdapter;
@@ -56,6 +59,15 @@ public class HomeSelectCoinFragment extends BaseFragment implements ISelectCoinV
         mSelectCoinListAdapter = new SelectCoinListAdapter(null);
         mRecyclerView.setAdapter(mSelectCoinListAdapter);
 
+        mBlankView = view.findViewById(R.id.blank_view);
+        mBlankView.setImageViewTye(BlankView.BLANK_SELF);
+        mBlankView.setButtonOnclick(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startRefresh(true);
+            }
+        });
+
         mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
@@ -67,10 +79,11 @@ public class HomeSelectCoinFragment extends BaseFragment implements ISelectCoinV
         mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
-                startRefresh();
+                startRefresh(false);
             }
         });
-        mSmartRefreshLayout.autoRefresh();
+//        mSmartRefreshLayout.autoRefresh();
+        startRefresh(true);
     }
 
     @Override
@@ -93,7 +106,34 @@ public class HomeSelectCoinFragment extends BaseFragment implements ISelectCoinV
         mSelectCoinPresenter.onDetach();
     }
 
-    private void startRefresh(){
+    private void showFragmentLoading(){
+        mSmartRefreshLayout.setVisibility(View.GONE);
+        mBlankView.showLoading();
+        mBlankView.setVisibility(View.VISIBLE);
+    }
+
+    private void showBlank(){
+        if(NetworkUtils.isConnected()){
+            mBlankView.setImageViewTye(BlankView.BLANK_SELF);
+            mBlankView.setDesc(getResources().getString(R.string.no_data));
+        }else {
+            mBlankView.setImageViewTye(BlankView.BLANK_WIFI);
+            mBlankView.setDesc("网络连接失败");
+        }
+        mBlankView.setVisibility(View.VISIBLE);
+        mSmartRefreshLayout.setVisibility(View.GONE);
+
+    }
+
+    private void hideBlank(){
+        mBlankView.setVisibility(View.GONE);
+        mSmartRefreshLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void startRefresh(boolean isShowLoading){
+        if(isShowLoading){
+            showFragmentLoading();
+        }
         mIsBannerOk = false;
         mIsListOk = false;
         mSelectCoinPresenter.getBanner();
@@ -137,6 +177,11 @@ public class HomeSelectCoinFragment extends BaseFragment implements ISelectCoinV
         mSelectCoinListAdapter.setSelectCoinItemModelList(list);
         mSelectCoinListAdapter.notifyDataSetChanged();
         mSmartRefreshLayout.finishRefresh(0);
+        if(list.size() > 0){
+            hideBlank();
+        }else {
+            showBlank();
+        }
 
     }
 

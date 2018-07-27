@@ -291,12 +291,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 if(DemoHelper.getInstance().isLoggedIn()){
                     DemoHelper.getInstance().logout();
                 }
-                DemoHelper.getInstance().login(loginResponseInfo.getData().getEasename(),
-                        loginResponseInfo.getData().getPassword());
+                if(PreferenceHelper.getIsLogin(this)){
+                    DemoHelper.getInstance().login(loginResponseInfo.getData().getEasename(),
+                            loginResponseInfo.getData().getPassword());
+                }else {
+                    mMyToast.showToast("登录失败");
+                }
                 mMyToast.showToast("登录成功");
                 finish();
             }else {
-                mMyToast.showToast(loginResponseInfo.getMessage());
+                mMyToast.showToast("登录失败");
             }
         }
     }

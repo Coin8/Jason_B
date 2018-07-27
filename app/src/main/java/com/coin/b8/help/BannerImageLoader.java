@@ -14,6 +14,6 @@ import com.youth.banner.loader.ImageLoader;
 public class BannerImageLoader extends ImageLoader{
     @Override
     public void displayImage(Context context, Object path, ImageView imageView) {
-        GlideUtil.setImageRes(context,imageView,path, R.drawable.share_smal_icon,R.drawable.share_smal_icon,false);
+        GlideUtil.setImageRes(context,imageView,path, R.drawable.news_pic_blank,R.drawable.news_pic_blank,false);
     }
 }

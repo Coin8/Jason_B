@@ -278,6 +278,7 @@ public class DynamicImportNewsResponse {
             private String pic;
             private long publishTime;
             private String abs;
+            private String showPubTime;
 
             public int getViewType() {
                 return viewType;
@@ -285,6 +286,14 @@ public class DynamicImportNewsResponse {
 
             public void setViewType(int viewType) {
                 this.viewType = viewType;
+            }
+
+            public String getShowPubTime() {
+                return showPubTime;
+            }
+
+            public void setShowPubTime(String showPubTime) {
+                this.showPubTime = showPubTime;
             }
 
             public long getId() {

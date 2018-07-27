@@ -202,7 +202,9 @@ public class PreferenceHelper {
     }
 
     public static boolean getIsLogin(Context context){
-        if(TextUtils.isEmpty(getToken(context))){
+        if(TextUtils.isEmpty(getToken(context))
+                || TextUtils.isEmpty(getEaseName(context))
+                || TextUtils.isEmpty(getEasePassword(context))){
             return false;
         }
         return true;

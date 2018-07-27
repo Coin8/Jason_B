@@ -16,7 +16,9 @@ import com.coin.b8.model.MarketListSearchResponse;
 import com.coin.b8.ui.adapter.HomeMarketNormalAdapter;
 import com.coin.b8.ui.iView.IHomeMarketNormalView;
 import com.coin.b8.ui.presenter.HomeMarketNormalPresenter;
+import com.coin.b8.ui.view.BlankView;
 import com.coin.b8.utils.CommonUtils;
+import com.coin.b8.utils.NetworkUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
@@ -38,6 +40,8 @@ public class HomeMarketFireCoinFragment extends BaseFragment implements IHomeMar
     private RecyclerView mRecyclerView;
     private HomeMarketNormalAdapter mHomeMarketNormalAdapter;
     private HomeMarketNormalPresenter mHomeMarketNormalPresenter;
+    private View mHeadLayout;
+    private BlankView mBlankView;
     private View mHeadViewValue;
     private View mHeadViewPrice;
     private View mHeadViewOneDayJump;
@@ -107,6 +111,7 @@ public class HomeMarketFireCoinFragment extends BaseFragment implements IHomeMar
 
     @Override
     protected void initView(View view) {
+        mHeadLayout = view.findViewById(R.id.head_layout);
         mHeadViewValue = view.findViewById(R.id.head_name_layout);
         mHeadViewPrice = view.findViewById(R.id.head_latest_layout);
         mHeadViewOneDayJump = view.findViewById(R.id.head_one_day_layout);
@@ -116,6 +121,17 @@ public class HomeMarketFireCoinFragment extends BaseFragment implements IHomeMar
         mCheckBoxPriceDown = view.findViewById(R.id.latest_down);
         mCheckBoxJumpUp = view.findViewById(R.id.one_day_up);
         mCheckBoxJumpDown = view.findViewById(R.id.one_day_down);
+
+        mBlankView = view.findViewById(R.id.blank_view);
+        mBlankView.setImageViewTye(BlankView.BLANK_SELF);
+        mBlankView.setButtonOnclick(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startRefresh(true);
+            }
+        });
+        mBlankView.setDesc(getResources().getString(R.string.no_data));
+        mBlankView.setButtonText(getResources().getString(R.string.click_refresh));
 
         mClassicsHeader  = view.findViewById(R.id.classic_head);
 
@@ -139,7 +155,7 @@ public class HomeMarketFireCoinFragment extends BaseFragment implements IHomeMar
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
                 mMyHandler.removeMessages(MESSAGE_UPDATE);
-                startRefresh();
+                startRefresh(false);
             }
         });
         mSmartRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -149,13 +165,45 @@ public class HomeMarketFireCoinFragment extends BaseFragment implements IHomeMar
                 startLoadMore();
             }
         });
-        mSmartRefreshLayout.autoRefresh();
         mHeadViewValue.setOnClickListener(this);
         mHeadViewPrice.setOnClickListener(this);
         mHeadViewOneDayJump.setOnClickListener(this);
     }
 
-    private void startRefresh() {
+
+    private void showFragmentLoading(){
+        mHeadLayout.setVisibility(View.GONE);
+        mSmartRefreshLayout.setVisibility(View.GONE);
+        mBlankView.showLoading();
+        mBlankView.setVisibility(View.VISIBLE);
+    }
+
+    private void showBlank(){
+        if(NetworkUtils.isConnected()){
+            mBlankView.setImageViewTye(BlankView.BLANK_SELF);
+            mBlankView.setDesc(getResources().getString(R.string.no_data));
+
+        }else {
+            mBlankView.setImageViewTye(BlankView.BLANK_WIFI);
+            mBlankView.setDesc("网络连接失败");
+        }
+        mBlankView.setVisibility(View.VISIBLE);
+        mHeadLayout.setVisibility(View.GONE);
+        mSmartRefreshLayout.setVisibility(View.GONE);
+
+    }
+
+    private void hideBlank(){
+        mBlankView.setVisibility(View.GONE);
+        mHeadLayout.setVisibility(View.VISIBLE);
+        mSmartRefreshLayout.setVisibility(View.VISIBLE);
+    }
+
+
+    private void startRefresh(boolean isShowLoading) {
+        if(isShowLoading){
+            showFragmentLoading();
+        }
         int start = 1;
         mHomeMarketNormalPresenter.getRefreshList("", mSort, start, mLimit, mSortType, mExchange);
     }
@@ -190,7 +238,7 @@ public class HomeMarketFireCoinFragment extends BaseFragment implements IHomeMar
     public void onResume() {
         super.onResume();
         mMyHandler.removeMessages(MESSAGE_UPDATE);
-        mMyHandler.sendEmptyMessageDelayed(MESSAGE_UPDATE,MESSAGE_DELAY_TIME);
+        startRefresh(true);
     }
 
     @Override
@@ -214,6 +262,10 @@ public class HomeMarketFireCoinFragment extends BaseFragment implements IHomeMar
                         && response.getData().size() > 0) {
                     mHomeMarketNormalAdapter.setList(response.getData());
                     mClassicsHeader.setLastUpdateTime(new Date());
+                    hideBlank();
+                }else {
+                    mHomeMarketNormalAdapter.setList(null);
+                    showBlank();
                 }
                 mSmartRefreshLayout.finishRefresh(0);
                 mMyHandler.removeMessages(MESSAGE_UPDATE);
@@ -243,6 +295,7 @@ public class HomeMarketFireCoinFragment extends BaseFragment implements IHomeMar
                 mSmartRefreshLayout.finishRefresh(0);
                 mMyHandler.removeMessages(MESSAGE_UPDATE);
                 mMyHandler.sendEmptyMessageDelayed(MESSAGE_UPDATE,MESSAGE_DELAY_TIME);
+                showBlank();
             }
                 break;
             case 1:{
@@ -279,11 +332,10 @@ public class HomeMarketFireCoinFragment extends BaseFragment implements IHomeMar
         if (v == null) {
             return;
         }
+        mBlankView.setVisibility(View.VISIBLE);
+        mBlankView.showLoading();
         switch (v.getId()) {
             case R.id.head_name_layout:
-                if(mSmartRefreshLayout.isRefreshing()){
-                    return;
-                }
                 if (mCheckBoxValueUp.isChecked()) {
                     mCheckBoxValueUp.setChecked(false);
                     mCheckBoxValueDown.setChecked(false);
@@ -302,12 +354,8 @@ public class HomeMarketFireCoinFragment extends BaseFragment implements IHomeMar
                     mSortType = DEFAULT_SORT_TYPE;
                     mSort = -1;
                 }
-                mSmartRefreshLayout.autoRefresh(0);
                 break;
             case R.id.head_latest_layout:
-                if(mSmartRefreshLayout.isRefreshing()){
-                    return;
-                }
                 if (mCheckBoxPriceUp.isChecked()) {
                     mCheckBoxPriceUp.setChecked(false);
                     mCheckBoxPriceDown.setChecked(false);
@@ -326,12 +374,8 @@ public class HomeMarketFireCoinFragment extends BaseFragment implements IHomeMar
                     mSortType = 3;
                     mSort = -1;
                 }
-                mSmartRefreshLayout.autoRefresh(0);
                 break;
             case R.id.head_one_day_layout:
-                if(mSmartRefreshLayout.isRefreshing()){
-                    return;
-                }
                 if (mCheckBoxJumpUp.isChecked()) {
                     mCheckBoxJumpUp.setChecked(false);
                     mCheckBoxJumpDown.setChecked(false);
@@ -350,8 +394,10 @@ public class HomeMarketFireCoinFragment extends BaseFragment implements IHomeMar
                     mSortType = 4;
                     mSort = -1;
                 }
-                mSmartRefreshLayout.autoRefresh(0);
                 break;
         }
+
+        startRefresh(false);
+
     }
 }

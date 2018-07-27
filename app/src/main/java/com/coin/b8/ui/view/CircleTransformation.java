@@ -18,8 +18,22 @@ import java.security.MessageDigest;
 public class CircleTransformation extends BitmapTransformation {
     private final String ID = getClass().getName();
 
+    private Paint mBorderPaint;
+    private float mBorderWidth;
+
+    public CircleTransformation(int borderWidth, int borderColor) {
+        mBorderWidth = borderWidth;
+        mBorderPaint = new Paint();
+        mBorderPaint.setDither(true);
+        mBorderPaint.setAntiAlias(true);
+        mBorderPaint.setColor(borderColor);
+        mBorderPaint.setStyle(Paint.Style.STROKE);
+        mBorderPaint.setStrokeWidth(mBorderWidth);
+    }
+
     @Override
     protected Bitmap transform(@NonNull BitmapPool pool, @NonNull Bitmap toTransform, int outWidth, int outHeight) {
+//        int size = (int) (Math.min(toTransform.getWidth(), toTransform.getHeight())- (mBorderWidth/2));
         int size = Math.min(toTransform.getWidth(), toTransform.getHeight());
         int x = (toTransform.getWidth() - size) / 2;
         int y = (toTransform.getHeight() - size) / 2;
@@ -33,6 +47,12 @@ public class CircleTransformation extends BitmapTransformation {
         paint.setAntiAlias(true);
         float r = size / 2f;
         canvas.drawCircle(r, r, r, paint);
+
+        if (mBorderPaint != null) {
+            float borderRadius = r - mBorderWidth / 2;
+            canvas.drawCircle(r, r, borderRadius, mBorderPaint);
+        }
+
         return circle;
     }
 

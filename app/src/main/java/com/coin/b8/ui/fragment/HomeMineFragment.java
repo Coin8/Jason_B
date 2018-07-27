@@ -113,10 +113,8 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
         }
         String icon = PreferenceHelper.getHeadIcon(getContext());
         if(!TextUtils.isEmpty(icon)){
-            GlideUtil.setImageRes(getContext(),mUserImageView,icon,
-                    R.drawable.icon_head,
-                    R.drawable.icon_head,
-                    true);
+            GlideUtil.setCircleImageRes(getContext(),mUserImageView,icon,
+                    R.drawable.icon_head);
         }else {
             mUserImageView.setImageResource(R.drawable.icon_head);
         }

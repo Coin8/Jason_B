@@ -107,7 +107,7 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
     private void updateHead(){
         String iconUrl = PreferenceHelper.getHeadIcon(this);
         if(!TextUtils.isEmpty(iconUrl)){
-            GlideUtil.setImageRes(this,mImageUserIcon,iconUrl,R.drawable.icon_head,R.drawable.icon_head,true);
+            GlideUtil.setCircleImageRes(this,mImageUserIcon,iconUrl,R.drawable.icon_head);
         }else {
             mImageUserIcon.setImageResource(R.drawable.icon_head);
         }
@@ -138,7 +138,7 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
         File file = new File(mLocalHeadIconPath);
         if(file.exists()){
             mIsHeadNewCreate = true;
-            GlideUtil.setImageRes(this,mImageUserIcon,file,R.drawable.icon_head,R.drawable.icon_head,true);
+            GlideUtil.setCircleImageRes(this,mImageUserIcon,file,R.drawable.icon_head);
             mPersonalInfoPresenter.modifyUserHead(mLocalHeadIconPath);
         }
     }

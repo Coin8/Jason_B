@@ -39,6 +39,7 @@ import com.coin.b8.ui.dialog.ShareDialogFragment;
 import com.coin.b8.ui.iView.IMainView;
 import com.coin.b8.ui.listen.ShareListen;
 import com.coin.b8.ui.presenter.MainPresenterImpl;
+import com.coin.b8.ui.view.BlankView;
 import com.coin.b8.update.ICheckAgent;
 import com.coin.b8.update.IUpdateChecker;
 import com.coin.b8.update.IUpdateParser;
@@ -48,6 +49,7 @@ import com.coin.b8.utils.AppUtil;
 import com.coin.b8.utils.CommonUtils;
 import com.coin.b8.utils.DialogUtil;
 import com.coin.b8.utils.MyToast;
+import com.coin.b8.utils.NetworkUtils;
 import com.coin.b8.utils.PhoneUtils;
 import com.coin.b8.wxapi.OnResponseListener;
 import com.coin.b8.wxapi.WXShare;
@@ -83,7 +85,11 @@ public class NativeDetailActivity extends BaseActivity implements View.OnClickLi
 
     private LoadingDialog mLoadingDialog;
 
+    private BlankView mBlankView;
+
     private String mWebViewUrl;
+
+    private boolean mIsLoadError = false;
 
     @Override
     public void onUpdateInfo(B8UpdateInfo b8UpdateInfo, boolean auto) {
@@ -307,6 +313,24 @@ public class NativeDetailActivity extends BaseActivity implements View.OnClickLi
 
         mWebView = findViewById(R.id.webView);
         mLoading = findViewById(R.id.layout_loading);
+        mBlankView = findViewById(R.id.blank_view);
+        mBlankView.setImageViewTye(BlankView.BLANK_WIFI);
+        mBlankView.setEnableButton(true);
+        mBlankView.setButtonText("点击刷新");
+        mBlankView.setButtonOnclick(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mWebView != null){
+                    mIsLoadError = false;
+                    mWebView.reload();
+                    mLoading.setVisibility(View.VISIBLE);
+                    mBlankView.setVisibility(View.GONE);
+//                    mWebView.setVisibility(View.VISIBLE);
+
+                }
+            }
+
+        });
     }
 
     private void initWebView() {
@@ -321,6 +345,8 @@ public class NativeDetailActivity extends BaseActivity implements View.OnClickLi
         mSettings.setDefaultZoom(WebSettings.ZoomDensity.FAR);// 屏幕自适应网页
         mSettings.setRenderPriority(WebSettings.RenderPriority.HIGH);
         mSettings.setJavaScriptEnabled(true);
+        mSettings.setAppCacheEnabled(false);
+        mSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         // webview从5.0开始默认不允许混合模式,https中不能加载http资源,需要设置开启。
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
@@ -364,6 +390,9 @@ public class NativeDetailActivity extends BaseActivity implements View.OnClickLi
                  */
                 Log.i(TAG, "onPageFinished url = " + url);
                 mLoading.setVisibility(View.GONE);
+                if(!mIsLoadError){
+                    mWebView.setVisibility(View.VISIBLE);
+                }
             }
 
             /**
@@ -372,6 +401,17 @@ public class NativeDetailActivity extends BaseActivity implements View.OnClickLi
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 Log.e(TAG, "onReceivedError url = " + failingUrl + ", errorCode = " + errorCode);
                 mLoading.setVisibility(View.GONE);
+                mWebView.setVisibility(View.GONE);
+                mBlankView.setVisibility(View.VISIBLE);
+                if(NetworkUtils.isConnected()){
+                    mBlankView.setImageViewTye(BlankView.BLANK_SELF);
+                    mBlankView.setDesc("数据为空");
+                }else {
+                    mBlankView.setImageViewTye(BlankView.BLANK_WIFI);
+                    mBlankView.setDesc("网络连接失败");
+                }
+
+                mIsLoadError = true;
             }
 
             /**
@@ -380,6 +420,16 @@ public class NativeDetailActivity extends BaseActivity implements View.OnClickLi
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
                 Log.e(TAG, "onReceivedSslError url = " + error.getUrl());
                 mLoading.setVisibility(View.GONE);
+                mWebView.setVisibility(View.GONE);
+                mBlankView.setVisibility(View.VISIBLE);
+                if(NetworkUtils.isConnected()){
+                    mBlankView.setImageViewTye(BlankView.BLANK_SELF);
+                    mBlankView.setDesc("数据为空");
+                }else {
+                    mBlankView.setImageViewTye(BlankView.BLANK_WIFI);
+                    mBlankView.setDesc("网络连接失败");
+                }
+                mIsLoadError = true;
             }
         });
         //设置WebChromeClient类

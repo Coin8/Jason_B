@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.coin.b8.R;
@@ -469,6 +470,9 @@ public class DemoHelper {
 
 
     public void login(String loginName, String password){
+        if(TextUtils.isEmpty(loginName) || TextUtils.isEmpty(password)){
+            return;
+        }
         EMClient.getInstance().login(loginName, password, new EMCallBack() {
 
             @Override
