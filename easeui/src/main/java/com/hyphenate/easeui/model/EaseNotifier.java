@@ -258,13 +258,6 @@ public class EaseNotifier {
                     .setPriority(Notification.PRIORITY_DEFAULT)
                     .setAutoCancel(true);
 
-            Intent msgIntent = appContext.getPackageManager().getLaunchIntentForPackage(packageName);
-            if (notificationInfoProvider != null) {
-                Intent intent = notificationInfoProvider.getLaunchIntent(message);
-                if (intent != null) {
-                    msgIntent = intent;
-                }
-            }
 
             B8MessageBodyModel b8MessageBodyModel = null;
             try {
@@ -274,11 +267,38 @@ public class EaseNotifier {
                 e.printStackTrace();
             }
             long requestCode = System.currentTimeMillis();
-            if(b8MessageBodyModel != null && msgIntent != null){
-                msgIntent.putExtra("webUrl", b8MessageBodyModel.getUrl());
-                msgIntent.putExtra("time",requestCode);
-                notifyText = b8MessageBodyModel.getText();
+            Intent msgIntent = appContext.getPackageManager().getLaunchIntentForPackage(packageName);
+            if (notificationInfoProvider != null) {
+                Intent intent = notificationInfoProvider.getLaunchIntent(message);
+                if (intent != null) {
+                    msgIntent = intent;
+                }
+
+                if(b8MessageBodyModel != null){
+                    switch (b8MessageBodyModel.getType()){
+                        case 1:{
+                            String url = b8MessageBodyModel.getUrl() + "&" + notificationInfoProvider.getTokenInfo();
+                            msgIntent.putExtra("webUrl", url);
+                            msgIntent.putExtra("time",requestCode);
+                        }
+                            break;
+                        case 2:
+                            msgIntent = notificationInfoProvider.getLaunchHomeIntent(message);
+                            break;
+                        case 3: {
+                            String url = "http://app.diyli.cn/#/dynamic_details/focus?id="
+                                    + b8MessageBodyModel.getUrl() + "&" + notificationInfoProvider.getTokenInfo();
+                            msgIntent.putExtra("webUrl", url);
+                            msgIntent.putExtra("time", requestCode);
+                        }
+                            break;
+                    }
+                    notifyText = b8MessageBodyModel.getText();
+
+                }
+
             }
+
 
 
             Log.e("zy","requestCode = "  + requestCode);
@@ -513,5 +533,8 @@ public class EaseNotifier {
          * @return null- will use the default icon
          */
         Intent getLaunchIntent(EMMessage message);
+
+        Intent getLaunchHomeIntent(EMMessage message);
+        String getTokenInfo();
     }
 }

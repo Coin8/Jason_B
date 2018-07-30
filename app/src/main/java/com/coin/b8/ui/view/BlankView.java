@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -51,6 +52,13 @@ public class BlankView extends LinearLayout{
         mLoadingLayout = findViewById(R.id.layout_loading);
         mEmptyLayout = findViewById(R.id.empty_layout);
         mLoadingText = findViewById(R.id.toast_text);
+
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     public void setLoadingText(String text){

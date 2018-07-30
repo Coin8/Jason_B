@@ -24,7 +24,7 @@
         android:layout_toLeftOf="@id/collect_image"
         android:layout_alignTop="@id/collect_image"
         android:maxLines="2"
-        android:textColor="@color/black"
+        android:textColor="@color/import_news_selector"
         android:textSize="16sp"
         android:lineSpacingExtra="10dp"
         android:ellipsize="end"

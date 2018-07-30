@@ -114,7 +114,8 @@
             android:drawableLeft="@drawable/verify_icon"
             android:drawablePadding="15dp"
             android:background="@null"
-            android:digits="@string/rule_text"/>
+            android:digits="@string/rule_number_text"
+            android:inputType="number"/>
         <TextView
             android:id="@+id/verify_confirm_btn"
             android:layout_width="wrap_content"

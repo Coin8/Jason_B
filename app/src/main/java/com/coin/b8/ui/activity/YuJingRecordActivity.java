@@ -20,6 +20,7 @@ import com.coin.b8.ui.iView.IYuJingRecordView;
 import com.coin.b8.ui.presenter.YuJingRecordPresenter;
 import com.coin.b8.ui.view.BlankView;
 import com.coin.b8.utils.MyToast;
+import com.coin.b8.utils.NetworkUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -29,7 +30,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
  */
 public class YuJingRecordActivity extends BaseActivity implements IYuJingRecordView{
     private YuJingRecordPresenter mYuJingRecordPresenter;
-    private SmartRefreshLayout mSmartRefreshLayout;
+//    private SmartRefreshLayout mSmartRefreshLayout;
     private RecyclerView mRecyclerView;
     private YuJingRecordAdapter mYuJingRecordAdapter;
     private boolean mEnableDelete = false;
@@ -37,6 +38,12 @@ public class YuJingRecordActivity extends BaseActivity implements IYuJingRecordV
     private LoadingDialog mLoadingDialog;
     private MyToast mMyToast;
 
+    private long mLastClickTime = 0;
+    private final long mDiffTime = 1000;
+
+    private final int GET_START = 0;
+    private final int GET_MODIFY = 1;
+    private final int GET_DELETE = 2;
     private boolean mLoadingShowing = false;
 
     @Override
@@ -49,9 +56,19 @@ public class YuJingRecordActivity extends BaseActivity implements IYuJingRecordV
         initView();
     }
 
+    private boolean isFastDoubleClick() {
+        long time = System.currentTimeMillis();
+        long timeD = time - mLastClickTime;
+        if (mLastClickTime > 0 && timeD < mDiffTime) {
+            return true;
+        }
+        mLastClickTime = time;
+        return false;
+    }
+
     private void initView(){
 
-        mSmartRefreshLayout = findViewById(R.id.refreshLayout);
+//        mSmartRefreshLayout = findViewById(R.id.refreshLayout);
         mRecyclerView = findViewById(R.id.recyclerview);
         mBlankView = findViewById(R.id.blank_view);
         mBlankView.setEnableButton(false);
@@ -73,7 +90,10 @@ public class YuJingRecordActivity extends BaseActivity implements IYuJingRecordV
         mYuJingRecordAdapter.setOnYuJingItemClickListen(new YuJingRecordAdapter.OnYuJingItemClickListen() {
             @Override
             public void onSwitchBtnClick(long id, boolean value) {
-                showLoading();
+//                if(isFastDoubleClick()){
+//                    return;
+//                }
+                showFragmentLoading();
                 int status = value? 1:0;
                 mYuJingRecordPresenter.modifyYuJing(PreferenceHelper.getUid(YuJingRecordActivity.this),
                        id,
@@ -82,7 +102,10 @@ public class YuJingRecordActivity extends BaseActivity implements IYuJingRecordV
 
             @Override
             public void onDelete(long id,int pos) {
-                showLoading();
+//                if(isFastDoubleClick()){
+//                    return;
+//                }
+                showFragmentLoading();
                 mYuJingRecordPresenter.deleteYuJing(PreferenceHelper.getUid(YuJingRecordActivity.this),
                         id);
 //                mYuJingRecordAdapter.remove(pos);
@@ -106,14 +129,18 @@ public class YuJingRecordActivity extends BaseActivity implements IYuJingRecordV
         });
 
 
-        mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshLayout) {
-                startRefresh();
-            }
-        });
-        mSmartRefreshLayout.setEnableLoadMore(false);
-        mSmartRefreshLayout.autoRefresh();
+//        mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+//            @Override
+//            public void onRefresh(RefreshLayout refreshLayout) {
+//                startRefresh();
+//            }
+//        });
+//        mSmartRefreshLayout.setEnableLoadMore(false);
+//        mSmartRefreshLayout.autoRefresh();
+        mRecyclerView.setVisibility(View.GONE);
+        mBlankView.setVisibility(View.VISIBLE);
+        mBlankView.showLoading();
+        mYuJingRecordPresenter.getYuJingList(PreferenceHelper.getUid(this),GET_START);
     }
 
     @Override
@@ -122,56 +149,91 @@ public class YuJingRecordActivity extends BaseActivity implements IYuJingRecordV
         mYuJingRecordPresenter.onDetach();
     }
 
-    private void startRefresh(){
-        mYuJingRecordPresenter.getYuJingList(PreferenceHelper.getUid(this));
-    }
 
-
-    private void showLoading(){
-        hideLoading();
-        mLoadingDialog = new LoadingDialog();
-        mLoadingDialog.setLoadingText("请稍后...");
-        mLoadingDialog.show(getSupportFragmentManager(),"loading");
-    }
-
-    private void hideLoading(){
-        if(mLoadingDialog != null){
-            mLoadingDialog.dismiss();
-        }
-    }
-
-
-    @Override
-    public void onYuJingListSuccess(YujingListResponse response) {
-        if(response != null && response.getData() != null && response.getData().size() > 0){
-            mBlankView.setVisibility(View.GONE);
-            mRecyclerView.setVisibility(View.VISIBLE);
-            mYuJingRecordAdapter.setList(response.getData());
+    private void showBlank(){
+        if(NetworkUtils.isConnected()){
+            mBlankView.setImageViewTye(BlankView.BLANK_YUJING);
+            mBlankView.setDesc(getResources().getString(R.string.no_data));
         }else {
-            mBlankView.setVisibility(View.VISIBLE);
-            mRecyclerView.setVisibility(View.GONE);
-            mYuJingRecordAdapter.setList(null);
+            mBlankView.setImageViewTye(BlankView.BLANK_WIFI);
+            mBlankView.setDesc(getResources().getString(R.string.net_connect_fail));
         }
-        mSmartRefreshLayout.finishRefresh(0,true);
-        hideLoading();
-    }
-
-    @Override
-    public void onYuJingListError() {
         mBlankView.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.GONE);
+    }
+
+    private void hideBlank(){
+        mBlankView.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private void showFragmentLoading(){
+        mBlankView.setVisibility(View.VISIBLE);
+        mBlankView.showLoading();
+    }
+    private void hideFragmentLoading(){
+        mBlankView.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+//    private void showLoading(){
+//        hideLoading();
+//        mLoadingDialog = new LoadingDialog();
+//        mLoadingDialog.setLoadingText("请稍后...");
+//        mLoadingDialog.show(getSupportFragmentManager(),"loading");
+//    }
+//
+//    private void hideLoading(){
+//        if(mLoadingDialog != null){
+//            mLoadingDialog.dismiss();
+//        }
+//    }
+
+
+    @Override
+    public void onYuJingListSuccess(YujingListResponse response, int type) {
+        if(response != null && response.getData() != null && response.getData().size() > 0){
+            hideBlank();
+            mYuJingRecordAdapter.setList(response.getData());
+        }else {
+            showBlank();
+            mYuJingRecordAdapter.setList(null);
+        }
+        switch (type){
+            case GET_DELETE:
+                break;
+            case GET_MODIFY:
+                break;
+        }
+
+//        mSmartRefreshLayout.finishRefresh(0,true);
+//        hideLoading();
+    }
+
+    @Override
+    public void onYuJingListError(int type) {
+//        mBlankView.setVisibility(View.VISIBLE);
+//        mRecyclerView.setVisibility(View.GONE);
         mYuJingRecordAdapter.setList(null);
-        mSmartRefreshLayout.finishRefresh(0,false);
-        hideLoading();
+        showBlank();
+        switch (type){
+            case GET_DELETE:
+                mMyToast.showToast("删除成功");
+                break;
+            case GET_MODIFY:
+                mMyToast.showToast("切换成功");
+                break;
+        }
+//        mSmartRefreshLayout.finishRefresh(0,false);
+//        hideLoading();
     }
 
     @Override
     public void onDeleteSuccess(DeleteYuJingResponse response) {
         if(response != null && response.getCode() == 200){
-            mMyToast.showToast("删除成功");
-            startRefresh();
+            mYuJingRecordPresenter.getYuJingList(PreferenceHelper.getUid(this),GET_DELETE);
         }else {
-            hideLoading();
+            hideFragmentLoading();
             mMyToast.showToast("删除失败");
         }
 
@@ -180,24 +242,23 @@ public class YuJingRecordActivity extends BaseActivity implements IYuJingRecordV
     @Override
     public void onDeleteError() {
         mMyToast.showToast("删除失败");
-        hideLoading();
+        hideFragmentLoading();
     }
 
     @Override
     public void onModifySuccess(ModifyYuJingResponse response) {
         if(response != null && response.isResult()){
-            mMyToast.showToast("切换成功");
-            startRefresh();
+            mYuJingRecordPresenter.getYuJingList(PreferenceHelper.getUid(this),GET_MODIFY);
         }else {
             mMyToast.showToast("切换失败");
-            hideLoading();
+            hideFragmentLoading();
         }
     }
 
     @Override
     public void onModifyError() {
         mMyToast.showToast("切换失败");
-        hideLoading();
+        hideFragmentLoading();
     }
 
     public static void startYuJingRecordActivity(Context context){

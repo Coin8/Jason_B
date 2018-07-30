@@ -1,6 +1,8 @@
 package com.coin.b8.ui.activity;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -65,11 +67,13 @@ public class HomeActivity extends BaseActivity implements BottomNavigationView.O
     private MyToast mToast;
     private HomePresenterImpl mHomePresenter;
     private WXShare mWXShare;
+    private int mFragmentIndex = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        handleData();
         initShare();
         mHomePresenter = new HomePresenterImpl(this);
         mFragments = new ArrayList<>();
@@ -125,7 +129,7 @@ public class HomeActivity extends BaseActivity implements BottomNavigationView.O
         mFragments.add(mHomeDynamicFragment);
         mFragments.add(mHomeSelectCoinFragment);
         mFragments.add(mHomeMineFragment);
-        switchFragment(0);
+        switchFragment(mFragmentIndex);
     }
 
     private void switchFragment(int position) {
@@ -306,6 +310,44 @@ public class HomeActivity extends BaseActivity implements BottomNavigationView.O
                 return info;
             }
         }).check();
+    }
+
+    private void handleData(){
+        Intent intent = getIntent();
+        if(intent != null){
+            mFragmentIndex = intent.getIntExtra("fragment_index",0);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleData();
+        switchFragment(mFragmentIndex);
+        if(mFragmentIndex == 1){
+            Fragment fragment = mFragments.get(1);
+            if(fragment != null && fragment instanceof HomeDynamicFragment){
+                ((HomeDynamicFragment) fragment).setQuickFragment();
+            }
+        }
+    }
+
+    public static void startHomeActivity(Context context){
+        if(context == null){
+            return;
+        }
+        Intent intent = new Intent(context,HomeActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void startHomeActivity(Context context,int index){
+        if(context == null){
+            return;
+        }
+        Intent intent = new Intent(context,HomeActivity.class);
+        intent.putExtra("fragment_index",index);
+        context.startActivity(intent);
     }
 
 }

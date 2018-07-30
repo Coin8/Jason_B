@@ -29,7 +29,8 @@
 
         <activity android:name="com.coin.b8.ui.activity.HomeActivity"
             android:theme="@style/BaseAppTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask">
         </activity>
 
         <activity android:name="com.coin.b8.ui.activity.SplashActivity"

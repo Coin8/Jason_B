@@ -8,8 +8,8 @@ import com.coin.b8.model.YujingListResponse;
  * Created by zhangyi on 2018/7/10.
  */
 public interface IYuJingRecordView {
-    void onYuJingListSuccess(YujingListResponse response);
-    void onYuJingListError();
+    void onYuJingListSuccess(YujingListResponse response,int type);
+    void onYuJingListError(int type);
     void onDeleteSuccess(DeleteYuJingResponse response);
     void onDeleteError();
     void onModifySuccess(ModifyYuJingResponse response);

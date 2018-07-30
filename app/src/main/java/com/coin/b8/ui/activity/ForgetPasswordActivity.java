@@ -23,7 +23,7 @@ import com.coin.b8.utils.MyToast;
 /**
  * Created by zhangyi on 2018/7/3.
  */
-public class ForgetPasswordActivity extends BaseActivity implements View.OnClickListener,IForgetPasswordView{
+public class ForgetPasswordActivity extends BaseActivity implements View.OnClickListener,IForgetPasswordView,View.OnFocusChangeListener{
     private TextView mForgetTitle;
     private TextView mBtnSubmit;
     private TextView mBtnVerifyCode;
@@ -57,7 +57,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
         mPasswordEdit.setLeftIcon(R.drawable.password_icon);
         mPasswordConfirmEdit.setLeftIcon(R.drawable.password_icon);
 
-        mAccountEdit.addTextChangedListener(new TextWatcher() {
+        TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -72,56 +72,17 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
             public void afterTextChanged(Editable s) {
                 checkState();
             }
-        });
-        mPasswordEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        };
 
-            }
+        mAccountEdit.addTextChangedListener(textWatcher);
+        mPasswordEdit.addTextChangedListener(textWatcher);
+        mPasswordConfirmEdit.addTextChangedListener(textWatcher);
+        mVerifyCodeEdit.addTextChangedListener(textWatcher);
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                checkState();
-            }
-        });
-        mPasswordConfirmEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                checkState();
-            }
-        });
-
-        mVerifyCodeEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                checkState();
-            }
-        });
+        mAccountEdit.setOnFocusChangeListener(this);
+        mPasswordEdit.setOnFocusChangeListener(this);
+        mPasswordConfirmEdit.setOnFocusChangeListener(this);
+        mVerifyCodeEdit.setOnFocusChangeListener(this);
 
 
         mBtnSubmit.setOnClickListener(this);
@@ -259,6 +220,94 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
     @Override
     public void onResetPasswordFail() {
         hideLoading();
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if(v == null){
+            return;
+        }
+        if(hasFocus){
+            return;
+        }
+        String email;
+        String password;
+        String password2;
+        String code;
+
+        email = mAccountEdit.getText().toString();
+        password = mPasswordEdit.getText().toString();
+        password2 = mPasswordConfirmEdit.getText().toString();
+        code = mVerifyCodeEdit.getText().toString();
+
+        switch (v.getId()){
+            case R.id.login_account_edit:
+                if(TextUtils.isEmpty(email)){
+                    mMyToast.showToast("账号不能为空");
+                    return;
+                }
+                if(!CommonUtils.isEmail(email)){
+                    mMyToast.showToast("请输入正确的邮箱地址");
+                    return;
+                }
+
+                break;
+            case R.id.login_password_edit:
+                if(TextUtils.isEmpty(email)){
+                    return;
+                }
+                if(TextUtils.isEmpty(password)){
+                    mMyToast.showToast("密码不能为空");
+                    return;
+                }
+                if(password.length() < 6){
+                    mMyToast.showToast("密码不能小于6位");
+                    return;
+                }
+                if(password.length() > 32){
+                    mMyToast.showToast("密码不能大于32位");
+                    return;
+                }
+                break;
+            case R.id.login_password_edit_confirm:
+                if(TextUtils.isEmpty(email)
+                        || TextUtils.isEmpty(password)){
+                    return;
+                }
+
+                if(!TextUtils.equals(password,password2)){
+                    mMyToast.showToast("两次密码不一样");
+                    return;
+                }
+
+                if(password.length() < 6){
+                    mMyToast.showToast("密码不能小于6位");
+                    return;
+                }
+                if(password.length() > 32){
+                    mMyToast.showToast("密码不能大于32位");
+                    return;
+                }
+
+                break;
+            case R.id.verify_confirm_edit:
+                if(TextUtils.isEmpty(email)
+                        || TextUtils.isEmpty(password)
+                        || TextUtils.isEmpty(password2)){
+                    return;
+                }
+                if(TextUtils.isEmpty(code)){
+                    mMyToast.showToast("验证码不能为空");
+                    return;
+                }
+                if(code.length() < 6){
+                    mMyToast.showToast("验证码不能小于6位");
+                    return;
+                }
+
+                break;
+        }
+
     }
 
     private class MyCountDownTimer extends CountDownTimer {

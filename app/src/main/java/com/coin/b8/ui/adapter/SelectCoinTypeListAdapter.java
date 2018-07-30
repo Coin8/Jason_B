@@ -1,5 +1,6 @@
 package com.coin.b8.ui.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.coin.b8.R;
 import com.coin.b8.constant.Constants;
+import com.coin.b8.help.PreferenceHelper;
 import com.coin.b8.model.SelectCoinTypeListResponse;
 import com.coin.b8.ui.activity.NativeDetailActivity;
 import com.coin.b8.utils.CommonUtils;
@@ -98,6 +100,17 @@ public class SelectCoinTypeListAdapter extends RecyclerView.Adapter{
                     public void onClick(View v) {
                         StringBuilder stringBuilder = new StringBuilder();
                         stringBuilder.append(Constants.GLOBAL_DETAIL_URL);
+                        Context context = v.getContext();
+                        stringBuilder.append("uid=").append(PreferenceHelper.getUid(context));
+                        String imei = PreferenceHelper.getIMEI(context);
+                        if(!TextUtils.isEmpty(imei)){
+                            stringBuilder.append("&imei=").append(imei);
+                        }
+                        String token = PreferenceHelper.getToken(context);
+                        if(!TextUtils.isEmpty(token)){
+                            stringBuilder.append("&token=").append(CommonUtils.encode(token));
+                        }
+                        stringBuilder.append("&");
                         stringBuilder.append("open").append("=").append(CommonUtils.encode(itemsBean.getOpen())).append("&")
                                 .append("close").append("=").append(CommonUtils.encode(itemsBean.getClose())).append("&")
                                 .append("closeCny").append("=").append(CommonUtils.encode(itemsBean.getCloseCny())).append("&")

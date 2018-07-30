@@ -66,4 +66,8 @@ public class HomeDynamicFragment extends BaseFragment{
         mViewPager.setAdapter(homeDynamicMainAdapter);
         mTabLayout.setViewPager(mViewPager);
     }
+
+    public void setQuickFragment(){
+        mTabLayout.setCurrentTab(0);
+    }
 }

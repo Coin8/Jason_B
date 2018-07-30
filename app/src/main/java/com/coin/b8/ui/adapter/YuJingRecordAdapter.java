@@ -91,16 +91,36 @@ public class YuJingRecordAdapter extends RecyclerView.Adapter{
                 isUp = false;
             }
             setDesc(normalViewHolder.mRecordDesc, desc, "¥"+dataBean.getPrice(), " 时",isUp);
+//            normalViewHolder.mSwitchButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if(mOnYuJingItemClickListen != null){
+//                        boolean isChecked = !normalViewHolder.mSwitchButton.isChecked();
+//                        if(normalViewHolder.mSwitchButton.isChecked()){
+//
+//                        }else {
+//
+//                        }
+//                        mOnYuJingItemClickListen.onSwitchBtnClick(dataBean.getId(),isChecked);
+//                        if(isChecked){
+//                            mList.get(position).setOpenStatus(1);
+//                        }else {
+//                            mList.get(position).setOpenStatus(2);
+//                        }
+//                    }
+//
+//                }
+//            });
             normalViewHolder.mSwitchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(SwitchButton view, boolean isChecked) {
                     if(mOnYuJingItemClickListen != null){
                         mOnYuJingItemClickListen.onSwitchBtnClick(dataBean.getId(),isChecked);
-                        if(isChecked){
-                            mList.get(position).setOpenStatus(1);
-                        }else {
-                            mList.get(position).setOpenStatus(2);
-                        }
+//                        if(isChecked){
+//                            mList.get(position).setOpenStatus(1);
+//                        }else {
+//                            mList.get(position).setOpenStatus(2);
+//                        }
                     }
                 }
             });
@@ -155,7 +175,6 @@ public class YuJingRecordAdapter extends RecyclerView.Adapter{
             mDeleteBtn = itemView.findViewById(R.id.delete_btn);
             mRecordTitle = itemView.findViewById(R.id.record_title);
             mRecordDesc = itemView.findViewById(R.id.record_desc);
-            mSwitchButton.setEnabled(false);
         }
     }
 }

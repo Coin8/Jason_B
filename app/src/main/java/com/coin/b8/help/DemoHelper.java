@@ -9,7 +9,9 @@ import android.util.Log;
 
 import com.coin.b8.R;
 import com.coin.b8.ui.activity.DetailActivity;
+import com.coin.b8.ui.activity.HomeActivity;
 import com.coin.b8.ui.activity.MainActivity;
+import com.coin.b8.utils.CommonUtils;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
@@ -339,6 +341,28 @@ public class DemoHelper {
 //                return intent;
 
                 return intent;
+            }
+
+            @Override
+            public Intent getLaunchHomeIntent(EMMessage message) {
+                Intent intent = new Intent(appContext, HomeActivity.class);
+                intent.putExtra("fragment_index",1);
+                return intent;
+            }
+
+            @Override
+            public String getTokenInfo() {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("uid=").append(PreferenceHelper.getUid(appContext));
+                String imei = PreferenceHelper.getIMEI(appContext);
+                if(!TextUtils.isEmpty(imei)){
+                    stringBuilder.append("&imei=").append(imei);
+                }
+                String token = PreferenceHelper.getToken(appContext);
+                if(!TextUtils.isEmpty(token)){
+                    stringBuilder.append("&token=").append(CommonUtils.encode(token));
+                }
+                return stringBuilder.toString();
             }
         });
     }

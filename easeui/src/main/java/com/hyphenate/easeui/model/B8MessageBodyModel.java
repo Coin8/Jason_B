@@ -5,7 +5,7 @@ package com.hyphenate.easeui.model;
  */
 public class B8MessageBodyModel {
     private String text;
-    private String type;
+    private int type;
     private String url;
 
     public String getText() {
@@ -16,11 +16,11 @@ public class B8MessageBodyModel {
         this.text = text;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 

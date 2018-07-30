@@ -173,7 +173,11 @@ public class DynamicImportNewsAdapter extends RecyclerView.Adapter{
                         radius,
                         R.drawable.pic_default);
                 normalViewHolder.mTitle.setText(contentBean.getTitle());
-
+                if(PreferenceHelper.getYaoWenValue(normalViewHolder.itemView.getContext(),String.valueOf(contentBean.getId()))){
+                    normalViewHolder.mTitle.setSelected(true);
+                }else {
+                    normalViewHolder.mTitle.setSelected(false);
+                }
                 if(TextUtils.isEmpty(contentBean.getShowPubTime())){
                     normalViewHolder.mTime.setText(CommonUtils.millis2String(contentBean.getPublishTime()*1000,DEFAULT_FORMAT));
                 }else {
@@ -198,6 +202,8 @@ public class DynamicImportNewsAdapter extends RecyclerView.Adapter{
                         }
                         String web_url = stringBuilder.toString();
                         NativeDetailActivity.startNativeDetailActivity(v.getContext(), web_url );
+                        PreferenceHelper.setYaoWenValue(v.getContext(),String.valueOf(contentBean.getId()),true);
+                        normalViewHolder.mTitle.setSelected(true);
                     }
                 });
 

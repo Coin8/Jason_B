@@ -16,19 +16,19 @@ public class YuJingRecordPresenter extends BasePresenterImpl<IYuJingRecordView>{
         mView = iYuJingRecordView;
     }
 
-    public void getYuJingList(String uid){
+    public void getYuJingList(String uid, int type){
         DisposableObserver<YujingListResponse> disposableObserver = new DisposableObserver<YujingListResponse>() {
             @Override
             public void onNext(YujingListResponse yujingListResponse) {
                 if(mView != null){
-                    mView.onYuJingListSuccess(yujingListResponse);
+                    mView.onYuJingListSuccess(yujingListResponse,type);
                 }
             }
 
             @Override
             public void onError(Throwable e) {
                 if(mView != null){
-                    mView.onYuJingListError();
+                    mView.onYuJingListError(type);
                 }
             }
 

@@ -286,17 +286,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void onLoginSuccess(LoginResponseInfo loginResponseInfo) {
         hideLoading();
         if(loginResponseInfo != null){
-            if(loginResponseInfo.isResult() && loginResponseInfo.getData() != null){
+            if(loginResponseInfo.isResult()
+                    && loginResponseInfo.getData() != null
+                    && !TextUtils.isEmpty(loginResponseInfo.getData().getToken())){
                 PreferenceHelper.saveLoinInfo(this,loginResponseInfo);
                 if(DemoHelper.getInstance().isLoggedIn()){
                     DemoHelper.getInstance().logout();
                 }
-                if(PreferenceHelper.getIsLogin(this)){
-                    DemoHelper.getInstance().login(loginResponseInfo.getData().getEasename(),
-                            loginResponseInfo.getData().getPassword());
-                }else {
-                    mMyToast.showToast(loginResponseInfo.getMessage());
-                }
+                DemoHelper.getInstance().login(loginResponseInfo.getData().getEasename(),
+                        loginResponseInfo.getData().getPassword());
                 mMyToast.showToast("登录成功");
                 finish();
             }else {

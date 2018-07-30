@@ -345,8 +345,8 @@ public class NativeDetailActivity extends BaseActivity implements View.OnClickLi
         mSettings.setDefaultZoom(WebSettings.ZoomDensity.FAR);// 屏幕自适应网页
         mSettings.setRenderPriority(WebSettings.RenderPriority.HIGH);
         mSettings.setJavaScriptEnabled(true);
-//        mSettings.setAppCacheEnabled(false);
-//        mSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        mSettings.setAppCacheEnabled(false);
+        mSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         // webview从5.0开始默认不允许混合模式,https中不能加载http资源,需要设置开启。
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
@@ -843,7 +843,7 @@ public class NativeDetailActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void showShareLoading() {
-        if (mLoadingDialog != null && mLoadingDialog.getDialog() != null && mLoadingDialog.getDialog().isShowing()) {
+        if (mLoadingDialog != null) {
             mLoadingDialog.dismiss();
         }
         mLoadingDialog = new LoadingDialog();
@@ -852,7 +852,7 @@ public class NativeDetailActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void hideShareLoading(){
-        if (mLoadingDialog != null && mLoadingDialog.getDialog().isShowing()) {
+        if (mLoadingDialog != null) {
             mLoadingDialog.dismiss();
         }
     }

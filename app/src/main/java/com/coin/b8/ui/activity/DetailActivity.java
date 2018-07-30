@@ -139,6 +139,11 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     class JSInterface {
 
         @JavascriptInterface
+        public void closeView() {
+            finish();
+        }
+
+        @JavascriptInterface
         public void shareWebUrl(String type,String title,String content, String webUrl) {
             if(!TextUtils.isEmpty(type) && mWXShare != null){
                 int xx = Integer.parseInt(type);
@@ -787,7 +792,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void showShareLoading() {
-        if (mLoadingDialog != null && mLoadingDialog.getDialog() != null && mLoadingDialog.getDialog().isShowing()) {
+        if (mLoadingDialog != null) {
             mLoadingDialog.dismiss();
         }
         mLoadingDialog = new LoadingDialog();
@@ -796,7 +801,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void hideShareLoading(){
-        if (mLoadingDialog != null && mLoadingDialog.getDialog().isShowing()) {
+        if (mLoadingDialog != null) {
             mLoadingDialog.dismiss();
         }
     }

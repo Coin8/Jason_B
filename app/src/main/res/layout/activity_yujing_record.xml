@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,58 +7,79 @@
     android:background="@color/lineColor">
     <include layout="@layout/toolbar"/>
     <View
+        android:id="@+id/top_line"
         android:layout_width="match_parent"
         android:layout_height="@dimen/line_width"
+        android:layout_below="@id/toolbar"
         android:background="@color/top_line_color"/>
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/refreshLayout"
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:srlEnableScrollContentWhenLoaded="true"
-        app:srlEnableFooterFollowWhenLoadFinished="true">
+        android:layout_below="@id/top_line"
+        android:background="@color/lineColor">
 
-        <com.scwang.smartrefresh.layout.header.ClassicsHeader
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srlPrimaryColor="@color/lineColor"
-            app:srlAccentColor="@color/refresh_text_color"
-            app:srlTextSizeTitle="@dimen/sp_12"
-            app:srlTextSizeTime="@dimen/sp_12">
-        </com.scwang.smartrefresh.layout.header.ClassicsHeader>
+    </android.support.v7.widget.RecyclerView>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <com.coin.b8.ui.view.BlankView
+        android:id="@+id/blank_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/top_line"
+        android:visibility="gone">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/lineColor">
+    </com.coin.b8.ui.view.BlankView>
 
-            </android.support.v7.widget.RecyclerView>
+    <!--<com.scwang.smartrefresh.layout.SmartRefreshLayout-->
+        <!--android:id="@+id/refreshLayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--app:srlEnableScrollContentWhenLoaded="true"-->
+        <!--app:srlEnableFooterFollowWhenLoadFinished="true">-->
 
-            <com.coin.b8.ui.view.BlankView
-                android:id="@+id/blank_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone">
+        <!--<com.scwang.smartrefresh.layout.header.ClassicsHeader-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:srlPrimaryColor="@color/lineColor"-->
+            <!--app:srlAccentColor="@color/refresh_text_color"-->
+            <!--app:srlTextSizeTitle="@dimen/sp_12"-->
+            <!--app:srlTextSizeTime="@dimen/sp_12">-->
+        <!--</com.scwang.smartrefresh.layout.header.ClassicsHeader>-->
 
-            </com.coin.b8.ui.view.BlankView>
+        <!--<FrameLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
 
-        </FrameLayout>
+            <!--<android.support.v7.widget.RecyclerView-->
+                <!--android:id="@+id/recyclerview"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:background="@color/lineColor">-->
+
+            <!--</android.support.v7.widget.RecyclerView>-->
+
+            <!--<com.coin.b8.ui.view.BlankView-->
+                <!--android:id="@+id/blank_view"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:visibility="gone">-->
+
+            <!--</com.coin.b8.ui.view.BlankView>-->
+
+        <!--</FrameLayout>-->
 
 
 
-        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srlClassicsSpinnerStyle="Translate"
-            app:srlPrimaryColor="@color/lineColor"
-            app:srlAccentColor="@color/refresh_text_color"
-            app:srlTextSizeTitle="@dimen/refresh_text_size"/>
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+        <!--<com.scwang.smartrefresh.layout.footer.ClassicsFooter-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:srlClassicsSpinnerStyle="Translate"-->
+            <!--app:srlPrimaryColor="@color/lineColor"-->
+            <!--app:srlAccentColor="@color/refresh_text_color"-->
+            <!--app:srlTextSizeTitle="@dimen/refresh_text_size"/>-->
+    <!--</com.scwang.smartrefresh.layout.SmartRefreshLayout>-->
 
 
-</LinearLayout>
+</RelativeLayout>

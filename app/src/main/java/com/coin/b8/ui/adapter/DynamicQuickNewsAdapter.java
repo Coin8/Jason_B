@@ -69,7 +69,7 @@ public class DynamicQuickNewsAdapter extends RecyclerView.Adapter{
                 normalViewHolder.mTime.setText(contentBean.getShowPubTime());
             }
             normalViewHolder.mContent.setText(contentBean.getContentWithoutTag());
-            normalViewHolder.mContent.setMaxLines(3);
+            normalViewHolder.mContent.setMaxLines(5);
             normalViewHolder.mShareBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

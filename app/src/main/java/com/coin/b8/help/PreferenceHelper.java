@@ -11,7 +11,7 @@ import com.coin.b8.model.UserInfoResponse;
  * Created by zhangyi on 2018/7/3.
  */
 public class PreferenceHelper {
-
+    private static final String mYaoWenName = "Preference_YaoWen_B8";
     private static final String mName = "Preference_B8";
     private static final String KEY_IS_LOGIN = "new_is_login";
     private static final String KEY_UID = "new_uid";
@@ -35,6 +35,16 @@ public class PreferenceHelper {
     private static String mEasePassword = "";
     private static int mSex = 0;
     private static String mHeadIcon = "";
+
+    public static boolean setYaoWenValue(Context context, String key, boolean value){
+        SharedPreferences.Editor editor = context.getSharedPreferences(mYaoWenName, Context.MODE_PRIVATE).edit();
+        editor.putBoolean(key, value);
+        return editor.commit();
+    }
+
+    public static boolean getYaoWenValue(Context context,String key){
+        return context.getSharedPreferences(mYaoWenName,Context.MODE_PRIVATE).getBoolean(key,false);
+    }
 
     private static boolean setValue(Context context, String key, String value){
         SharedPreferences.Editor editor = context.getSharedPreferences(mName, Context.MODE_PRIVATE).edit();
@@ -202,9 +212,7 @@ public class PreferenceHelper {
     }
 
     public static boolean getIsLogin(Context context){
-        if(TextUtils.isEmpty(getToken(context))
-                || TextUtils.isEmpty(getEaseName(context))
-                || TextUtils.isEmpty(getEasePassword(context))){
+        if(TextUtils.isEmpty(getToken(context))){
             return false;
         }
         return true;
