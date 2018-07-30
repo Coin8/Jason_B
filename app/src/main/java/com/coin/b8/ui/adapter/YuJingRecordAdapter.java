@@ -155,6 +155,7 @@ public class YuJingRecordAdapter extends RecyclerView.Adapter{
             mDeleteBtn = itemView.findViewById(R.id.delete_btn);
             mRecordTitle = itemView.findViewById(R.id.record_title);
             mRecordDesc = itemView.findViewById(R.id.record_desc);
+            mSwitchButton.setEnabled(false);
         }
     }
 }

@@ -10,37 +10,158 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/line_width"
         android:background="@color/lineColor"/>
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/refreshLayout"
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinator_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:srlEnableScrollContentWhenLoaded="true"
-        app:srlEnableFooterFollowWhenLoadFinished="true">
+        android:fitsSystemWindows="true">
 
-        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:srlPrimaryColor="@color/lineColor"
-            app:srlAccentColor="@color/refresh_text_color"
-            app:srlTextSizeTitle="@dimen/sp_12"
-            app:srlTextSizeTime="@dimen/sp_12">
-        </com.scwang.smartrefresh.layout.header.ClassicsHeader>
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:background="@color/white"
+            app:elevation="0dp">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:contentInsetStart="0dp"
+                app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/white">
+                    <TextView
+                        android:id="@+id/des_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/title_text_color"
+                        android:lineSpacingExtra="18dp"/>
+
+                    <TextView
+                        android:id="@+id/update_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginBottom="20dp"
+                        android:textSize="12sp"
+                        android:textColor="#9b9b9b"
+                        android:layout_gravity="right"/>
+
+
+                </LinearLayout>
+            </android.support.v7.widget.Toolbar>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                android:background="@color/lineColor"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="名称/成交额"
+                    android:textColor="#4a4a4a"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="最新价"
+                    android:textColor="#4a4a4a"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center"
+                    android:text="24H涨幅"
+                    android:textColor="#4a4a4a"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+
+        <!--<com.scwang.smartrefresh.layout.SmartRefreshLayout-->
+            <!--android:id="@+id/refreshLayout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+            <!--app:srlEnableScrollContentWhenLoaded="true"-->
+            <!--app:srlEnableFooterFollowWhenLoadFinished="true">-->
+
+            <!--<com.scwang.smartrefresh.layout.header.ClassicsHeader-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--app:srlPrimaryColor="@color/lineColor"-->
+                <!--app:srlAccentColor="@color/refresh_text_color"-->
+                <!--app:srlTextSizeTitle="@dimen/sp_12"-->
+                <!--app:srlTextSizeTime="@dimen/sp_12">-->
+            <!--</com.scwang.smartrefresh.layout.header.ClassicsHeader>-->
+
+            <!--<android.support.v7.widget.RecyclerView-->
+                <!--android:id="@+id/recyclerview"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:background="@color/lineColor">-->
+
+            <!--</android.support.v7.widget.RecyclerView>-->
+
+            <!--<com.scwang.smartrefresh.layout.footer.ClassicsFooter-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--app:srlClassicsSpinnerStyle="Translate"-->
+                <!--app:srlPrimaryColor="@color/lineColor"-->
+                <!--app:srlAccentColor="@color/refresh_text_color"-->
+                <!--app:srlTextSizeTitle="@dimen/refresh_text_size"/>-->
+        <!--</com.scwang.smartrefresh.layout.SmartRefreshLayout>-->
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/lineColor">
+            android:background="@color/lineColor"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         </android.support.v7.widget.RecyclerView>
 
-        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srlClassicsSpinnerStyle="Translate"
-            app:srlPrimaryColor="@color/lineColor"
-            app:srlAccentColor="@color/refresh_text_color"
-            app:srlTextSizeTitle="@dimen/refresh_text_size"/>
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+    
+    <com.coin.b8.ui.view.BlankView
+        android:id="@+id/blank_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+    </com.coin.b8.ui.view.BlankView>
+
+
 
 </LinearLayout>
