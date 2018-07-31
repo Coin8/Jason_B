@@ -48,7 +48,7 @@
                         android:layout_marginRight="15dp"
                         android:textSize="14sp"
                         android:textColor="@color/title_text_color"
-                        android:lineSpacingExtra="18dp"/>
+                        android:lineSpacingExtra="8dp"/>
 
                     <TextView
                         android:id="@+id/update_time"

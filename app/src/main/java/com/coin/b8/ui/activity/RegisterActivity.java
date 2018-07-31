@@ -39,7 +39,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private EditTextClear mAccountEdit;
     private EditTextClear mPasswordEdit;
     private EditTextClear mPasswordConfirmEdit;
-    private EditText mVerifyCodeEdit;
+    private EditTextClear mVerifyCodeEdit;
     private RegisterPresenterImpl mRegisterPresenter;
     private boolean mCodeIsSend = false;
     private TextView mToast;
@@ -108,7 +108,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
         mAccountEdit.setLeftIcon(R.drawable.username_icon);
         mPasswordEdit.setLeftIcon(R.drawable.password_icon);
-        mPasswordEdit.setLeftIcon(R.drawable.password_icon);
+        mPasswordConfirmEdit.setLeftIcon(R.drawable.password_icon);
+        mVerifyCodeEdit.setLeftIcon(R.drawable.verify_icon);
 
         TextWatcher textWatcher = new TextWatcher() {
             @Override

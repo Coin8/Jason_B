@@ -107,7 +107,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_marginTop="25dp">
-            <EditText
+            <com.coin.b8.ui.view.EditTextClear
                 android:id="@+id/verify_confirm_edit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -126,6 +126,7 @@
                 android:id="@+id/verify_confirm_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
                 android:textSize="16sp"
                 android:textColor="#163b7d"
                 android:layout_gravity="center_vertical"

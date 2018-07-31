@@ -154,7 +154,7 @@
             android:layout_marginLeft="@dimen/feedback_marin_15"
             android:layout_marginRight="@dimen/feedback_marin_15"
             android:layout_marginTop="@dimen/feedback_marin_20"
-            android:background="@drawable/feedback_btn_bg"
+            android:background="@drawable/corner_bg_light_personsal"
             android:gravity="center"
             android:text="@string/feedback_submit"
             android:textColor="#ffffff"

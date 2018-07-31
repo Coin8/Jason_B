@@ -34,7 +34,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
     private EditTextClear mAccountEdit;
     private EditTextClear mPasswordEdit;
     private EditTextClear mPasswordConfirmEdit;
-    private EditText mVerifyCodeEdit;
+    private EditTextClear mVerifyCodeEdit;
     private boolean mCodeIsSend = false;
     private LoadingDialog mLoadingDialog;
     private MyCountDownTimer mMyCountDownTimer;
@@ -100,6 +100,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
         mAccountEdit.setLeftIcon(R.drawable.username_icon);
         mPasswordEdit.setLeftIcon(R.drawable.password_icon);
         mPasswordConfirmEdit.setLeftIcon(R.drawable.password_icon);
+        mVerifyCodeEdit.setLeftIcon(R.drawable.verify_icon);
 
         TextWatcher textWatcher = new TextWatcher() {
             @Override

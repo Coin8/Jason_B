@@ -40,7 +40,7 @@
             android:text=""
             android:textColor="@color/title_text_color"
             android:textSize="15sp"
-            android:lineSpacingExtra="19dp"
+            android:lineSpacingExtra="8dp"
             android:ellipsize="end"/>
 
         <LinearLayout

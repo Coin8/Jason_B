@@ -5,7 +5,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.AppCompatRadioButton;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +75,28 @@ public class FeedBackFragment extends DialogFragment {
         mContentEdit = v.findViewById(R.id.content_edit);
         mContactEdit = v.findViewById(R.id.contact_edit);
         mPosButton = v.findViewById(R.id.post_button);
+
+        mContentEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String question = mContentEdit.getText().toString();
+                if(TextUtils.isEmpty(question) || question.length() < 10){
+                    mPosButton.setBackgroundResource(R.drawable.corner_bg_light_personsal);
+                }else {
+                    mPosButton.setBackgroundResource(R.drawable.feedback_btn_bg);
+                }
+            }
+        });
 
         mPosButton.setOnClickListener(new View.OnClickListener() {
             @Override
