@@ -335,7 +335,16 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
      * 从相册获取图片
      */
     private void getPicFromAlbm() {
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+
+        Intent photoPickerIntent;
+        if (Build.VERSION.SDK_INT < 19) {
+            photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
+//            intentFromGallery.setType("image/*");
+        } else {
+            photoPickerIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        }
+
+//        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, ALBUM_REQUEST_CODE);
     }

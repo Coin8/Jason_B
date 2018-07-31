@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.text.Editable;
@@ -22,6 +24,8 @@ import com.coin.b8.ui.view.EditTextClear;
 import com.coin.b8.utils.CommonUtils;
 import com.coin.b8.utils.MyToast;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by zhangyi on 2018/7/3.
  */
@@ -38,15 +42,53 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private EditText mVerifyCodeEdit;
     private RegisterPresenterImpl mRegisterPresenter;
     private boolean mCodeIsSend = false;
-    private MyToast mMyToast;
+    private TextView mToast;
     private LoadingDialog mLoadingDialog;
+
+
+    private static final int MESSAGE_DISMISS = 100;
+    private static final int MESSAGE_DELAY_TIME = 2000;
+
+    private class MyHandler extends Handler {
+        private WeakReference<RegisterActivity> mWeakReference;
+        public MyHandler(RegisterActivity activity) {
+            mWeakReference = new WeakReference<RegisterActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            RegisterActivity activity = mWeakReference.get();
+            if(activity == null){
+                return;
+            }
+            switch (msg.what){
+                case MESSAGE_DISMISS:
+                    activity.hideToast();
+                    break;
+            }
+        }
+    }
+
+    private MyHandler mMyHandler;
+
+    public void showToast(String text){
+        mToast.setVisibility(View.VISIBLE);
+        mToast.setText(text);
+        mMyHandler.removeMessages(MESSAGE_DISMISS);
+        mMyHandler.sendEmptyMessageDelayed(MESSAGE_DISMISS,MESSAGE_DELAY_TIME);
+    }
+
+    public void hideToast(){
+        mToast.setVisibility(View.GONE);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         mRegisterPresenter = new RegisterPresenterImpl(this);
-        mMyToast = new MyToast(this);
+        mToast = findViewById(R.id.toast_text);
+        mMyHandler = new MyHandler(this);
         setInitToolBar("");
         initView();
     }
@@ -123,6 +165,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     protected void onDestroy() {
         super.onDestroy();
         mRegisterPresenter.onDetach();
+        mMyHandler.removeMessages(MESSAGE_DISMISS);
+        mMyHandler.removeCallbacksAndMessages(null);
     }
 
     @Override
@@ -141,11 +185,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 }
                 email = mAccountEdit.getText().toString();
                 if(TextUtils.isEmpty(email)){
-                    mMyToast.showToast("账号不能为空");
+                    showToast("账号不能为空");
                     return;
                 }
                 if(!CommonUtils.isEmail(email)){
-                    mMyToast.showToast("请输入正确的邮箱地址");
+                    showToast("请输入正确的邮箱地址");
                     return;
                 }
                 showLoading("正在发送");
@@ -166,32 +210,32 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 password2 = mPasswordConfirmEdit.getText().toString();
                 code = mVerifyCodeEdit.getText().toString();
                 if(TextUtils.isEmpty(email)){
-                    mMyToast.showToast("账号不能为空");
+                    showToast("账号不能为空");
                     return;
                 }
                 if(!CommonUtils.isEmail(email)){
-                    mMyToast.showToast("请输入正确的邮箱地址");
+                    showToast("请输入正确的邮箱地址");
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
-                    mMyToast.showToast("密码不能为空");
+                    showToast("密码不能为空");
                     return;
                 }
                 if(password.length() < 6){
-                    mMyToast.showToast("密码不能小于6位");
+                    showToast("密码不能小于6位");
                     return;
                 }
                 if(password.length() > 32){
-                    mMyToast.showToast("密码不能大于32位");
+                    showToast("密码不能大于32位");
                     return;
                 }
                 if(!TextUtils.equals(password,password2)){
-                    mMyToast.showToast("两次密码不一样");
+                    showToast("两次密码不一样");
                     return;
                 }
 
                 if(TextUtils.isEmpty(code)){
-                    mMyToast.showToast("验证码不能为空");
+                    showToast("验证码不能为空");
                     return;
                 }
                 showLoading("正在注册");
@@ -222,13 +266,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onVerifyCodeSuccess() {
         hideLoading();
-        mMyToast.showToast("发送成功");
+        showToast("发送成功");
     }
 
     @Override
     public void onVerifyCodeFail() {
         hideLoading();
-        mMyToast.showToast("发送失败");
+        showToast("发送失败");
     }
 
     @Override
@@ -236,10 +280,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         hideLoading();
         if(registerResponseInfo != null){
             if(registerResponseInfo.isResult()){
-                mMyToast.showToast("注册成功");
+                showToast("注册成功");
                 finish();
             }else {
-                mMyToast.showToast(registerResponseInfo.getMessage());
+                showToast(registerResponseInfo.getMessage());
             }
 
         }
@@ -248,7 +292,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onRegisterFail() {
         hideLoading();
-        mMyToast.showToast("注册失败");
+        showToast("注册失败");
     }
 
     @Override
@@ -273,11 +317,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         switch (v.getId()){
             case R.id.login_account_edit:
                 if(TextUtils.isEmpty(email)){
-                    mMyToast.showToast("账号不能为空");
+                    showToast("账号不能为空");
                     return;
                 }
                 if(!CommonUtils.isEmail(email)){
-                    mMyToast.showToast("请输入正确的邮箱地址");
+                    showToast("请输入正确的邮箱地址");
                     return;
                 }
 
@@ -287,15 +331,15 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
-                    mMyToast.showToast("密码不能为空");
+                    showToast("密码不能为空");
                     return;
                 }
                 if(password.length() < 6){
-                    mMyToast.showToast("密码不能小于6位");
+                    showToast("密码不能小于6位");
                     return;
                 }
                 if(password.length() > 32){
-                    mMyToast.showToast("密码不能大于32位");
+                    showToast("密码不能大于32位");
                     return;
                 }
                 break;
@@ -306,16 +350,16 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 }
 
                 if(!TextUtils.equals(password,password2)){
-                    mMyToast.showToast("两次密码不一样");
+                    showToast("两次密码不一样");
                     return;
                 }
 
                 if(password.length() < 6){
-                    mMyToast.showToast("密码不能小于6位");
+                    showToast("密码不能小于6位");
                     return;
                 }
                 if(password.length() > 32){
-                    mMyToast.showToast("密码不能大于32位");
+                    showToast("密码不能大于32位");
                     return;
                 }
 
@@ -327,11 +371,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     return;
                 }
                 if(TextUtils.isEmpty(code)){
-                    mMyToast.showToast("验证码不能为空");
+                    showToast("验证码不能为空");
                     return;
                 }
                 if(code.length() < 6){
-                    mMyToast.showToast("验证码不能小于6位");
+                    showToast("验证码不能小于6位");
                     return;
                 }
                 break;

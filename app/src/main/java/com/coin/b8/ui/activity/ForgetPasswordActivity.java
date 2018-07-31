@@ -3,6 +3,8 @@ package com.coin.b8.ui.activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -20,6 +22,8 @@ import com.coin.b8.ui.view.EditTextClear;
 import com.coin.b8.utils.CommonUtils;
 import com.coin.b8.utils.MyToast;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by zhangyi on 2018/7/3.
  */
@@ -34,14 +38,54 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
     private boolean mCodeIsSend = false;
     private LoadingDialog mLoadingDialog;
     private MyCountDownTimer mMyCountDownTimer;
-    private MyToast mMyToast;
+    private TextView mToast;
     private ForgetPasswordPresenterImpl mForgetPasswordPresenter;
+
+
+
+    private static final int MESSAGE_DISMISS = 100;
+    private static final int MESSAGE_DELAY_TIME = 2000;
+
+    private class MyHandler extends Handler {
+        private WeakReference<ForgetPasswordActivity> mWeakReference;
+        public MyHandler(ForgetPasswordActivity activity) {
+            mWeakReference = new WeakReference<ForgetPasswordActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            ForgetPasswordActivity activity = mWeakReference.get();
+            if(activity == null){
+                return;
+            }
+            switch (msg.what){
+                case MESSAGE_DISMISS:
+                    activity.hideToast();
+                    break;
+            }
+        }
+    }
+
+    private MyHandler mMyHandler;
+
+    public void showToast(String text){
+        mToast.setVisibility(View.VISIBLE);
+        mToast.setText(text);
+        mMyHandler.removeMessages(MESSAGE_DISMISS);
+        mMyHandler.sendEmptyMessageDelayed(MESSAGE_DISMISS,MESSAGE_DELAY_TIME);
+    }
+
+    public void hideToast(){
+        mToast.setVisibility(View.GONE);
+    }
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
-        mMyToast = new MyToast(this);
+        mToast = findViewById(R.id.toast_text);
+        mMyHandler = new MyHandler(this);
         mForgetPasswordPresenter = new ForgetPasswordPresenterImpl(this);
         setInitToolBar("");
         mForgetTitle = findViewById(R.id.content_title);
@@ -109,6 +153,8 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
     protected void onDestroy() {
         super.onDestroy();
         mForgetPasswordPresenter.onDetach();
+        mMyHandler.removeMessages(MESSAGE_DISMISS);
+        mMyHandler.removeCallbacksAndMessages(null);
     }
 
     @Override
@@ -127,32 +173,32 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                 password2 = mPasswordConfirmEdit.getText().toString();
                 code = mVerifyCodeEdit.getText().toString();
                 if(TextUtils.isEmpty(email)){
-                    mMyToast.showToast("账号不能为空");
+                    showToast("账号不能为空");
                     return;
                 }
                 if(!CommonUtils.isEmail(email)){
-                    mMyToast.showToast("请输入正确的邮箱地址");
+                    showToast("请输入正确的邮箱地址");
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
-                    mMyToast.showToast("密码不能为空");
+                    showToast("密码不能为空");
                     return;
                 }
                 if(password.length() < 6){
-                    mMyToast.showToast("密码不能小于6位");
+                    showToast("密码不能小于6位");
                     return;
                 }
                 if(password.length() > 32){
-                    mMyToast.showToast("密码不能大于32位");
+                    showToast("密码不能大于32位");
                     return;
                 }
                 if(!TextUtils.equals(password,password2)){
-                    mMyToast.showToast("两次密码不一样");
+                    showToast("两次密码不一样");
                     return;
                 }
 
                 if(TextUtils.isEmpty(code)){
-                    mMyToast.showToast("验证码不能为空");
+                    showToast("验证码不能为空");
                     return;
                 }
                 showLoading("正在修改");
@@ -164,11 +210,11 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                 }
                 email = mAccountEdit.getText().toString();
                 if(TextUtils.isEmpty(email)){
-                    mMyToast.showToast("账号不能为空");
+                    showToast("账号不能为空");
                     return;
                 }
                 if(!CommonUtils.isEmail(email)){
-                    mMyToast.showToast("请输入正确的邮箱地址");
+                    showToast("请输入正确的邮箱地址");
                     return;
                 }
                 showLoading("正在发送");
@@ -195,13 +241,13 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
     @Override
     public void onVerifyCodeSuccess() {
         hideLoading();
-        mMyToast.showToast("发送成功");
+        showToast("发送成功");
     }
 
     @Override
     public void onVerifyCodeFail() {
         hideLoading();
-        mMyToast.showToast("发送失败");
+        showToast("发送失败");
     }
 
     @Override
@@ -209,10 +255,10 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
         hideLoading();
         if(resetPasswordResponseInfo != null){
             if(resetPasswordResponseInfo.isResult()){
-                mMyToast.showToast("修改密码成功");
+                showToast("修改密码成功");
                 finish();
             }else {
-                mMyToast.showToast(resetPasswordResponseInfo.getMessage());
+                showToast(resetPasswordResponseInfo.getMessage());
             }
         }
     }
@@ -243,11 +289,11 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
         switch (v.getId()){
             case R.id.login_account_edit:
                 if(TextUtils.isEmpty(email)){
-                    mMyToast.showToast("账号不能为空");
+                    showToast("账号不能为空");
                     return;
                 }
                 if(!CommonUtils.isEmail(email)){
-                    mMyToast.showToast("请输入正确的邮箱地址");
+                    showToast("请输入正确的邮箱地址");
                     return;
                 }
 
@@ -257,15 +303,15 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
-                    mMyToast.showToast("密码不能为空");
+                    showToast("密码不能为空");
                     return;
                 }
                 if(password.length() < 6){
-                    mMyToast.showToast("密码不能小于6位");
+                    showToast("密码不能小于6位");
                     return;
                 }
                 if(password.length() > 32){
-                    mMyToast.showToast("密码不能大于32位");
+                    showToast("密码不能大于32位");
                     return;
                 }
                 break;
@@ -276,16 +322,16 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                 }
 
                 if(!TextUtils.equals(password,password2)){
-                    mMyToast.showToast("两次密码不一样");
+                    showToast("两次密码不一样");
                     return;
                 }
 
                 if(password.length() < 6){
-                    mMyToast.showToast("密码不能小于6位");
+                    showToast("密码不能小于6位");
                     return;
                 }
                 if(password.length() > 32){
-                    mMyToast.showToast("密码不能大于32位");
+                    showToast("密码不能大于32位");
                     return;
                 }
 
@@ -297,11 +343,11 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                     return;
                 }
                 if(TextUtils.isEmpty(code)){
-                    mMyToast.showToast("验证码不能为空");
+                    showToast("验证码不能为空");
                     return;
                 }
                 if(code.length() < 6){
-                    mMyToast.showToast("验证码不能小于6位");
+                    showToast("验证码不能小于6位");
                     return;
                 }
 

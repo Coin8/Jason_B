@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -33,6 +35,7 @@ import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 /**
@@ -42,35 +45,61 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private TextView mForgetTitle;
     private TextView mForgetBtn;
     private TextView mLoginBtn;
-    private MyToast mMyToast;
     private LoginPresenterImpl mLoginPresenter;
     private EditTextClear mAccountEdit;
     private EditTextClear mPasswordEdit;
     private LoadingDialog mLoadingDialog;
+    private TextView mToast;
 
-    private Toast mToast;
+    private static final int MESSAGE_DISMISS = 100;
+    private static final int MESSAGE_DELAY_TIME = 2000;
 
-    private void showToast(String text){
-        if (mToast == null) {
-            mToast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-        } else {
-            mToast.setText(text);
-            mToast.setDuration(Toast.LENGTH_SHORT);
+    private class MyHandler extends Handler {
+        private WeakReference<LoginActivity> mWeakReference;
+        public MyHandler(LoginActivity activity) {
+            mWeakReference = new WeakReference<LoginActivity>(activity);
         }
-        mToast.show();
+
+        @Override
+        public void handleMessage(Message msg) {
+            LoginActivity activity = mWeakReference.get();
+            if(activity == null){
+                return;
+            }
+            switch (msg.what){
+                case MESSAGE_DISMISS:
+                    activity.hideToast();
+                    break;
+            }
+        }
+    }
+
+
+    private MyHandler mMyHandler;
+
+    public void showToast(String text){
+        mToast.setVisibility(View.VISIBLE);
+        mToast.setText(text);
+        mMyHandler.removeMessages(MESSAGE_DISMISS);
+        mMyHandler.sendEmptyMessageDelayed(MESSAGE_DISMISS,MESSAGE_DELAY_TIME);
+    }
+
+    public void hideToast(){
+        mToast.setVisibility(View.GONE);
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mMyToast = new MyToast(this);
+        mMyHandler = new MyHandler(this);
         mLoginPresenter = new LoginPresenterImpl(this);
         initView();
         requestPhonePermission();
     }
 
     private void initView(){
+        mToast = findViewById(R.id.toast_text);
         setInitToolBar("");
         mToolbarRightTitle.setVisibility(View.VISIBLE);
         mToolbarRightTitle.setText("注册账号");
@@ -127,11 +156,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 }
                 String user = mAccountEdit.getText().toString();
                 if(TextUtils.isEmpty(user)){
-                    mMyToast.showToast("账号不能为空");
+                    showToast("账号不能为空");
                     return;
                 }
                 if(!CommonUtils.isEmail(user)){
-                    mMyToast.showToast("请输入正确的邮箱地址");
+                    showToast("请输入正确的邮箱地址");
                     return;
                 }
 
@@ -146,7 +175,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 }
                 String user = mPasswordEdit.getText().toString();
                 if(TextUtils.isEmpty(user)){
-                    mMyToast.showToast("密码不能为空");
+                    showToast("密码不能为空");
                     return;
                 }
             }
@@ -171,6 +200,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     protected void onDestroy() {
         super.onDestroy();
         mLoginPresenter.onDetach();
+        mMyHandler.removeMessages(MESSAGE_DISMISS);
+        mMyHandler.removeCallbacksAndMessages(null);
     }
 
     private void requestPhonePermission(){
@@ -227,18 +258,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 if(TextUtils.isEmpty(email)){
 //                    Log.e("zy","5555555 = "+ count++);
 
-                    mMyToast.showToast("账号不能为空");
+                    showToast("账号不能为空");
 //                    showToast("账号不能为空");
 //                    ToastUtil.showShortToast("账号不能为空");
 
                     return;
                 }
                 if(!CommonUtils.isEmail(email)){
-                    mMyToast.showToast("请输入正确的邮箱地址");
+                    showToast("请输入正确的邮箱地址");
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
-                    mMyToast.showToast("密码不能为空");
+                    showToast("密码不能为空");
                     return;
                 }
                 showLoading("正在登录");
@@ -272,7 +303,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     private void hideLoading(){
-        if(mLoadingDialog != null && mLoadingDialog.getDialog() != null && mLoadingDialog.getDialog().isShowing()){
+        if(mLoadingDialog != null){
             mLoadingDialog.dismiss();
         }
     }
@@ -295,10 +326,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 }
                 DemoHelper.getInstance().login(loginResponseInfo.getData().getEasename(),
                         loginResponseInfo.getData().getPassword());
-                mMyToast.showToast("登录成功");
+                showToast("登录成功");
                 finish();
             }else {
-                mMyToast.showToast("登录失败");
+                showToast("登录失败");
             }
         }
     }
@@ -307,7 +338,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public void onLoginFail() {
         hideLoading();
-        mMyToast.showToast("登录失败");
+        showToast("登录失败");
     }
 
 

@@ -1,97 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white">
 
-    <include layout="@layout/toolbar"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar"/>
+
+        <TextView
+            android:id="@+id/content_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="30dp"
+            android:text="@string/b8_login"
+            android:textColor="@color/title_text_color"
+            android:textSize="24sp"/>
+
+
+        <com.coin.b8.ui.view.EditTextClear
+            android:id="@+id/login_account_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="43dp"
+            android:hint="@string/login_account_hint"
+            android:textColorHint="@color/et_text_hit"
+            android:textColor="@color/title_text_color"
+            android:textSize="16sp"
+            android:textCursorDrawable="@drawable/shape_et_cursor_color"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:drawableLeft="@drawable/username_icon"
+            android:drawablePadding="15dp"
+            android:background="@null"
+            android:digits="@string/rule_text"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_width"
+            android:layout_marginTop="17dp"
+            android:background="@color/lineColor"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"/>
+
+        <com.coin.b8.ui.view.EditTextClear
+            android:id="@+id/login_password_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:hint="@string/login_password_hint"
+            android:textColorHint="@color/et_text_hit"
+            android:textColor="@color/title_text_color"
+            android:textSize="16sp"
+            android:textCursorDrawable="@drawable/shape_et_cursor_color"
+            android:inputType="textPassword"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:drawableLeft="@drawable/password_icon"
+            android:drawablePadding="15dp"
+            android:background="@null"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_width"
+            android:layout_marginTop="17dp"
+            android:background="@color/lineColor"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"/>
+
+        <TextView
+            android:id="@+id/forget_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="right"
+            android:text="忘记密码"
+            android:textSize="12sp"
+            android:textColor="#163b7d"/>
+
+        <TextView
+            android:id="@+id/login_btn"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/corner_bg_light_personsal"
+            android:textColor="@color/title_text_color"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:text="@string/b8_login"/>
+
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/content_title"
+        android:id="@+id/toast_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="30dp"
-        android:text="@string/b8_login"
-        android:textColor="@color/title_text_color"
-        android:textSize="24sp"/>
-
-
-    <com.coin.b8.ui.view.EditTextClear
-        android:id="@+id/login_account_edit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="43dp"
-        android:hint="@string/login_account_hint"
-        android:textColorHint="@color/et_text_hit"
-        android:textColor="@color/title_text_color"
-        android:textSize="16sp"
-        android:textCursorDrawable="@drawable/shape_et_cursor_color"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:drawableLeft="@drawable/username_icon"
-        android:drawablePadding="15dp"
-        android:background="@null"
-        android:digits="@string/rule_text"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/line_width"
-        android:layout_marginTop="17dp"
-        android:background="@color/lineColor"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"/>
-
-    <com.coin.b8.ui.view.EditTextClear
-        android:id="@+id/login_password_edit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:hint="@string/login_password_hint"
-        android:textColorHint="@color/et_text_hit"
-        android:textColor="@color/title_text_color"
-        android:textSize="16sp"
-        android:textCursorDrawable="@drawable/shape_et_cursor_color"
-        android:inputType="textPassword"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:drawableLeft="@drawable/password_icon"
-        android:drawablePadding="15dp"
-        android:background="@null"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/line_width"
-        android:layout_marginTop="17dp"
-        android:background="@color/lineColor"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"/>
-
-    <TextView
-        android:id="@+id/forget_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="15dp"
-        android:layout_gravity="right"
-        android:text="忘记密码"
-        android:textSize="12sp"
-        android:textColor="#163b7d"/>
-    
-    <TextView
-        android:id="@+id/login_btn"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:background="@drawable/corner_bg_light_personsal"
-        android:textColor="@color/title_text_color"
-        android:textSize="16sp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/toast_bg"
         android:gravity="center"
-        android:text="@string/b8_login"/>
+        android:textSize="14sp"
+        android:padding="8dp"
+        android:textColor="#ffffffff"
+        android:visibility="gone"/>
 
 
-</LinearLayout>
+</RelativeLayout>

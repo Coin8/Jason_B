@@ -23,6 +23,7 @@ public class HomeDynamicFragment extends BaseFragment{
     private ViewPager mViewPager;
     private SlidingTabLayout mTabLayout;
     private ImageView mSearchImageView;
+    private boolean mIsViewInit = false;
 
     public static HomeDynamicFragment getInstance() {
         HomeDynamicFragment fragment = new HomeDynamicFragment();
@@ -65,9 +66,12 @@ public class HomeDynamicFragment extends BaseFragment{
         HomeDynamicMainAdapter homeDynamicMainAdapter = new HomeDynamicMainAdapter(getFragmentManager(),list);
         mViewPager.setAdapter(homeDynamicMainAdapter);
         mTabLayout.setViewPager(mViewPager);
+        mIsViewInit = true;
     }
 
     public void setQuickFragment(){
-        mTabLayout.setCurrentTab(0);
+        if(mIsViewInit){
+            mTabLayout.setCurrentTab(0);
+        }
     }
 }

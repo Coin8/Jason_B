@@ -94,21 +94,21 @@ public class DynamicQuickNewsAdapter extends RecyclerView.Adapter{
         public TextView mContent;
         public View mShareBtn;
 
-        private int mMaxLine = 3;
+        private int mMaxLine = 5;
 
         public NormalViewHolder(View itemView) {
             super(itemView);
             mTime = itemView.findViewById(R.id.time);
             mContent = itemView.findViewById(R.id.content);
             mShareBtn = itemView.findViewById(R.id.share_layout);
-            mContent.setMaxLines(3);
+            mContent.setMaxLines(5);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(mMaxLine == 3){
+                    if(mMaxLine == 5){
                         mMaxLine = Integer.MAX_VALUE;
                     }else {
-                        mMaxLine = 3;
+                        mMaxLine = 5;
                     }
                     mContent.setMaxLines(mMaxLine);
                 }
