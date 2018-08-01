@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="43dp"
-            android:hint="@string/login_account_hint"
+            android:hint="账号/邮箱"
             android:textColorHint="@color/et_text_hit"
             android:textColor="@color/title_text_color"
             android:textSize="16sp"
@@ -65,7 +65,8 @@
             android:layout_marginRight="30dp"
             android:drawableLeft="@drawable/password_icon"
             android:drawablePadding="15dp"
-            android:background="@null"/>
+            android:background="@null"
+            android:digits="@string/rule_text"/>
 
         <View
             android:layout_width="match_parent"

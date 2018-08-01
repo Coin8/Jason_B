@@ -74,7 +74,7 @@
     <string name="no_data">暂无数据</string>
     <string name="net_connect_fail">网络连接失败</string>
     <string name="rule_text">0123456789abcdefghijklmnopqrstuvwxyz
-ABCDEFGHIJKLMNOPQRSTUVWXYZ`¬!"£$%^*()~=#{}[];':,./?/*-_+&#060;&#062;&#064;&#038;</string>
+ABCDEFGHIJKLMNOPQRSTUVWXYZ`¬!"£$%^*()~=#{}[];':,./?/*-_\\+&#060;&#062;&#064;&#038;</string>
     <string name="rule_number_text">0123456789</string>
 
     <item name="type_header" type="integer"/>

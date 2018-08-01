@@ -112,7 +112,7 @@ public class YuJingRecordActivity extends BaseActivity implements IYuJingRecordV
             }
         });
 
-        mToolbarRightTitle.setVisibility(View.VISIBLE);
+        mToolbarRightTitle.setVisibility(View.GONE);
         mToolbarRightTitle.setText("编辑");
         mToolbarRightTitle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,11 +160,16 @@ public class YuJingRecordActivity extends BaseActivity implements IYuJingRecordV
         }
         mBlankView.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.GONE);
+        mToolbarRightTitle.setText("编辑");
+        mEnableDelete = false;
+        mYuJingRecordAdapter.setDeleteEnable(mEnableDelete);
+        mToolbarRightTitle.setVisibility(View.GONE);
     }
 
     private void hideBlank(){
         mBlankView.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
+        mToolbarRightTitle.setVisibility(View.VISIBLE);
     }
 
     private void showFragmentLoading(){

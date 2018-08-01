@@ -82,12 +82,21 @@ public class CollectionListInfoResponse {
         private Object updateTime;
         private int publishTime;
         private int yn;
+        private String showPubTime;
         /**
          * 1.要闻2，干货3 banner
          */
         private int targetType;
         private String pic;
         private String title;
+
+        public String getShowPubTime() {
+            return showPubTime;
+        }
+
+        public void setShowPubTime(String showPubTime) {
+            this.showPubTime = showPubTime;
+        }
 
         public long getId() {
             return id;

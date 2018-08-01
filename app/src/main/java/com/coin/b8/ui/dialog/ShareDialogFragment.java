@@ -39,6 +39,7 @@ public class ShareDialogFragment extends DialogFragment implements View.OnClickL
     private boolean isDisplayQuickNews = false;
     private TextView mTextViewDesc;
     private TextView mTextViewTime;
+    private ImageView mBottomImage;
 
     private String mDesc = "";
     private String mTime = "";
@@ -92,6 +93,8 @@ public class ShareDialogFragment extends DialogFragment implements View.OnClickL
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
         params.height = WindowManager.LayoutParams.MATCH_PARENT;
         window.setAttributes(params);
+
+
     }
 
 
@@ -101,6 +104,7 @@ public class ShareDialogFragment extends DialogFragment implements View.OnClickL
 //        return super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.dialog_share, container, false);
         mDefaultImageLayout = v.findViewById(R.id.default_image_share_layout);
+        mBottomImage = v.findViewById(R.id.bottom_img);
         mQuickNewsLayout = v.findViewById(R.id.quick_news_layout);
         mTextViewDesc = v.findViewById(R.id.desc);
         mTextViewTime = v.findViewById(R.id.date);
@@ -129,6 +133,25 @@ public class ShareDialogFragment extends DialogFragment implements View.OnClickL
             mDefaultImageLayout.setVisibility(View.VISIBLE);
             mQuickNewsLayout.setVisibility(View.GONE);
         }
+
+        mBottomImage.post(new Runnable() {
+            @Override
+            public void run() {
+                if(mBottomImage != null){
+                    int width = mBottomImage.getWidth();
+                    if(width > 0){
+                        int h = 260*width/749;
+                        ViewGroup.LayoutParams layoutParams = mBottomImage.getLayoutParams();
+                        layoutParams.height = h;
+                        layoutParams.width = width;
+                        mBottomImage.setLayoutParams(layoutParams);
+                    }
+                }
+
+            }
+        });
+
+
         return v;
     }
 

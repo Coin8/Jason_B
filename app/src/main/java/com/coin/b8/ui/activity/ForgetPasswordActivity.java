@@ -178,7 +178,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                     return;
                 }
                 if(!CommonUtils.isEmail(email)){
-                    showToast("请输入正确的邮箱地址");
+                    showToast("账号格式错误");
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
@@ -215,7 +215,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                     return;
                 }
                 if(!CommonUtils.isEmail(email)){
-                    showToast("请输入正确的邮箱地址");
+                    showToast("账号格式错误");
                     return;
                 }
                 showLoading("正在发送");
@@ -294,7 +294,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                     return;
                 }
                 if(!CommonUtils.isEmail(email)){
-                    showToast("请输入正确的邮箱地址");
+                    showToast("账号格式错误");
                     return;
                 }
 

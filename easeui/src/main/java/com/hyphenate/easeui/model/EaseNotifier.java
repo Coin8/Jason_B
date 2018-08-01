@@ -337,7 +337,8 @@ public class EaseNotifier {
             
 //            mBuilder.setTicker(notifyText);
             mBuilder.setContentText(notifyText);
-            if(b8MessageBodyModel != null && !TextUtils.isEmpty(b8MessageBodyModel.getUrl())){
+            if(b8MessageBodyModel != null &&
+                    (b8MessageBodyModel.getType() == 2 || !TextUtils.isEmpty(b8MessageBodyModel.getUrl())) ){
                 mBuilder.setContentIntent(pendingIntent);
             }
             // mBuilder.setNumber(notificationNum);

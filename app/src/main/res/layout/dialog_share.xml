@@ -69,10 +69,13 @@
                     android:textColor="@color/title_text_color"/>
 
                 <ImageView
+                    android:id="@+id/bottom_img"
                     android:layout_marginTop="50dp"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/share_quick_qr" />
+                    android:src="@drawable/share_quick_qr"
+                    android:scaleType="fitXY"
+                    android:layout_gravity="center_horizontal"/>
 
             </LinearLayout>
 

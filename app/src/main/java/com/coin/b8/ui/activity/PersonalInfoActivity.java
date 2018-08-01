@@ -3,6 +3,7 @@ package com.coin.b8.ui.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,7 +31,9 @@ import com.coin.b8.ui.dialog.CustomSelectDialog;
 import com.coin.b8.ui.dialog.InputDialog;
 import com.coin.b8.ui.iView.IPersonalInfoView;
 import com.coin.b8.ui.presenter.PersonalInfoPresenterImpl;
+import com.coin.b8.utils.CameraAlbumUtil;
 import com.coin.b8.utils.CommonUtils;
+import com.coin.b8.utils.FileProviderUtils;
 import com.coin.b8.utils.GlideUtil;
 import com.coin.b8.utils.MyToast;
 import com.yanzhenjie.permission.Action;
@@ -61,18 +64,16 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
     private TextView mLoginBtn;
     private PersonalInfoPresenterImpl mPersonalInfoPresenter;
 
-    //调用照相机返回图片文件
-    private File tempFile;
-    private String mAuthority = "";
-    private String mLocalHeadIconPath;
     private MyToast mMyToast;
     private boolean mIsHeadNewCreate = false;
+
+    private String mTmpPicture = Environment.getExternalStorageDirectory().getPath()+File.separator +  System.currentTimeMillis() + ".jpg";
+    private String mTmpOutPicture = Environment.getExternalStorageDirectory().getPath()+File.separator +  System.currentTimeMillis() + "out.jpg";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_info);
-        mLocalHeadIconPath = getFilesDir() +  Constants.LOCAL_HEAD_ICON_FILE_NAME;
         mPersonalInfoPresenter = new PersonalInfoPresenterImpl(this);
         setInitToolBar(getString(R.string.personal_info));
         mNickName = findViewById(R.id.nicheng_text);
@@ -85,7 +86,6 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
         mSexLayout.setOnClickListener(this);
         mImageUserIcon.setOnClickListener(this);
         mLoginBtn.setOnClickListener(this);
-        mAuthority = getPackageName() + ".chosehead";
         mMyToast = new MyToast(this);
 
     }
@@ -134,12 +134,11 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
         mPersonalInfoPresenter.onDetach();
     }
 
-    private void initHead(){
-        File file = new File(mLocalHeadIconPath);
-        if(file.exists()){
+    private void initHead(File file){
+        if(file != null && file.exists()) {
             mIsHeadNewCreate = true;
-            GlideUtil.setCircleImageRes(this,mImageUserIcon,file,R.drawable.icon_head);
-            mPersonalInfoPresenter.modifyUserHead(mLocalHeadIconPath);
+            GlideUtil.setCircleImageRes(this, mImageUserIcon, file, R.drawable.icon_head);
+            mPersonalInfoPresenter.modifyUserHead(mTmpOutPicture);
         }
     }
 
@@ -163,37 +162,34 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        switch (requestCode){
-            case CAMERA_REQUEST_CODE:   //调用相机后返回
-                if (resultCode == RESULT_OK) {
-                    //用相机返回的照片去调用剪裁也需要对Uri进行处理
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        Uri contentUri = FileProvider.getUriForFile(this, mAuthority, tempFile);
-                        cropPhoto(contentUri);
-                    } else {
-                        cropPhoto(Uri.fromFile(tempFile));
-                    }
-                }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        Uri filtUri;
+        File outputFile = new File(mTmpOutPicture);//裁切后输出的图片
+//        File outputFile = new File("/mnt/sdcard/tupian_out.jpg");//裁切后输出的图片
+        switch (requestCode) {
+            case CameraAlbumUtil.REQUEST_CODE_PAIZHAO:
+                //拍照完成，进行图片裁切
+                File file = new File(mTmpPicture);
+//                File file = new File("/mnt/sdcard/tupian.jpg");
+                filtUri = FileProviderUtils.uriFromFile(this, file);
+                CameraAlbumUtil.Caiqie(this, filtUri, outputFile);
                 break;
-            case ALBUM_REQUEST_CODE:    //调用相册后返回
-                if (resultCode == RESULT_OK) {
-                    Uri uri = intent.getData();
-                    cropPhoto(uri);
-                }
-                break;
-            case CROP_REQUEST_CODE:     //调用剪裁后返回
-                if(intent == null){
+            case CameraAlbumUtil.REQUEST_CODE_ZHAOPIAN:
+                //相册选择图片完毕，进行图片裁切
+                if (data == null ||  data.getData()==null) {
                     return;
                 }
-                Bundle bundle = intent.getExtras();
-                if (bundle != null) {
-                    //在这里获得了剪裁后的Bitmap对象，可以用于上传
-                    Bitmap image = bundle.getParcelable("data");
-                    saveImage(image);
-                    initHead();
-                }
+                filtUri = data.getData();
+                CameraAlbumUtil.Caiqie(this, filtUri, outputFile);
+                break;
+            case CameraAlbumUtil.REQUEST_CODE_CAIQIE:
+                //图片裁切完成，显示裁切后的图片
+                initHead(outputFile);
                 break;
         }
 
@@ -314,103 +310,41 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
      * 从相机获取图片
      */
     private void getPicFromCamera() {
-
-        //用于保存调用相机拍照后所生成的文件
-        tempFile = new File(Environment.getExternalStorageDirectory().getPath(), System.currentTimeMillis() + ".jpg");
-        //跳转到调用系统相机
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        //判断版本
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {   //如果在Android7.0以上,使用FileProvider获取Uri
-            intent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            Uri contentUri = FileProvider.getUriForFile(this, mAuthority, tempFile);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
-            Log.e("dasd", contentUri.toString());
-        } else {    //否则使用Uri.fromFile(file)方法获取Uri
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
-        }
-        startActivityForResult(intent, CAMERA_REQUEST_CODE);
+        CameraAlbumUtil.paizhao(this, new File(mTmpPicture));
     }
 
     /**
      * 从相册获取图片
      */
     private void getPicFromAlbm() {
-
-        Intent photoPickerIntent;
-        if (Build.VERSION.SDK_INT < 19) {
-            photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
-//            intentFromGallery.setType("image/*");
-        } else {
-            photoPickerIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if(AndPermission.hasPermissions(this,Permission.WRITE_EXTERNAL_STORAGE)) {
+            CameraAlbumUtil.zhaopian(this);
+        }else {
+            requestStoragePermission();
         }
-
-//        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, ALBUM_REQUEST_CODE);
     }
-
-    /**
-     * 裁剪图片
-     */
-    private void cropPhoto(Uri uri) {
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        intent.setDataAndType(uri, "image/*");
-        intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-
-        intent.putExtra("outputX", 300);
-        intent.putExtra("outputY", 300);
-        intent.putExtra("return-data", true);
-
-        startActivityForResult(intent, CROP_REQUEST_CODE);
-    }
-
 
     private void requestStoragePermission(){
         AndPermission.with(this)
                 .runtime()
-                .permission(Permission.WRITE_EXTERNAL_STORAGE,Permission.CAMERA)
+                .permission(Permission.WRITE_EXTERNAL_STORAGE)
                 .rationale(new RuntimeRationale())
                 .onGranted(new Action<List<String>>() {
                     @Override
                     public void onAction(List<String> permissions) {
-
+                        getPicFromAlbm();
                     }
                 })
                 .onDenied(new Action<List<String>>() {
                     @Override
                     public void onAction(@NonNull List<String> permissions) {
                         if (AndPermission.hasAlwaysDeniedPermission(PersonalInfoActivity.this, permissions)) {
-
+                            showSettingDialog(PersonalInfoActivity.this, permissions);
                         }
                     }
                 })
                 .start();
 
-    }
-
-    private void saveImage(Bitmap bmp) {
-        if(bmp == null){
-            return ;
-        }
-        File file = new File(mLocalHeadIconPath);
-        if(file.exists()){
-            file.delete();
-        }
-
-        try {
-            file.createNewFile();
-            FileOutputStream fos = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            fos.flush();
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        bmp.recycle();
     }
 
     private void startLogin(){

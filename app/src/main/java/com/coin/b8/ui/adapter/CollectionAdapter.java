@@ -2,6 +2,7 @@ package com.coin.b8.ui.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,7 +84,12 @@ public class CollectionAdapter extends RecyclerView.Adapter{
         if(collectionVH != null ){
             int radius = collectionVH.itemView.getContext().getResources().getDimensionPixelSize(R.dimen.dp_4);
             collectionVH.title.setText(dataBean.getTitle() );
-            collectionVH.time.setText(CommonUtils.millis2String(dataBean.getCreateTime(),DEFAULT_FORMAT));
+            if(TextUtils.isEmpty(dataBean.getShowPubTime())){
+                collectionVH.time.setText(CommonUtils.millis2String(dataBean.getCreateTime(),DEFAULT_FORMAT));
+            }else {
+                collectionVH.time.setText(dataBean.getShowPubTime());
+            }
+
             GlideUtil.setCornerImageRes(holder.itemView.getContext(),
                     collectionVH.mImageView,
                     dataBean.getPic(),

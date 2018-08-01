@@ -160,7 +160,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     return;
                 }
                 if(!CommonUtils.isEmail(user)){
-                    showToast("请输入正确的邮箱地址");
+                    showToast("账号格式错误");
                     return;
                 }
 
@@ -265,7 +265,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     return;
                 }
                 if(!CommonUtils.isEmail(email)){
-                    showToast("请输入正确的邮箱地址");
+                    showToast("账号格式错误");
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
@@ -329,7 +329,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 showToast("登录成功");
                 finish();
             }else {
-                showToast("登录失败");
+                showToast(loginResponseInfo.getMessage());
             }
         }
     }
