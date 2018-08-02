@@ -17,6 +17,7 @@ import com.coin.b8.help.PreferenceHelper;
 import com.coin.b8.model.SelectCoinItemModel;
 import com.coin.b8.ui.activity.NativeDetailActivity;
 import com.coin.b8.ui.activity.SelectCoinTypeListActivity;
+import com.coin.b8.utils.CommonUtils;
 import com.coin.b8.utils.EventReportUtil;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -117,7 +118,7 @@ public class SelectCoinListAdapter extends RecyclerView.Adapter{
                             }
                             String token = PreferenceHelper.getToken(context);
                             if(!TextUtils.isEmpty(token)){
-                                stringBuilder.append("&token=").append(token);
+                                stringBuilder.append("&token=").append(CommonUtils.encode(token));
                             }
 
                             String web_url =  stringBuilder.toString();

@@ -122,7 +122,7 @@ public class HomeDynamicImportant extends BaseFragment implements IDynamicImport
         }
         String token = PreferenceHelper.getToken(context);
         if(!TextUtils.isEmpty(token)){
-            stringBuilder.append("&token=").append(token);
+            stringBuilder.append("&token=").append(CommonUtils.encode(token));
         }
         return stringBuilder.toString();
     }

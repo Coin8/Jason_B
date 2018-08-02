@@ -153,7 +153,7 @@ public class DynamicImportNewsAdapter extends RecyclerView.Adapter{
                     }
                     String token = PreferenceHelper.getToken(context);
                     if(!TextUtils.isEmpty(token)){
-                        stringBuilder.append("&token=").append(token);
+                        stringBuilder.append("&token=").append(CommonUtils.encode(token));
                     }
 
                     String web_url =  stringBuilder.toString();
