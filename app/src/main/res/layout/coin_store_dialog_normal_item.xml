@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/store_item_id"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/delete_btn"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_centerVertical="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/coin_store_delete_icon"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/delete_btn"
+        android:layout_marginLeft="15dp"
+        android:gravity="center_vertical"
+        android:text="hello"
+        android:textColor="#191919"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/status_btn"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/coin_store_state_selector" />
+
+    <TextView
+        android:id="@+id/rename_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:gravity="center_vertical"
+        android:textColor="#426AB3"
+        android:textSize="16sp"
+        android:text="重命名"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_width"
+        android:layout_marginLeft="15dp"
+        android:background="@color/lineColor"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

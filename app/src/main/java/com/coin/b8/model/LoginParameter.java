@@ -12,6 +12,24 @@ public class LoginParameter {
 
     private String email;
     private String password;
+    private String contact;
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
 
     public String getEmail() {
         return email;

@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.coin.b8.R;
 import com.coin.b8.constant.Constants;
 import com.coin.b8.help.PreferenceHelper;
+import com.coin.b8.utils.ActivityManagerUtil;
 import com.coin.b8.utils.CommonUtils;
 import com.coin.b8.utils.PhoneUtils;
 import com.jaeger.library.StatusBarUtil;
@@ -46,7 +47,15 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActivityManagerUtil.addActivityToList(this);
         this.initSystemBar();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityManagerUtil.removeActivityFromList(this);
     }
 
     @Override

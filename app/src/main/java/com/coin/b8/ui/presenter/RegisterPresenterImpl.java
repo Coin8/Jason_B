@@ -18,22 +18,26 @@ public class RegisterPresenterImpl {
         mView = view;
     }
 
-    public void sendVerifyCode(String email,int type){
+    public void sendVerifyCode(String email,String contact,int type){
         DisposableObserver<VerifycodeResponseModel> disposableObserver = new DisposableObserver<VerifycodeResponseModel>() {
             @Override
             public void onNext(VerifycodeResponseModel verifycodeResponseModel) {
                 if(mView != null){
-                    if(verifycodeResponseModel != null && verifycodeResponseModel.isResult() == true){
+                    if(verifycodeResponseModel == null ){
+                        mView.onVerifyCodeFail("发送验证码失败");
+                        return;
+                    }
+                    if(verifycodeResponseModel.isResult() == true){
                         mView.onVerifyCodeSuccess();
                     }else {
-                        mView.onVerifyCodeFail();
+                        mView.onVerifyCodeFail(verifycodeResponseModel.getMessage());
                     }
                 }
             }
 
             @Override
             public void onError(Throwable e) {
-                mView.onVerifyCodeFail();
+                mView.onVerifyCodeFail("发送验证码失败");
             }
 
             @Override
@@ -42,11 +46,43 @@ public class RegisterPresenterImpl {
             }
         };
 
-        B8Api.sendVerifyCode(disposableObserver,email,type);
+        B8Api.sendVerifyCode(disposableObserver,email,contact,type);
         mCompositeDisposable.add(disposableObserver);
     }
 
-    public void register(String email,String password,String code){
+    public void checkPhoneCode(String contact,String verifyCode, int verifyType){
+        DisposableObserver<VerifycodeResponseModel> disposableObserver = new DisposableObserver<VerifycodeResponseModel>() {
+            @Override
+            public void onNext(VerifycodeResponseModel verifycodeResponseModel) {
+                if(mView != null){
+                    if(verifycodeResponseModel == null ) {
+                        mView.onCheckVerifyCodeFail("校验失败");
+                        return;
+                    }
+                    if(verifycodeResponseModel.isResult() == true){
+                        mView.onCheckVerifyCodeSuccess();
+                    }else {
+                        mView.onCheckVerifyCodeFail(verifycodeResponseModel.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mView.onCheckVerifyCodeFail("校验失败");
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+
+        B8Api.checkVerifyCode(disposableObserver,contact,verifyCode,verifyType);
+        mCompositeDisposable.add(disposableObserver);
+    }
+
+    public void register(String email,String contact,String password,String code){
         DisposableObserver<RegisterResponseInfo> disposableObserver = new DisposableObserver<RegisterResponseInfo>() {
             @Override
             public void onNext(RegisterResponseInfo registerResponseInfo) {
@@ -68,7 +104,7 @@ public class RegisterPresenterImpl {
 
             }
         };
-        B8Api.getRegisterInfo(disposableObserver,email,password,code);
+        B8Api.getRegisterInfo(disposableObserver,email,contact,password,code);
         mCompositeDisposable.add(disposableObserver);
     }
 

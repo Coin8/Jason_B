@@ -2,6 +2,7 @@ package com.coin.b8.ui.presenter;
 
 import com.coin.b8.http.B8Api;
 import com.coin.b8.model.B8UpdateInfo;
+import com.coin.b8.model.CoinStoreListResponse;
 import com.coin.b8.model.UserInfoResponse;
 import com.coin.b8.ui.iView.IHomeMine;
 import com.coin.b8.utils.AppUtil;
@@ -64,6 +65,31 @@ public class HomeMinePresenterImpl {
             }
         };
         B8Api.getUserInfo(disposableObserver,uid);
+        mCompositeDisposable.add(disposableObserver);
+    }
+
+    public void getCoinStoreList(){
+        DisposableObserver<CoinStoreListResponse> disposableObserver = new DisposableObserver<CoinStoreListResponse>() {
+            @Override
+            public void onNext(CoinStoreListResponse coinStoreListResponse) {
+                if(mView != null){
+                    mView.onCoinStoreList(coinStoreListResponse);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if(mView != null){
+                    mView.onCoinStoreListError();
+                }
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+        B8Api.getCoinStoreList(disposableObserver);
         mCompositeDisposable.add(disposableObserver);
     }
 

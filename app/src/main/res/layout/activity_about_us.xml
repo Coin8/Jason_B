@@ -9,7 +9,7 @@
         android:id="@+id/top_line"
         android:layout_width="match_parent"
         android:layout_height="@dimen/line_width"
-        android:background="@color/top_line_color"
+        android:background="@color/navigation_line_color"
         android:layout_below="@id/toolbar"/>
 
     <ImageView

@@ -93,8 +93,6 @@ public class ShareDialogFragment extends DialogFragment implements View.OnClickL
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
         params.height = WindowManager.LayoutParams.MATCH_PARENT;
         window.setAttributes(params);
-
-
     }
 
 

@@ -16,22 +16,26 @@ public class ForgetPasswordPresenterImpl extends BasePresenterImpl<IForgetPasswo
         mView = iForgetPasswordView;
     }
 
-    public void sendVerifyCode(String email,int type){
+    public void checkPhoneCode(String contact,String verifyCode, int verifyType){
         DisposableObserver<VerifycodeResponseModel> disposableObserver = new DisposableObserver<VerifycodeResponseModel>() {
             @Override
             public void onNext(VerifycodeResponseModel verifycodeResponseModel) {
                 if(mView != null){
-                    if(verifycodeResponseModel != null && verifycodeResponseModel.isResult() == true){
-                        mView.onVerifyCodeSuccess();
+                    if(verifycodeResponseModel == null ) {
+                        mView.onCheckVerifyCodeFail("校验失败");
+                        return;
+                    }
+                    if(verifycodeResponseModel.isResult() == true){
+                        mView.onCheckVerifyCodeSuccess();
                     }else {
-                        mView.onVerifyCodeFail();
+                        mView.onCheckVerifyCodeFail(verifycodeResponseModel.getMessage());
                     }
                 }
             }
 
             @Override
             public void onError(Throwable e) {
-                mView.onVerifyCodeFail();
+                mView.onCheckVerifyCodeFail("校验失败");
             }
 
             @Override
@@ -40,11 +44,44 @@ public class ForgetPasswordPresenterImpl extends BasePresenterImpl<IForgetPasswo
             }
         };
 
-        B8Api.sendVerifyCode(disposableObserver,email,type);
+        B8Api.checkVerifyCode(disposableObserver,contact,verifyCode,verifyType);
         mCompositeDisposable.add(disposableObserver);
     }
 
-    public void resetPassword(String email,String password,String verifyCode){
+
+    public void sendVerifyCode(String email,String contact,int type){
+        DisposableObserver<VerifycodeResponseModel> disposableObserver = new DisposableObserver<VerifycodeResponseModel>() {
+            @Override
+            public void onNext(VerifycodeResponseModel verifycodeResponseModel) {
+                if(mView != null){
+                    if(verifycodeResponseModel == null){
+                        mView.onVerifyCodeFail("发送失败");
+                        return;
+                    }
+                    if(verifycodeResponseModel.isResult() == true){
+                        mView.onVerifyCodeSuccess();
+                    }else {
+                        mView.onVerifyCodeFail(verifycodeResponseModel.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mView.onVerifyCodeFail("发送失败");
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+
+        B8Api.sendVerifyCode(disposableObserver,email,contact,type);
+        mCompositeDisposable.add(disposableObserver);
+    }
+
+    public void resetPassword(String email,String contact,String password,String verifyCode){
         DisposableObserver<ResetPasswordResponseInfo> disposableObserver = new DisposableObserver<ResetPasswordResponseInfo>() {
             @Override
             public void onNext(ResetPasswordResponseInfo resetPasswordResponseInfo) {
@@ -66,7 +103,7 @@ public class ForgetPasswordPresenterImpl extends BasePresenterImpl<IForgetPasswo
             }
         };
 
-        B8Api.resetPassword(disposableObserver,email,password,verifyCode);
+        B8Api.resetPassword(disposableObserver,email,contact,password,verifyCode);
         mCompositeDisposable.add(disposableObserver);
     }
 

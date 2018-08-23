@@ -14,6 +14,8 @@ public class PreferenceHelper {
     private static final String mYaoWenName = "Preference_YaoWen_B8";
     private static final String mName = "Preference_B8";
     private static final String KEY_IS_LOGIN = "new_is_login";
+    private static final String KEY_FIST_START = "new_first_start";
+    private static final String KEY_MONEY_DISPLAY = "new_money_display";
     private static final String KEY_UID = "new_uid";
     private static final String KEY_IMEI = "new_imei";
     private static final String KEY_TOKEN = "new_token";
@@ -63,6 +65,31 @@ public class PreferenceHelper {
     }
     private static int getValue(Context context,String key,int value){
         return context.getSharedPreferences(mName,Context.MODE_PRIVATE).getInt(key,value);
+    }
+
+    private static boolean setValue(Context context,String key,boolean value){
+        SharedPreferences.Editor editor = context.getSharedPreferences(mName, Context.MODE_PRIVATE).edit();
+        editor.putBoolean(key, value);
+        return editor.commit();
+    }
+    private static  boolean getValue(Context context,String key,boolean value){
+        return context.getSharedPreferences(mName,Context.MODE_PRIVATE).getBoolean(key,value);
+    }
+
+    public static boolean setFirstStart(Context context,boolean value){
+        return setValue(context,KEY_FIST_START,value);
+    }
+
+    public static boolean getFirstStart(Context context){
+        return getValue(context,KEY_FIST_START,true);
+    }
+
+    public static boolean setMoneyDisplay(Context context,boolean value){
+        return setValue(context,KEY_MONEY_DISPLAY,value);
+    }
+
+    public static boolean getMoneyDisplay(Context context){
+        return getValue(context,KEY_MONEY_DISPLAY,true);
     }
 
     public static boolean setUid(Context context,String uid){

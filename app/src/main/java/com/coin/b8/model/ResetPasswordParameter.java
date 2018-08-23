@@ -14,6 +14,15 @@ public class ResetPasswordParameter {
     private String email;
     private String password;
     private String verifyCode;
+    private String contact;
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
 
     public String getEmail() {
         return email;

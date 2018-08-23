@@ -15,6 +15,7 @@ import android.view.View;
 import com.coin.b8.R;
 import com.coin.b8.model.MarketListSearchResponse;
 import com.coin.b8.ui.adapter.HomeMarketNormalAdapter;
+import com.coin.b8.ui.divider.RecycleViewDivider;
 import com.coin.b8.ui.iView.IHomeMarketNormalView;
 import com.coin.b8.ui.presenter.HomeMarketNormalPresenter;
 import com.coin.b8.ui.view.BlankView;
@@ -139,13 +140,18 @@ public class HomeMarketValueFragment extends BaseFragment implements IHomeMarket
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-                outRect.bottom = getResources().getDimensionPixelSize(R.dimen.line_width);
-            }
-        });
+//        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+//            @Override
+//            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+//                super.getItemOffsets(outRect, view, parent, state);
+//                outRect.bottom = getResources().getDimensionPixelSize(R.dimen.line_width);
+//            }
+//        });
+        mRecyclerView.addItemDecoration(new RecycleViewDivider(getContext(),
+                LinearLayoutManager.VERTICAL,
+                getResources().getDimensionPixelSize(R.dimen.line_width),
+                getResources().getColor(R.color.middle_line_color)
+        ));
         mHomeMarketValueAdapter = new HomeMarketNormalAdapter();
         mRecyclerView.setAdapter(mHomeMarketValueAdapter);
 

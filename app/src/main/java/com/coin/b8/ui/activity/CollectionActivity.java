@@ -23,6 +23,7 @@ import com.coin.b8.model.CancelCollectionResponse;
 import com.coin.b8.model.CollectionListInfoResponse;
 import com.coin.b8.ui.adapter.CollectionAdapter;
 import com.coin.b8.ui.dialog.LoadingDialog;
+import com.coin.b8.ui.divider.RecycleViewDivider;
 import com.coin.b8.ui.iView.IMyCollectionView;
 import com.coin.b8.ui.presenter.MyCollectionPresenterImpl;
 import com.coin.b8.ui.view.BlankView;
@@ -70,13 +71,19 @@ public class CollectionActivity extends BaseActivity implements IMyCollectionVie
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setAdapter(mCollectionAdapter);
-        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-                outRect.bottom = getResources().getDimensionPixelSize(R.dimen.line_width);
-            }
-        });
+//        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+//            @Override
+//            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+//                super.getItemOffsets(outRect, view, parent, state);
+//                outRect.bottom = getResources().getDimensionPixelSize(R.dimen.line_width);
+//            }
+//        });
+
+        mRecyclerView.addItemDecoration(new RecycleViewDivider(this,
+                LinearLayoutManager.VERTICAL,
+                getResources().getDimensionPixelSize(R.dimen.line_width),
+                getResources().getColor(R.color.middle_line_color)
+        ));
         mCollectionAdapter.setItemClickListen(new CollectionAdapter.OnItemClickListen() {
             @Override
             public void onItemClick(CollectionListInfoResponse.DataBean dataBean, int position) {

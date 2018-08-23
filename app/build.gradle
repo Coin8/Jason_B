@@ -285,6 +285,7 @@ dependencies {
     compile 'com.youth.banner:banner:1.4.10'
     //微博sdk
     compile 'com.sina.weibo.sdk:core:4.2.7:openDefaultRelease@aar'
+    implementation 'com.android.support:cardview-v7:27.1.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

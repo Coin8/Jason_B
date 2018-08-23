@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.coin.b8.R;
@@ -63,6 +64,7 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
     private ImageView mImageUserIcon;
     private TextView mLoginBtn;
     private PersonalInfoPresenterImpl mPersonalInfoPresenter;
+    private RelativeLayout mHeadLayout;
 
     private MyToast mMyToast;
     private boolean mIsHeadNewCreate = false;
@@ -76,6 +78,7 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
         setContentView(R.layout.activity_personal_info);
         mPersonalInfoPresenter = new PersonalInfoPresenterImpl(this);
         setInitToolBar(getString(R.string.personal_info));
+        mHeadLayout = findViewById(R.id.head_layout);
         mNickName = findViewById(R.id.nicheng_text);
         mSex = findViewById(R.id.xb_text);
         mNickNameLayout = findViewById(R.id.nick_name_layout);
@@ -84,7 +87,8 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
         mLoginBtn = findViewById(R.id.login_btn);
         mNickNameLayout.setOnClickListener(this);
         mSexLayout.setOnClickListener(this);
-        mImageUserIcon.setOnClickListener(this);
+        mHeadLayout.setOnClickListener(this);
+//        mImageUserIcon.setOnClickListener(this);
         mLoginBtn.setOnClickListener(this);
         mMyToast = new MyToast(this);
 
@@ -152,7 +156,7 @@ public class PersonalInfoActivity extends BaseActivity implements View.OnClickLi
             case R.id.sex_layout:
                 showDialogSex();
                 break;
-            case R.id.user_icon:
+            case R.id.head_layout:
                 showDialogAlbum();
                 break;
             case R.id.login_btn:

@@ -93,6 +93,11 @@
             android:screenOrientation="portrait"/>
 
         <activity
+            android:name=".ui.activity.LoginForPhoneCodeActivity"
+            android:theme="@style/BaseAppTheme"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name=".ui.activity.RegisterActivity"
             android:theme="@style/BaseAppTheme"
             android:screenOrientation="portrait"/>

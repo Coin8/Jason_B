@@ -56,12 +56,13 @@
     <string name="mine_name_default">无</string>
     <string name="unlogin">未登录</string>
     <string name="about_us">关于我们</string>
-    <string name="personal_info">个人中心</string>
+    <string name="personal_info">个人信息</string>
     <string name="b8_login">登录</string>
     <string name="b8_register">注册</string>
-    <string name="login_account_hint">邮箱</string>
+    <string name="complete">完成</string>
+    <string name="login_account_hint">输入11位手机号</string>
     <string name="login_password_hint">密码</string>
-    <string name="register_password">密码(6-32位)</string>
+    <string name="register_password">设置新密码8-16位字母数字组合</string>
     <string name="register_password_confirm">确认密码</string>
     <string name="register_submit">提交</string>
     <string name="b8_forget_password">忘记密码</string>

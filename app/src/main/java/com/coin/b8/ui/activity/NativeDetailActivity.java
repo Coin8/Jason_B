@@ -33,6 +33,7 @@ import com.coin.b8.model.B8UpdateInfo;
 import com.coin.b8.model.FeedBackParameter;
 import com.coin.b8.model.FeedBackResult;
 import com.coin.b8.permission.RuntimeRationale;
+import com.coin.b8.ui.dialog.CoinStoreDialog;
 import com.coin.b8.ui.dialog.FeedBackFragment;
 import com.coin.b8.ui.dialog.LoadingDialog;
 import com.coin.b8.ui.dialog.ShareDialogFragment;
@@ -74,6 +75,7 @@ public class NativeDetailActivity extends BaseActivity implements View.OnClickLi
     public static int FILECHOOSER_RESULTCODE = 1;
     public static int FILECHOOSER_RESULTCODE_FOR_ANDROID_5 = 2;
 
+    private View mContentLayout;
     private WebView mWebView;
     private MainPresenterImpl mMainPresenter;
 
@@ -90,6 +92,8 @@ public class NativeDetailActivity extends BaseActivity implements View.OnClickLi
     private String mWebViewUrl;
 
     private boolean mIsLoadError = false;
+
+    private CoinStoreDialog mCoinStoreDialog;
 
     @Override
     public void onUpdateInfo(B8UpdateInfo b8UpdateInfo, boolean auto) {
@@ -310,7 +314,7 @@ public class NativeDetailActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initView() {
-
+        mContentLayout = findViewById(R.id.content_layout);
         mWebView = findViewById(R.id.webView);
         mLoading = findViewById(R.id.layout_loading);
         mBlankView = findViewById(R.id.blank_view);
@@ -331,6 +335,13 @@ public class NativeDetailActivity extends BaseActivity implements View.OnClickLi
             }
 
         });
+
+        mCoinStoreDialog = new CoinStoreDialog(getApplicationContext(),null);
+        mCoinStoreDialog.setEnableSelfUpdate(true);
+    }
+
+    private void showCoinStoreDialog(){
+        mCoinStoreDialog.showDialog(mContentLayout);
     }
 
     private void initWebView() {

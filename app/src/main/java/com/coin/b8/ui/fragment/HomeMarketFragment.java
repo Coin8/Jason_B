@@ -45,7 +45,6 @@ public class HomeMarketFragment extends BaseFragment{
         mViewPager = view.findViewById(R.id.vp_market);
         mSearchBtn = view.findViewById(R.id.btn_search);
 
-
         mTabLayout.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
@@ -66,6 +65,7 @@ public class HomeMarketFragment extends BaseFragment{
         HomeMarketMainAdapter homeMarketMainAdapter = new HomeMarketMainAdapter(getFragmentManager(),list);
         mViewPager.setAdapter(homeMarketMainAdapter);
         mTabLayout.setViewPager(mViewPager);
+        mViewPager.setOffscreenPageLimit(3);
 
         mSearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override

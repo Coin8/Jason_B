@@ -12,6 +12,7 @@ import com.coin.b8.model.BannerResponse;
 import com.coin.b8.model.SelectCoinItemModel;
 import com.coin.b8.model.SelectCoinListResponse;
 import com.coin.b8.ui.adapter.SelectCoinListAdapter;
+import com.coin.b8.ui.divider.RecycleViewDivider;
 import com.coin.b8.ui.iView.ISelectCoinView;
 import com.coin.b8.ui.presenter.SelectCoinPresenterImpl;
 import com.coin.b8.ui.view.BlankView;
@@ -68,13 +69,19 @@ public class HomeSelectCoinFragment extends BaseFragment implements ISelectCoinV
             }
         });
 
-        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
+//        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+//            @Override
+//            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+//                super.getItemOffsets(outRect, view, parent, state);
+//
+//            }
+//        });
 
-            }
-        });
+//        mRecyclerView.addItemDecoration(new RecycleViewDivider(getContext(),
+//                LinearLayoutManager.VERTICAL,
+//                getResources().getDimensionPixelSize(R.dimen.line_width),
+//                getResources().getColor(R.color.middle_line_color)
+//        ));
 
         mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -82,7 +89,6 @@ public class HomeSelectCoinFragment extends BaseFragment implements ISelectCoinV
                 startRefresh(false);
             }
         });
-//        mSmartRefreshLayout.autoRefresh();
         startRefresh(true);
     }
 

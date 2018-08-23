@@ -45,6 +45,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private TextView mForgetTitle;
     private TextView mForgetBtn;
     private TextView mLoginBtn;
+    private TextView mLoginPhoneCodeBtn;
     private LoginPresenterImpl mLoginPresenter;
     private EditTextClear mAccountEdit;
     private EditTextClear mPasswordEdit;
@@ -102,7 +103,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         mToast = findViewById(R.id.toast_text);
         setInitToolBar("");
         mToolbarRightTitle.setVisibility(View.VISIBLE);
-        mToolbarRightTitle.setText("注册账号");
+        mToolbarRightTitle.setText("快速注册");
         mToolbarRightTitle.setOnClickListener(this);
         mForgetTitle = findViewById(R.id.content_title);
         mForgetTitle .setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
@@ -156,11 +157,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 }
                 String user = mAccountEdit.getText().toString();
                 if(TextUtils.isEmpty(user)){
-                    showToast("账号不能为空");
+                    showToast("手机号不能为空");
                     return;
                 }
-                if(!CommonUtils.isEmail(user)){
-                    showToast("账号格式错误");
+                if(!CommonUtils.isMobileSimple(user)){
+                    showToast("手机号格式错误");
                     return;
                 }
 
@@ -183,6 +184,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         mLoginBtn = findViewById(R.id.login_btn);
         mLoginBtn.setOnClickListener(this);
+
+        mLoginPhoneCodeBtn = findViewById(R.id.login_for_phone_code);
+        mLoginPhoneCodeBtn.setOnClickListener(this);
     }
 
 
@@ -230,12 +234,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     }
 
-
-    int count = 0;
     @Override
     public void onClick(View v) {
         if(v == null){
-//            mMyToast.showToast("222222222");
             return;
         }
         String email;
@@ -248,24 +249,24 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 }
                 startRegister();
                 break;
+            case R.id.login_for_phone_code:
+                if(!checkPhonePermission()){
+                    return;
+                }
+                LoginForPhoneCodeActivity.startLoginForPhoneCodeActivity(this);
+                break;
             case R.id.login_btn:
                 if(!checkPhonePermission()){
-//                    mMyToast.showToast("111111111");
                     return;
                 }
                 email = mAccountEdit.getText().toString();
                 password = mPasswordEdit.getText().toString();
                 if(TextUtils.isEmpty(email)){
-//                    Log.e("zy","5555555 = "+ count++);
-
-                    showToast("账号不能为空");
-//                    showToast("账号不能为空");
-//                    ToastUtil.showShortToast("账号不能为空");
-
+                    showToast("手机号不能为空");
                     return;
                 }
-                if(!CommonUtils.isEmail(email)){
-                    showToast("账号格式错误");
+                if(!CommonUtils.isMobileSimple(email)){
+                    showToast("手机号格式错误");
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
@@ -273,7 +274,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     return;
                 }
                 showLoading("正在登录");
-                mLoginPresenter.getLoginInfo(email,password);
+                mLoginPresenter.getLoginInfo(null,password,email,"1");
                 break;
             case R.id.forget_password:
                 if(!checkPhonePermission()){
@@ -311,6 +312,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         mLoadingDialog = new LoadingDialog();
         mLoadingDialog.setLoadingText(text);
         mLoadingDialog.show(getSupportFragmentManager(),"login");
+    }
+
+    @Override
+    public void onVerifyCodeSuccess() {
+
+    }
+
+    @Override
+    public void onVerifyCodeFail(String message) {
+
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.coin.b8.R;
@@ -31,6 +32,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
     private TextView mForgetTitle;
     private TextView mBtnSubmit;
     private TextView mBtnVerifyCode;
+    private TextView mBtnComplete;
     private EditTextClear mAccountEdit;
     private EditTextClear mPasswordEdit;
     private EditTextClear mPasswordConfirmEdit;
@@ -41,6 +43,11 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
     private TextView mToast;
     private ForgetPasswordPresenterImpl mForgetPasswordPresenter;
 
+    private LinearLayout mStep1;
+    private LinearLayout mStep2;
+
+    private String mPhoneNumber;
+    private String mPhoneVerifyCode;
 
 
     private static final int MESSAGE_DISMISS = 100;
@@ -88,8 +95,11 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
         mMyHandler = new MyHandler(this);
         mForgetPasswordPresenter = new ForgetPasswordPresenterImpl(this);
         setInitToolBar("");
+        mStep1 = findViewById(R.id.step1);
+        mStep2 = findViewById(R.id.step2);
         mForgetTitle = findViewById(R.id.content_title);
         mBtnSubmit = findViewById(R.id.submit_btn);
+        mBtnComplete = findViewById(R.id.complete_btn);
         mAccountEdit = findViewById(R.id.login_account_edit);
         mPasswordEdit = findViewById(R.id.login_password_edit);
         mPasswordConfirmEdit = findViewById(R.id.login_password_edit_confirm);
@@ -98,9 +108,10 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
         mForgetTitle .setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
 
         mAccountEdit.setLeftIcon(R.drawable.username_icon);
+        mVerifyCodeEdit.setLeftIcon(R.drawable.verify_icon);
+
         mPasswordEdit.setLeftIcon(R.drawable.password_icon);
         mPasswordConfirmEdit.setLeftIcon(R.drawable.password_icon);
-        mVerifyCodeEdit.setLeftIcon(R.drawable.verify_icon);
 
         TextWatcher textWatcher = new TextWatcher() {
             @Override
@@ -119,30 +130,45 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
             }
         };
 
+        TextWatcher passwordTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String password = mPasswordEdit.getText().toString();
+                String password1 = mPasswordConfirmEdit.getText().toString();
+                if(TextUtils.isEmpty(password)
+                        || TextUtils.isEmpty(password1)){
+                    mBtnComplete.setBackgroundResource(R.drawable.corner_bg_light_personsal);
+                }else {
+                    mBtnComplete.setBackgroundResource(R.drawable.feedback_btn_bg);
+                }
+            }
+        };
+
         mAccountEdit.addTextChangedListener(textWatcher);
-        mPasswordEdit.addTextChangedListener(textWatcher);
-        mPasswordConfirmEdit.addTextChangedListener(textWatcher);
         mVerifyCodeEdit.addTextChangedListener(textWatcher);
 
-        mAccountEdit.setOnFocusChangeListener(this);
-        mPasswordEdit.setOnFocusChangeListener(this);
-        mPasswordConfirmEdit.setOnFocusChangeListener(this);
-        mVerifyCodeEdit.setOnFocusChangeListener(this);
-
+        mPasswordEdit.addTextChangedListener(passwordTextWatcher);
+        mPasswordConfirmEdit.addTextChangedListener(passwordTextWatcher);
 
         mBtnSubmit.setOnClickListener(this);
         mBtnVerifyCode.setOnClickListener(this);
+        mBtnComplete.setOnClickListener(this);
     }
 
     private void checkState(){
         String username = mAccountEdit.getText().toString();
-        String password = mPasswordEdit.getText().toString();
-        String password1 = mPasswordConfirmEdit.getText().toString();
         String verify = mVerifyCodeEdit.getText().toString();
-
         if(TextUtils.isEmpty(username)
-                || TextUtils.isEmpty(password)
-                || TextUtils.isEmpty(password1)
                 || TextUtils.isEmpty(verify)){
             mBtnSubmit.setBackgroundResource(R.drawable.corner_bg_light_personsal);
         }else {
@@ -170,27 +196,39 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
         switch (v.getId()){
             case R.id.submit_btn:
                 email = mAccountEdit.getText().toString();
-                password = mPasswordEdit.getText().toString();
-                password2 = mPasswordConfirmEdit.getText().toString();
                 code = mVerifyCodeEdit.getText().toString();
                 if(TextUtils.isEmpty(email)){
-                    showToast("账号不能为空");
+                    showToast("手机号不能为空");
                     return;
                 }
-                if(!CommonUtils.isEmail(email)){
-                    showToast("账号格式错误");
+                if(!CommonUtils.isMobileSimple(email)){
+                    showToast("手机号格式错误");
                     return;
                 }
+                if(TextUtils.isEmpty(code)){
+                    showToast("验证码不能为空");
+                    return;
+                }
+
+                mPhoneNumber = email;
+                mPhoneVerifyCode = code;
+                showLoading("正在验证");
+                mForgetPasswordPresenter.checkPhoneCode(email,code,2);
+                break;
+            case R.id.complete_btn:
+                password = mPasswordEdit.getText().toString();
+                password2 = mPasswordConfirmEdit.getText().toString();
+
                 if(TextUtils.isEmpty(password)){
                     showToast("密码不能为空");
                     return;
                 }
-                if(password.length() < 6){
-                    showToast("密码不能小于6位");
+                if(password.length() < 8){
+                    showToast("密码不能小于8位");
                     return;
                 }
-                if(password.length() > 32){
-                    showToast("密码不能大于32位");
+                if(password.length() > 16){
+                    showToast("密码不能大于16位");
                     return;
                 }
                 if(!TextUtils.equals(password,password2)){
@@ -198,12 +236,8 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                     return;
                 }
 
-                if(TextUtils.isEmpty(code)){
-                    showToast("验证码不能为空");
-                    return;
-                }
                 showLoading("正在修改");
-                mForgetPasswordPresenter.resetPassword(email,password,code);
+                mForgetPasswordPresenter.resetPassword(null,mPhoneNumber,password,mPhoneVerifyCode);
                 break;
             case R.id.verify_confirm_btn:
                 if(mCodeIsSend){
@@ -211,15 +245,15 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                 }
                 email = mAccountEdit.getText().toString();
                 if(TextUtils.isEmpty(email)){
-                    showToast("账号不能为空");
+                    showToast("手机号不能为空");
                     return;
                 }
-                if(!CommonUtils.isEmail(email)){
-                    showToast("账号格式错误");
+                if(!CommonUtils.isMobileSimple(email)){
+                    showToast("手机号格式错误");
                     return;
                 }
                 showLoading("正在发送");
-                mForgetPasswordPresenter.sendVerifyCode(email,2);
+                mForgetPasswordPresenter.sendVerifyCode(null,email,2);
                 mCodeIsSend = true;
                 mMyCountDownTimer = new MyCountDownTimer(60*1000);
                 mMyCountDownTimer.start();
@@ -240,15 +274,28 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
     }
 
     @Override
+    public void onCheckVerifyCodeSuccess() {
+        hideLoading();
+        mStep1.setVisibility(View.GONE);
+        mStep2.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onCheckVerifyCodeFail(String message) {
+        hideLoading();
+        showToast(message);
+    }
+
+    @Override
     public void onVerifyCodeSuccess() {
         hideLoading();
         showToast("发送成功");
     }
 
     @Override
-    public void onVerifyCodeFail() {
+    public void onVerifyCodeFail(String message) {
         hideLoading();
-        showToast("发送失败");
+        showToast(message);
     }
 
     @Override
@@ -290,11 +337,11 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
         switch (v.getId()){
             case R.id.login_account_edit:
                 if(TextUtils.isEmpty(email)){
-                    showToast("账号不能为空");
+                    showToast("手机号不能为空");
                     return;
                 }
-                if(!CommonUtils.isEmail(email)){
-                    showToast("账号格式错误");
+                if(!CommonUtils.isMobileSimple(email)){
+                    showToast("手机号格式错误");
                     return;
                 }
 
@@ -347,8 +394,8 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                     showToast("验证码不能为空");
                     return;
                 }
-                if(code.length() < 6){
-                    showToast("验证码不能小于6位");
+                if(code.length() < 4){
+                    showToast("验证码不能小于4位");
                     return;
                 }
 

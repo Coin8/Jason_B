@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.coin.b8.R;
 import com.coin.b8.model.SelectCoinTypeListResponse;
 import com.coin.b8.ui.adapter.SelectCoinTypeListAdapter;
+import com.coin.b8.ui.divider.RecycleViewDivider;
 import com.coin.b8.ui.iView.ISelectCoinTypeListView;
 import com.coin.b8.ui.presenter.SelectCoinTypeListPresenter;
 import com.coin.b8.ui.view.BlankView;
@@ -76,13 +77,19 @@ public class SelectCoinTypeListActivity extends BaseActivity implements ISelectC
         mRecyclerView.setAdapter(mSelectCoinTypeListAdapter);
         mSelectCoinTypeListAdapter.setCoinTypeTitle(mCoinTypeTitle);
 
-        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-                outRect.bottom = getResources().getDimensionPixelSize(R.dimen.line_width);
-            }
-        });
+//        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+//            @Override
+//            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+//                super.getItemOffsets(outRect, view, parent, state);
+//                outRect.bottom = getResources().getDimensionPixelSize(R.dimen.line_width);
+//            }
+//        });
+
+        mRecyclerView.addItemDecoration(new RecycleViewDivider(this,
+                LinearLayoutManager.VERTICAL,
+                getResources().getDimensionPixelSize(R.dimen.line_width),
+                getResources().getColor(R.color.middle_line_color)
+        ));
 
         mCoordinatorLayout.setVisibility(View.GONE);
         mBlankView.showLoading();

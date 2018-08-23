@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.coin.b8.R;
@@ -33,7 +34,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private TextView mForgetTitle;
     private TextView mBtnAgreement;
     private AppCompatCheckBox mCheckboxAgreement;
-    private TextView mBtnSubmit;
+    private TextView mBtnNext;
+    private TextView mBtnComplete;
+    private TextView mBtnGoLogin;
     private MyCountDownTimer mMyCountDownTimer;
     private TextView mBtnGetVerifyCode;
     private EditTextClear mAccountEdit;
@@ -44,7 +47,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private boolean mCodeIsSend = false;
     private TextView mToast;
     private LoadingDialog mLoadingDialog;
+    private LinearLayout mStep1Layout;
+    private LinearLayout mStep2Layout;
 
+    private String mPhoneNumber;
+    private String mPhoneVerifyCode;
 
     private static final int MESSAGE_DISMISS = 100;
     private static final int MESSAGE_DELAY_TIME = 2000;
@@ -94,6 +101,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void initView(){
+        mStep1Layout = findViewById(R.id.step1);
+        mStep2Layout = findViewById(R.id.step2);
         mAccountEdit = findViewById(R.id.login_account_edit);
         mPasswordEdit = findViewById(R.id.login_password_edit);
         mPasswordConfirmEdit = findViewById(R.id.login_password_edit_confirm);
@@ -102,7 +111,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         mBtnGetVerifyCode = findViewById(R.id.verify_confirm_btn);
         mBtnAgreement = findViewById(R.id.btn_agreement);
         mCheckboxAgreement = findViewById(R.id.checkbox_agreement);
-        mBtnSubmit = findViewById(R.id.submit_btn);
+        mBtnNext = findViewById(R.id.submit_btn);
+        mBtnComplete = findViewById(R.id.complete_btn);
+        mBtnGoLogin = findViewById(R.id.btn_go_login);
         mForgetTitle = findViewById(R.id.content_title);
         mForgetTitle .setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
 
@@ -129,38 +140,60 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         };
 
         mAccountEdit.addTextChangedListener(textWatcher);
-        mPasswordEdit.addTextChangedListener(textWatcher);
-        mPasswordConfirmEdit.addTextChangedListener(textWatcher);
         mVerifyCodeEdit.addTextChangedListener(textWatcher);
 
-        mAccountEdit.setOnFocusChangeListener(this);
-        mPasswordEdit.setOnFocusChangeListener(this);
-        mPasswordConfirmEdit.setOnFocusChangeListener(this);
-        mVerifyCodeEdit.setOnFocusChangeListener(this);
+
+        TextWatcher passwordTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String password = mPasswordEdit.getText().toString();
+                String password1 = mPasswordConfirmEdit.getText().toString();
+                if(TextUtils.isEmpty(password)
+                        || TextUtils.isEmpty(password1)){
+                    mBtnComplete.setBackgroundResource(R.drawable.corner_bg_light_personsal);
+                }else {
+                    mBtnComplete.setBackgroundResource(R.drawable.feedback_btn_bg);
+                }
+            }
+        };
+
+        mPasswordEdit.addTextChangedListener(passwordTextWatcher);
+        mPasswordConfirmEdit.addTextChangedListener(passwordTextWatcher);
+
+//        mAccountEdit.setOnFocusChangeListener(this);
+//        mPasswordEdit.setOnFocusChangeListener(this);
+//        mPasswordConfirmEdit.setOnFocusChangeListener(this);
+//        mVerifyCodeEdit.setOnFocusChangeListener(this);
 
         mBtnAgreement.setOnClickListener(this);
         mCheckboxAgreement.setOnClickListener(this);
-        mBtnSubmit.setOnClickListener(this);
+        mBtnNext.setOnClickListener(this);
         mBtnGetVerifyCode.setOnClickListener(this);
+        mBtnComplete.setOnClickListener(this);
+        mBtnGoLogin.setOnClickListener(this);
     }
 
     private void checkState(){
         String username = mAccountEdit.getText().toString();
-        String password = mPasswordEdit.getText().toString();
-        String password1 = mPasswordConfirmEdit.getText().toString();
         String verify = mVerifyCodeEdit.getText().toString();
-
         if(!mCheckboxAgreement.isChecked()
                 ||TextUtils.isEmpty(username)
-                || TextUtils.isEmpty(password)
-                || TextUtils.isEmpty(password1)
                 || TextUtils.isEmpty(verify)){
-            mBtnSubmit.setBackgroundResource(R.drawable.corner_bg_light_personsal);
+            mBtnNext.setBackgroundResource(R.drawable.corner_bg_light_personsal);
         }else {
-            mBtnSubmit.setBackgroundResource(R.drawable.feedback_btn_bg);
+            mBtnNext.setBackgroundResource(R.drawable.feedback_btn_bg);
         }
     }
-
 
     @Override
     protected void onDestroy() {
@@ -186,15 +219,15 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 }
                 email = mAccountEdit.getText().toString();
                 if(TextUtils.isEmpty(email)){
-                    showToast("账号不能为空");
+                    showToast("手机号不能为空");
                     return;
                 }
-                if(!CommonUtils.isEmail(email)){
-                    showToast("账号格式错误");
+                if(!CommonUtils.isMobileSimple(email)){
+                    showToast("手机号格式错误");
                     return;
                 }
                 showLoading("正在发送");
-                mRegisterPresenter.sendVerifyCode(email,1);
+                mRegisterPresenter.sendVerifyCode(null,email,1);
                 mCodeIsSend = true;
                 mMyCountDownTimer = new MyCountDownTimer(60*1000);
                 mMyCountDownTimer.start();
@@ -207,31 +240,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     return;
                 }
                 email = mAccountEdit.getText().toString();
-                password = mPasswordEdit.getText().toString();
-                password2 = mPasswordConfirmEdit.getText().toString();
                 code = mVerifyCodeEdit.getText().toString();
                 if(TextUtils.isEmpty(email)){
                     showToast("账号不能为空");
                     return;
                 }
-                if(!CommonUtils.isEmail(email)){
-                    showToast("账号格式错误");
-                    return;
-                }
-                if(TextUtils.isEmpty(password)){
-                    showToast("密码不能为空");
-                    return;
-                }
-                if(password.length() < 6){
-                    showToast("密码不能小于6位");
-                    return;
-                }
-                if(password.length() > 32){
-                    showToast("密码不能大于32位");
-                    return;
-                }
-                if(!TextUtils.equals(password,password2)){
-                    showToast("两次密码不一样");
+                if(!CommonUtils.isMobileSimple(email)){
+                    showToast("手机号格式错误");
                     return;
                 }
 
@@ -239,11 +254,39 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     showToast("验证码不能为空");
                     return;
                 }
-                showLoading("正在注册");
-                mRegisterPresenter.register(email,password,code);
+                mPhoneNumber = email;
+                mPhoneVerifyCode = code;
+                showLoading("正在验证");
+                mRegisterPresenter.checkPhoneCode(email,code,1);
                 break;
             case R.id.checkbox_agreement:
                 checkState();
+                break;
+            case R.id.complete_btn:
+                password = mPasswordEdit.getText().toString();
+                password2 = mPasswordConfirmEdit.getText().toString();
+                if(TextUtils.isEmpty(password)){
+                    showToast("密码不能为空");
+                    return;
+                }
+                if(password.length() < 8){
+                    showToast("密码不能小于8位");
+                    return;
+                }
+                if(password.length() > 16){
+                    showToast("密码不能大于16位");
+                    return;
+                }
+                if(!TextUtils.equals(password,password2)){
+                    showToast("两次密码不一样");
+                    return;
+                }
+                showLoading("正在注册");
+                mRegisterPresenter.register(null,mPhoneNumber,password,mPhoneVerifyCode);
+                break;
+
+            case R.id.btn_go_login:
+                finish();
                 break;
         }
 
@@ -264,6 +307,20 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         mLoadingDialog.setLoadingText(text);
         mLoadingDialog.show(getSupportFragmentManager(),"register");
     }
+
+    @Override
+    public void onCheckVerifyCodeSuccess() {
+        hideLoading();
+        mStep1Layout.setVisibility(View.GONE);
+        mStep2Layout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onCheckVerifyCodeFail(String message) {
+        hideLoading();
+        showToast(message);
+    }
+
     @Override
     public void onVerifyCodeSuccess() {
         hideLoading();
@@ -271,9 +328,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
-    public void onVerifyCodeFail() {
+    public void onVerifyCodeFail(String message) {
         hideLoading();
-        showToast("发送失败");
+        showToast(message);
     }
 
     @Override
@@ -286,7 +343,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             }else {
                 showToast(registerResponseInfo.getMessage());
             }
-
         }
     }
 
@@ -318,11 +374,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         switch (v.getId()){
             case R.id.login_account_edit:
                 if(TextUtils.isEmpty(email)){
-                    showToast("账号不能为空");
+                    showToast("手机号不能为空");
                     return;
                 }
-                if(!CommonUtils.isEmail(email)){
-                    showToast("账号格式错误");
+                if(!CommonUtils.isMobileSimple(email)){
+                    showToast("手机号格式错误");
                     return;
                 }
 
@@ -396,9 +452,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             mBtnGetVerifyCode.setText(s);
         }
 
-        /**
-         * Execute different action according to tagForCountDownTimer when countdown timer is done.
-         */
         @Override
         public void onFinish() {
             mBtnGetVerifyCode.setText("重新发送");

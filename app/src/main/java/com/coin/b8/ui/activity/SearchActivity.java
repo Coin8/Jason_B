@@ -28,6 +28,7 @@ import com.coin.b8.model.MarketListSearchResponse;
 import com.coin.b8.ui.adapter.SearchAdapter;
 import com.coin.b8.ui.adapter.SearchResultAdapter;
 import com.coin.b8.ui.dialog.LoadingDialog;
+import com.coin.b8.ui.divider.RecycleViewDivider;
 import com.coin.b8.ui.iView.ISearchView;
 import com.coin.b8.ui.presenter.SearchPresenterImpl;
 import com.coin.b8.ui.view.BlankView;
@@ -164,13 +165,18 @@ public class SearchActivity extends BaseActivity implements ISearchView{
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(this);
         linearLayoutManager1.setOrientation(LinearLayoutManager.VERTICAL);
         mSearchResultRecyclerView.setLayoutManager(linearLayoutManager1);
-        mSearchResultRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-                outRect.bottom = getResources().getDimensionPixelSize(R.dimen.line_width);
-            }
-        });
+//        mSearchResultRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+//            @Override
+//            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+//                super.getItemOffsets(outRect, view, parent, state);
+//                outRect.bottom = getResources().getDimensionPixelSize(R.dimen.line_width);
+//            }
+//        });
+        mSearchResultRecyclerView.addItemDecoration(new RecycleViewDivider(this,
+                LinearLayoutManager.VERTICAL,
+                getResources().getDimensionPixelSize(R.dimen.line_width),
+                getResources().getColor(R.color.middle_line_color)
+        ));
         mSearchResultAdapter = new SearchResultAdapter();
         mSearchResultRecyclerView.setAdapter(mSearchResultAdapter);
         mBlankView = findViewById(R.id.search_blank_view);

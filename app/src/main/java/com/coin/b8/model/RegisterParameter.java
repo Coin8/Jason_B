@@ -14,6 +14,15 @@ public class RegisterParameter {
     private String email;
     private String verifyCode;
     private String password;
+    private String contact;
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
 
     public String getEmail() {
         return email;

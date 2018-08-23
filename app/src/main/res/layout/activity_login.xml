@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="43dp"
-            android:hint="账号/邮箱"
+            android:hint="请使用手机号登录"
             android:textColorHint="@color/et_text_hit"
             android:textColor="@color/title_text_color"
             android:textSize="16sp"
@@ -40,7 +40,8 @@
             android:drawableLeft="@drawable/username_icon"
             android:drawablePadding="15dp"
             android:background="@null"
-            android:digits="@string/rule_text"/>
+            android:digits="@string/rule_number_text"
+            android:inputType="number"/>
 
         <View
             android:layout_width="match_parent"
@@ -76,16 +77,35 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"/>
 
-        <TextView
-            android:id="@+id/forget_password"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="30dp"
+            android:orientation="horizontal"
             android:layout_marginTop="15dp"
-            android:layout_gravity="right"
-            android:text="忘记密码"
-            android:textSize="12sp"
-            android:textColor="#163b7d"/>
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp">
+
+            <TextView
+                android:id="@+id/login_for_phone_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="手机验证码登录"
+                android:textSize="12sp"
+                android:textColor="#163b7d"/>
+
+            <TextView
+                android:id="@+id/forget_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="忘记密码？"
+                android:textSize="12sp"
+                android:textColor="#163b7d"/>
+
+        </RelativeLayout>
+
+
 
         <TextView
             android:id="@+id/login_btn"

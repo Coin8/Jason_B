@@ -18,6 +18,7 @@ import com.coin.b8.model.MarketSelfListResponse;
 import com.coin.b8.ui.activity.SearchActivity;
 import com.coin.b8.ui.adapter.HomeMarketSelfAdapter;
 import com.coin.b8.ui.dialog.LoadingDialog;
+import com.coin.b8.ui.divider.RecycleViewDivider;
 import com.coin.b8.ui.iView.IHomeMarketSelfView;
 import com.coin.b8.ui.presenter.HomeMarketSelfPresenter;
 import com.coin.b8.ui.view.BlankView;
@@ -139,13 +140,11 @@ public class HomeMarketSelfFragment extends BaseFragment implements IHomeMarketS
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-                outRect.bottom = getResources().getDimensionPixelSize(R.dimen.line_width);
-            }
-        });
+        mRecyclerView.addItemDecoration(new RecycleViewDivider(getContext(),
+                LinearLayoutManager.VERTICAL,
+                getResources().getDimensionPixelSize(R.dimen.line_width),
+                getResources().getColor(R.color.middle_line_color)
+                ));
         mHomeMarketSelfAdapter = new HomeMarketSelfAdapter();
         mRecyclerView.setAdapter(mHomeMarketSelfAdapter);
 

@@ -16,10 +16,6 @@
         android:textSize="18sp"
         android:background="@color/white"/>
 
-
-
-
-
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"

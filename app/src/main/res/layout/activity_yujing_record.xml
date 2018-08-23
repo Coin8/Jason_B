@@ -11,8 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/line_width"
         android:layout_below="@id/toolbar"
-        android:background="@color/top_line_color"/>
-
+        android:background="@color/navigation_line_color"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview"

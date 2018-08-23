@@ -2,6 +2,7 @@ package com.coin.b8.http;
 
 import com.coin.b8.model.AddMarketSelfResponse;
 import com.coin.b8.model.CancelCollectionResponse;
+import com.coin.b8.model.CoinStoreListResponse;
 import com.coin.b8.model.CollectionListInfoResponse;
 import com.coin.b8.model.CommonResponse;
 import com.coin.b8.model.DeleteYuJingResponse;
@@ -21,6 +22,7 @@ import com.coin.b8.model.RegisterResponseInfo;
 import com.coin.b8.model.ResetPasswordResponseInfo;
 import com.coin.b8.model.SelectCoinListResponse;
 import com.coin.b8.model.SelectCoinTypeListResponse;
+import com.coin.b8.model.ShareCommentResponse;
 import com.coin.b8.model.TestModel;
 import com.coin.b8.model.B8UpdateInfo;
 import com.coin.b8.model.UnLoginUidInfo;
@@ -63,6 +65,13 @@ public interface APIService {
 
     @GET("b/a/verifycode")
     Observable<VerifycodeResponseModel> sendVerifyCode(@Query("email")  String email,
+                                                       @Query("contact")  String contact,
+                                                       @Query("verifyType")  int verifyType);
+
+    @GET("b/a/checkVerifycode")
+    Observable<VerifycodeResponseModel> checkVerifyCode(
+                                                       @Query("contact")  String contact,
+                                                       @Query("verifyCode")  String verifyCode,
                                                        @Query("verifyType")  int verifyType);
 
     @Headers({"Content-type:application/json;charset=UTF-8"})
@@ -282,5 +291,52 @@ public interface APIService {
      */
     @GET("b/a/coin/exchange")
     Observable<ExchangeListResponse> getExchangeList();
+
+    /**
+     * 获取币仓列表
+     * @return
+     */
+    @GET("berich/coinStore")
+    Observable<CoinStoreListResponse> getCoinStoreList();
+
+    /**
+     * 新建币仓
+      * @param name
+     * @return
+     */
+    @POST("berich/coinStore")
+    Observable<CommonResponse> createCoinStore(@Query("name") String name);
+
+    /**
+     * 删除币仓
+     * @param id
+     * @return
+     */
+    @DELETE("berich/coinStore/{id}")
+    Observable<CommonResponse> deleteCoinStore(@Path("id")  long id);
+
+    /**
+     * 币仓重命名
+     * @param id
+     * @param name
+     * @return
+     */
+    @PUT("berich/coinStore")
+    Observable<CommonResponse> renameCoinStore( @Query("id") long id,@Query("name") String name);
+
+    /**
+     * 修改展示仓位
+     * @param id
+     * @return
+     */
+    @PUT("berich/coinStore/changeStatus")
+    Observable<CommonResponse> switchCoinStoreStatus( @Query("id") long id);
+
+    /**
+     * 评语-随机获取一条评语
+     * @return
+     */
+    @GET("b/a/comment/random")
+    Observable<ShareCommentResponse> getShareComment();
 
 }

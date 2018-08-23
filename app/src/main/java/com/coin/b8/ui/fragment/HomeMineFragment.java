@@ -8,7 +8,11 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.coin.b8.R;
@@ -17,6 +21,7 @@ import com.coin.b8.constant.Constants;
 import com.coin.b8.help.PreferenceHelper;
 import com.coin.b8.http.B8Api;
 import com.coin.b8.model.B8UpdateInfo;
+import com.coin.b8.model.CoinStoreListResponse;
 import com.coin.b8.model.FeedBackParameter;
 import com.coin.b8.model.FeedBackResult;
 import com.coin.b8.model.UserInfoResponse;
@@ -24,9 +29,12 @@ import com.coin.b8.ui.activity.BusinessCooperationActivity;
 import com.coin.b8.ui.activity.CollectionActivity;
 import com.coin.b8.ui.activity.HomeActivity;
 import com.coin.b8.ui.activity.LoginActivity;
+import com.coin.b8.ui.activity.NativeDetailActivity;
 import com.coin.b8.ui.activity.PersonalInfoActivity;
 import com.coin.b8.ui.activity.SettingActivity;
 import com.coin.b8.ui.activity.YuJingRecordActivity;
+import com.coin.b8.ui.dialog.CoinStoreDialog;
+import com.coin.b8.ui.dialog.CoinStoreShareDialog;
 import com.coin.b8.ui.dialog.FeedBackFragment;
 import com.coin.b8.ui.dialog.ShareDialogFragment;
 import com.coin.b8.ui.iView.IHomeMine;
@@ -38,6 +46,7 @@ import com.coin.b8.update.IUpdateChecker;
 import com.coin.b8.update.IUpdateParser;
 import com.coin.b8.update.UpdateInfo;
 import com.coin.b8.update.UpdateManager;
+import com.coin.b8.utils.CommonUtils;
 import com.coin.b8.utils.GlideUtil;
 import com.coin.b8.utils.MyToast;
 import com.coin.b8.wxapi.OnResponseListener;
@@ -63,6 +72,27 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
     private TextView mViewUserId;
     private ImageView mUserImageView;
     private MyToast mToast;
+
+    private TextView mTotalProperty;
+    private TextView mTodayIncome;
+    private TextView mTodayIncomeRate;
+    private TextView mCoinStoreShareBtn;
+    private TextView mStoreTitleBtn;
+    private RelativeLayout mCoinStoreLayout;
+    private CoinStoreDialog mCoinStoreDialog;
+    private LinearLayout mStoreBtnLayout;
+    private long mStoreId;
+    private TextView mStoreShareBtn;
+
+    private String mStrIncome = "0";
+    private String mStrIncomeRate = "0%";
+    private String mStrTotalProperty="总资产：0";
+
+    private ImageView mEyeView;
+
+    private boolean mIsMoneyVisiable = false;
+
+
     private HomeMinePresenterImpl mHomeMinePresenter;
     public static HomeMineFragment getInstance() {
         HomeMineFragment fragment = new HomeMineFragment();
@@ -76,6 +106,15 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     protected void initView(View view) {
+        mEyeView = view.findViewById(R.id.eye);
+        mStoreShareBtn = view.findViewById(R.id.share_btn);
+        mStoreBtnLayout = view.findViewById(R.id.btn_store_layout);
+        mCoinStoreLayout = view.findViewById(R.id.coin_store_layout);
+        mStoreTitleBtn = view.findViewById(R.id.btn_store);
+        mCoinStoreShareBtn = view.findViewById(R.id.share_btn);
+        mTotalProperty = view.findViewById(R.id.property);
+        mTodayIncome = view.findViewById(R.id.income);
+        mTodayIncomeRate = view.findViewById(R.id.income_rate);
         mUserLayout = view.findViewById(R.id.user_layout);
         mItemInviteFriend = view.findViewById(R.id.mine_invite_friends);
         mItemCollection = view.findViewById(R.id.mine_collection);
@@ -94,6 +133,7 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
         mItemFeedback.setOnClickListener(this);
         mItemSetting.setOnClickListener(this);
         mItemCheckUpdate.setOnClickListener(this);
+        mEyeView.setOnClickListener(this);
         mUserLayout.setOnClickListener(this);
         mToast = new MyToast(getActivity());
         mItemCheckUpdate.setRightText(getResources().getString(R.string.already_new_version));
@@ -103,10 +143,38 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
         TextPaint tp = mViewUserName.getPaint();
         tp.setFakeBoldText(true);
 
+        mCoinStoreLayout.setOnClickListener(this);
+        mStoreBtnLayout.setOnClickListener(this);
+        mCoinStoreShareBtn.setOnClickListener(this);
+
+        mCoinStoreDialog = new CoinStoreDialog(getContext(),null);
+        mCoinStoreDialog.setEnableSelfUpdate(false);
+        mCoinStoreDialog.setDismissListen(new CoinStoreDialog.DisMissListen() {
+            @Override
+            public void onDissMiss() {
+                lighton();
+                mHomeMinePresenter.getCoinStoreList();
+            }
+        });
+
+        mEyeView.setOnClickListener(this);
+
+    }
+
+
+    private void lighton() {
+        WindowManager.LayoutParams lp=getActivity().getWindow().getAttributes();
+        lp.alpha=1.0f;
+        getActivity().getWindow().setAttributes(lp);
+    }
+
+    private void lightoff() {
+        WindowManager.LayoutParams lp=getActivity().getWindow().getAttributes();
+        lp.alpha=0.7f;
+        getActivity().getWindow().setAttributes(lp);
     }
 
     private void initUser(){
-        initHead();
         initNickName();
         if(PreferenceHelper.getIsLogin(getContext())) {
             mViewUserId.setText("ID:" + PreferenceHelper.getUid(getContext()));
@@ -129,13 +197,6 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
         mViewUserName.setText(nickName);
     }
 
-    private void initHead(){
-//        String path = getContext().getFilesDir() + Constants.LOCAL_HEAD_ICON_FILE_NAME;
-//        File file = new File(path);
-//        if(file.exists()){
-//            GlideUtil.setImageRes(getContext(),mUserImageView,file,R.drawable.icon_head,R.drawable.icon_head,true);
-//        }
-    }
 
     @Override
     public void onStart() {
@@ -151,13 +212,18 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
         if(TextUtils.isEmpty(uid)){
             uid = "0";
         }
+        dispalyMoney();
         mHomeMinePresenter.getUserInfo(uid);
+        mHomeMinePresenter.getCoinStoreList();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         mHomeMinePresenter.onDetach();
+        if(mCoinStoreDialog != null){
+            mCoinStoreDialog.destroy();
+        }
     }
 
     @Override
@@ -166,6 +232,47 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
             return;
         }
         switch (v.getId()){
+            case R.id.eye:
+                if(mIsMoneyVisiable){
+                    mTodayIncome.setText("*****");
+                    mTodayIncomeRate.setText("*****");
+                    mTotalProperty.setText("总资产：*****");
+                    mIsMoneyVisiable = false;
+                    mEyeView.setImageResource(R.drawable.eye_close);
+                }else {
+                    mTodayIncome.setText(mStrIncome);
+                    mTodayIncomeRate.setText(mStrIncomeRate);
+                    mTotalProperty.setText(mStrTotalProperty);
+                    mIsMoneyVisiable = true;
+                    mEyeView.setImageResource(R.drawable.eye_open);
+                }
+                PreferenceHelper.setMoneyDisplay(getContext(),mIsMoneyVisiable);
+                break;
+            case R.id.share_btn:
+                startCoinStoreShareDialog();
+                break;
+            case R.id.btn_store_layout:
+                mCoinStoreDialog.showDialog(mUserLayout);
+                lightoff();
+                mHomeMinePresenter.getCoinStoreList();
+                break;
+            case R.id.coin_store_layout:{
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(Constants.BASEURL).append("#/asset-group?");
+                stringBuilder.append("uid=").append(PreferenceHelper.getUid(getContext()));
+                String imei = PreferenceHelper.getIMEI(getContext());
+                if(!TextUtils.isEmpty(imei)){
+                    stringBuilder.append("&imei=").append(imei);
+                }
+                String token = PreferenceHelper.getToken(getContext());
+                if(!TextUtils.isEmpty(token)){
+                    stringBuilder.append("&token=").append(CommonUtils.encode(token));
+                }
+
+                stringBuilder.append("&id=").append(mStoreId);
+                NativeDetailActivity.startNativeDetailActivity(getContext(),stringBuilder.toString());
+            }
+                break;
             case R.id.mine_invite_friends:
                 startShare();
                 break;
@@ -197,7 +304,44 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
+    private void startCoinStoreShareDialog(){
+        Bundle bundle = new Bundle();
+        bundle.putString("money",mStrIncome);
+        bundle.putString("rate",mStrIncomeRate);
+        CoinStoreShareDialog dialog = new CoinStoreShareDialog();
+        dialog.setArguments(bundle);
+        dialog.setShareListen(new ShareListen() {
+            @Override
+            public void onClickWxChat(Bitmap bitmap) {
+                HomeActivity activity = (HomeActivity) getActivity();
+                if(activity != null){
+                    activity.shareBitmap(0,bitmap);
+                }
+            }
 
+            @Override
+            public void onClickWxCircle(Bitmap bitmap) {
+                HomeActivity activity = (HomeActivity) getActivity();
+                if(activity != null){
+                    activity.shareBitmap(1,bitmap);
+                }
+            }
+
+            @Override
+            public void onClickWeiBo(Bitmap bitmap) {
+                HomeActivity activity = (HomeActivity) getActivity();
+                if(activity != null){
+                    activity.shareBitmap(2,bitmap);
+                }
+            }
+
+            @Override
+            public void onClickQq(Bitmap bitmap) {
+
+            }
+        });
+        dialog.show(getFragmentManager(),"shareDialog");
+    }
 
     private void startShare() {
         ShareDialogFragment shareDialogFragment = new ShareDialogFragment();
@@ -340,6 +484,55 @@ public class HomeMineFragment extends BaseFragment implements View.OnClickListen
         if(userInfoResponse != null && userInfoResponse.getData() != null){
             PreferenceHelper.saveUserInfo(getContext(),userInfoResponse);
             initUser();
+        }
+    }
+
+    @Override
+    public void onCoinStoreList(CoinStoreListResponse response) {
+        if(response != null
+                && response.isResult()
+                && response.getData() != null){
+            mCoinStoreDialog.setResponse(response);
+            for (int i = 0; i < response.getData().size(); i++) {
+                if(response.getData().get(i).getStatus() == 2){
+                    mStoreId = response.getData().get(i).getId();
+                    mStrIncome = response.getData().get(i).getProfit();
+                    mStrIncomeRate = response.getData().get(i).getRate() + "%";
+                    mStrTotalProperty = "总资产：" + response.getData().get(i).getProperty();
+                    dispalyMoney();
+                    mStoreTitleBtn.setText(response.getData().get(i).getName());
+                    if(!TextUtils.isEmpty(mStrIncomeRate) && mStrIncomeRate.startsWith("1")){
+                        mStoreShareBtn.setText("亏损了，求安慰");
+                    }else {
+                        mStoreShareBtn.setText("赚钱了，去装逼");
+                    }
+                }
+            }
+
+        }else {
+            mCoinStoreDialog.setResponse(null);
+        }
+    }
+
+    @Override
+    public void onCoinStoreListError() {
+        mCoinStoreDialog.setResponse(null);
+    }
+
+
+    private void dispalyMoney(){
+        if(PreferenceHelper.getMoneyDisplay(getContext())){
+            mTodayIncome.setText(mStrIncome);
+            mTodayIncomeRate.setText(mStrIncomeRate);
+            mTotalProperty.setText(mStrTotalProperty);
+            mIsMoneyVisiable = true;
+            mEyeView.setImageResource(R.drawable.eye_open);
+        }else {
+            mTodayIncome.setText("*****");
+            mTodayIncomeRate.setText("*****");
+            mTotalProperty.setText("总资产：*****");
+            mIsMoneyVisiable = false;
+            mEyeView.setImageResource(R.drawable.eye_close);
         }
     }
 }

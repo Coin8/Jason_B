@@ -5,6 +5,7 @@ import android.util.Log;
 import com.coin.b8.model.AddMarketSelfParameter;
 import com.coin.b8.model.AddMarketSelfResponse;
 import com.coin.b8.model.CancelCollectionResponse;
+import com.coin.b8.model.CoinStoreListResponse;
 import com.coin.b8.model.CollectionListInfoResponse;
 import com.coin.b8.model.CommonResponse;
 import com.coin.b8.model.DeleteYuJingResponse;
@@ -31,6 +32,7 @@ import com.coin.b8.model.ResetPasswordParameter;
 import com.coin.b8.model.ResetPasswordResponseInfo;
 import com.coin.b8.model.SelectCoinListResponse;
 import com.coin.b8.model.SelectCoinTypeListResponse;
+import com.coin.b8.model.ShareCommentResponse;
 import com.coin.b8.model.TestModel;
 import com.coin.b8.model.B8UpdateInfo;
 import com.coin.b8.model.UnLoginUidInfo;
@@ -123,12 +125,32 @@ public class B8Api {
      *
      * @param observer
      * @param email
-     * @param verifyType 1注册，2重置密码
+     * @param verifyType 1注册，2重置密码 3登录
      */
     public static void sendVerifyCode(Observer<VerifycodeResponseModel> observer,
                                       String email,
+                                      String contact,
                                       int verifyType){
-        BuildApi.getAPIService().sendVerifyCode(email,verifyType)
+        BuildApi.getAPIService().sendVerifyCode(email,contact,verifyType)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    /**
+     * 校验验证码
+     * @param observer
+     * @param contact
+     * @param verifyCode
+     * @param verifyType 1注册，2重置密码 3登录
+     */
+
+    public static void checkVerifyCode(Observer<VerifycodeResponseModel> observer,
+                                       String contact,
+                                       String verifyCode,
+                                       int verifyType){
+        BuildApi.getAPIService().checkVerifyCode(contact,verifyCode,verifyType)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -138,10 +160,12 @@ public class B8Api {
 
     public static void getRegisterInfo(Observer<RegisterResponseInfo> observer,
                                        String email,
+                                       String contact,
                                        String password,
                                        String verifyCode){
         RegisterParameter registerParameter = new RegisterParameter();
         registerParameter.setEmail(email);
+        registerParameter.setContact(contact);
         registerParameter.setPassword(password);
         registerParameter.setVerifyCode(verifyCode);
         Gson gson = new Gson();
@@ -156,10 +180,14 @@ public class B8Api {
 
     public static void getLoginInfo(Observer<LoginResponseInfo> observer,
                                        String email,
-                                       String password){
+                                       String password,
+                                       String contact,
+                                       String type){
         LoginParameter loginParameter = new LoginParameter();
         loginParameter.setEmail(email);
         loginParameter.setPassword(password);
+        loginParameter.setContact(contact);
+        loginParameter.setType(type);
         Gson gson = new Gson();
         String data = gson.toJson(loginParameter);
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), data);
@@ -172,10 +200,12 @@ public class B8Api {
 
     public static void resetPassword(Observer<ResetPasswordResponseInfo> observer,
                                      String email,
+                                     String contact,
                                      String password,
                                      String verifyCode ){
         ResetPasswordParameter resetPasswordParameter = new ResetPasswordParameter();
         resetPasswordParameter.setEmail(email);
+        resetPasswordParameter.setContact(contact);
         resetPasswordParameter.setPassword(password);
         resetPasswordParameter.setVerifyCode(verifyCode);
         Gson gson = new Gson();
@@ -412,6 +442,58 @@ public class B8Api {
         String data = gson.toJson(addMarketSelfParameter);
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), data);
         BuildApi.getAPIService().addMarketSelf(uid,requestBody)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    /**
+     * 获取币仓列表
+     * @param observer
+     */
+    public static void getCoinStoreList(Observer<CoinStoreListResponse> observer){
+        BuildApi.getAPIService().getCoinStoreList()
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void createCoinStore(Observer<CommonResponse> observer,String name){
+        BuildApi.getAPIService().createCoinStore(name)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void deleteCoinStore(Observer<CommonResponse> observer,long id){
+        BuildApi.getAPIService().deleteCoinStore(id)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void renameCoinStore(Observer<CommonResponse> observer,long id,String name){
+        BuildApi.getAPIService().renameCoinStore(id,name)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void switchCoinStore(Observer<CommonResponse> observer,long id){
+        BuildApi.getAPIService().switchCoinStoreStatus(id)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public static void getShareComment(Observer<ShareCommentResponse> observer){
+        BuildApi.getAPIService().getShareComment()
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

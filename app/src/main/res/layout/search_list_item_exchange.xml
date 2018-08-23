@@ -39,5 +39,5 @@
         android:layout_height="@dimen/line_width"
         android:layout_marginLeft="15dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/lineColor"/>
+        android:background="@color/middle_line_color"/>
 </RelativeLayout>
