@@ -34,6 +34,7 @@ import com.coin.b8.model.FeedBackParameter;
 import com.coin.b8.model.FeedBackResult;
 import com.coin.b8.permission.RuntimeRationale;
 import com.coin.b8.ui.dialog.CoinStoreDialog;
+import com.coin.b8.ui.dialog.CoinStoreShareDialog;
 import com.coin.b8.ui.dialog.FeedBackFragment;
 import com.coin.b8.ui.dialog.LoadingDialog;
 import com.coin.b8.ui.dialog.ShareDialogFragment;
@@ -133,6 +134,16 @@ public class NativeDetailActivity extends BaseActivity implements View.OnClickLi
     }
 
     class JSInterface {
+
+        @JavascriptInterface
+        public void popUpView() {
+            showCoinStoreDialog();
+        }
+
+        @JavascriptInterface
+        public void share(String percent,String profit) {
+            startCoinStoreShareDialog(percent,profit);
+        }
 
         @JavascriptInterface
         public void closeView() {
@@ -343,6 +354,43 @@ public class NativeDetailActivity extends BaseActivity implements View.OnClickLi
     private void showCoinStoreDialog(){
         mCoinStoreDialog.showDialog(mContentLayout);
     }
+
+    private void startCoinStoreShareDialog(String percent,String profit){
+        Bundle bundle = new Bundle();
+        bundle.putString("money",profit);
+        bundle.putString("rate",percent);
+        CoinStoreShareDialog dialog = new CoinStoreShareDialog();
+        dialog.setArguments(bundle);
+        dialog.setShareListen(new ShareListen() {
+            @Override
+            public void onClickWxChat(Bitmap bitmap) {
+                if(mWXShare != null){
+                    mWXShare.shareImage(0,bitmap);
+                }
+            }
+
+            @Override
+            public void onClickWxCircle(Bitmap bitmap) {
+                if(mWXShare != null){
+                    mWXShare.shareImage(1,bitmap);
+                }
+            }
+
+            @Override
+            public void onClickWeiBo(Bitmap bitmap) {
+                if(mWXShare != null){
+                    mWXShare.shareImage(2,bitmap);
+                }
+            }
+
+            @Override
+            public void onClickQq(Bitmap bitmap) {
+
+            }
+        });
+        dialog.show(getSupportFragmentManager(),"shareDialog");
+    }
+
 
     private void initWebView() {
         mLoading.setVisibility(View.VISIBLE);
