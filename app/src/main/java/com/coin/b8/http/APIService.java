@@ -148,14 +148,14 @@ public interface APIService {
      *  获取选币列表
      * @return
      */
-    @GET("b/a/coin/type/list")
+    @GET("b/a/v2/coin/type/list")
     Observable<SelectCoinListResponse> getSelectCoinList();
 
     /**
      *  获取选币类型下的币列表
      * @return
      */
-    @GET("b/a/coin/type/{id}")
+    @GET("b/a/v2/coin/type/{id}")
     Observable<SelectCoinTypeListResponse> getSelectCoinTypeList(@Path("id")  int id);
 
     /**
@@ -184,14 +184,14 @@ public interface APIService {
      *  获取预警列表
      * @return
      */
-    @GET("b/a/uu/warning/list/{uid}")
+    @GET("b/a/uu/v2/warning/list/{uid}")
     Observable<YujingListResponse> getYuJingList(@Path("uid") String uid);
 
     /**
      *  删除预警
      * @return
      */
-    @DELETE("b/a/uu/warning/{uid}/{id}")
+    @DELETE("b/a/uu/v2/warning/{uid}/{id}")
     Observable<DeleteYuJingResponse> deleteYuJing(
             @Path("uid") String uid,
             @Path("id") long id);
@@ -201,7 +201,7 @@ public interface APIService {
      * @return
      */
     @Headers({"Content-type:application/json;charset=UTF-8"})
-    @PUT("b/a/uu/warning")
+    @PUT("b/a/uu/v2/warning")
     Observable<ModifyYuJingResponse> modifyYuJing(@Body RequestBody parameter);
 
 
@@ -221,7 +221,7 @@ public interface APIService {
      * （app操作中限制的条件用这个字段传，比如用户点了只在火币网内搜，就在这个字段传火币Pro,未限制就不传）
      * @return
      */
-    @GET("/b/a/coin/search")
+    @GET("/b/a/v2/search/outline")
     Observable<MarketListSearchResponse> getMarketListSearch(
             @Query("content") String content,
             @Query("sort") int sort,
@@ -240,7 +240,7 @@ public interface APIService {
      * @param sortType  默认值为1；1是交易额，2是交易量 ，3是当前价格，4是涨幅5市值
      * @return
      */
-    @GET("b/a/u/coin/list/{uid}")
+    @GET("b/a/u/v2/coin/list/{uid}")
     Observable<MarketSelfListResponse> getMarketSelfList(
             @Path("uid") String uid,
             @Query("sort") int sort,
@@ -250,21 +250,19 @@ public interface APIService {
 
     /**
      *  添加自选
-     * @param parameter
+     *
      * @return
      */
-    @Headers({"Content-type:application/json;charset=UTF-8"})
-    @POST("b/a/u/coin/{uid}")
+    @GET("b/a/u/v2/coin/{id}")
     Observable<AddMarketSelfResponse> addMarketSelf(
-            @Path("uid") String uid,
-            @Body RequestBody parameter);
+            @Path("id") long id);
 
     /**
      * 删除自选
      * @param ucrid
      * @return
      */
-    @DELETE("b/a/u/coin/{ucrid}")
+    @DELETE("b/a/u/v2/coin/{ucrid}")
     Observable<CommonResponse> deleteMarketSelf(
             @Path("ucrid") long ucrid);
 
@@ -282,14 +280,14 @@ public interface APIService {
      * 获取热门币
      * @return
      */
-    @GET("b/a/coin/hot")
+    @GET("b/a/v2/search/coin/hot")
     Observable<HotCoinResponse> getHotCoin();
 
     /**
      * 获取交易所列表
      * @return
      */
-    @GET("b/a/coin/exchange")
+    @GET("b/a/v2/search/exchange")
     Observable<ExchangeListResponse> getExchangeList();
 
     /**

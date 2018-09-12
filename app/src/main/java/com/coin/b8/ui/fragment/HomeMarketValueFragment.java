@@ -61,7 +61,8 @@ public class HomeMarketValueFragment extends BaseFragment implements IHomeMarket
     private int mSortType = DEFAULT_SORT_TYPE;
 
     private int mLimit = 20;
-    private String mExchange= "coinmarketcap";
+//    private String mExchange= "coinmarketcap";
+    private String mExchange= "global";
 
     private static final int MESSAGE_UPDATE = 100;
     private static final int MESSAGE_DELAY_TIME = 5000;

@@ -93,11 +93,13 @@ public class MarketSelfListResponse {
 
         private String open;
         private String close;
-        private String closeCny;
+        private String closeShow;
         private String amount;
+        private String amountShow;
         private String count;
         private String vol;
         private String symbol;
+        private long symbolId;
         private String base;
         private String quote;
         private long rank;
@@ -107,14 +109,15 @@ public class MarketSelfListResponse {
         private String stockValue;
         private int isSelect;
         private long coinId;
+        private long uniqueId;
         private String exchangeAndSymbol;
         private long ucrid;
         private String chineseName;
-        private String openCny;
+        private String openShow;
         private String low;
         private String high;
-        private String lowCny;
-        private String highCny;
+        private String lowShow;
+        private String highShow;
         private String volForSort;
 
         public String getOpen() {
@@ -131,14 +134,6 @@ public class MarketSelfListResponse {
 
         public void setClose(String close) {
             this.close = close;
-        }
-
-        public String getCloseCny() {
-            return closeCny;
-        }
-
-        public void setCloseCny(String closeCny) {
-            this.closeCny = closeCny;
         }
 
         public String getAmount() {
@@ -269,14 +264,6 @@ public class MarketSelfListResponse {
             this.chineseName = chineseName;
         }
 
-        public String getOpenCny() {
-            return openCny;
-        }
-
-        public void setOpenCny(String openCny) {
-            this.openCny = openCny;
-        }
-
         public String getLow() {
             return low;
         }
@@ -293,28 +280,68 @@ public class MarketSelfListResponse {
             this.high = high;
         }
 
-        public String getLowCny() {
-            return lowCny;
-        }
-
-        public void setLowCny(String lowCny) {
-            this.lowCny = lowCny;
-        }
-
-        public String getHighCny() {
-            return highCny;
-        }
-
-        public void setHighCny(String highCny) {
-            this.highCny = highCny;
-        }
-
         public String getVolForSort() {
             return volForSort;
         }
 
         public void setVolForSort(String volForSort) {
             this.volForSort = volForSort;
+        }
+
+        public String getCloseShow() {
+            return closeShow;
+        }
+
+        public void setCloseShow(String closeShow) {
+            this.closeShow = closeShow;
+        }
+
+        public String getAmountShow() {
+            return amountShow;
+        }
+
+        public void setAmountShow(String amountShow) {
+            this.amountShow = amountShow;
+        }
+
+        public long getSymbolId() {
+            return symbolId;
+        }
+
+        public void setSymbolId(long symbolId) {
+            this.symbolId = symbolId;
+        }
+
+        public long getUniqueId() {
+            return uniqueId;
+        }
+
+        public void setUniqueId(long uniqueId) {
+            this.uniqueId = uniqueId;
+        }
+
+        public String getOpenShow() {
+            return openShow;
+        }
+
+        public void setOpenShow(String openShow) {
+            this.openShow = openShow;
+        }
+
+        public String getLowShow() {
+            return lowShow;
+        }
+
+        public void setLowShow(String lowShow) {
+            this.lowShow = lowShow;
+        }
+
+        public String getHighShow() {
+            return highShow;
+        }
+
+        public void setHighShow(String highShow) {
+            this.highShow = highShow;
         }
     }
 }

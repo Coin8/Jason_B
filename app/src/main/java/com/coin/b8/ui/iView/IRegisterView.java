@@ -1,5 +1,6 @@
 package com.coin.b8.ui.iView;
 
+import com.coin.b8.model.LoginResponseInfo;
 import com.coin.b8.model.RegisterResponseInfo;
 import com.coin.b8.model.VerifycodeResponseModel;
 
@@ -13,4 +14,6 @@ public interface IRegisterView {
     void onVerifyCodeFail(String message);
     void onRegisterSuccess(RegisterResponseInfo registerResponseInfo);
     void onRegisterFail();
+    void onLoginSuccess(LoginResponseInfo loginResponseInfo);
+    void onLoinFailed();
 }

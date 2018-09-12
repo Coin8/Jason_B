@@ -74,7 +74,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter{
         }
         normalViewHolder.mExchangeName.setText(dataBean.getExchangeName());
         normalViewHolder.mClose.setText(dataBean.getClose());
-        normalViewHolder.mCloseCny.setText("¥"+dataBean.getCloseCny());
+        normalViewHolder.mCloseCny.setText("¥"+dataBean.getCloseShow());
         normalViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +96,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter{
 
                 stringBuilder.append("open").append("=").append(CommonUtils.encode(dataBean.getOpen())).append("&")
                         .append("close").append("=").append(CommonUtils.encode(dataBean.getClose())).append("&")
-                        .append("closeCny").append("=").append(CommonUtils.encode(dataBean.getCloseCny())).append("&")
+                        .append("closeShow").append("=").append(CommonUtils.encode(dataBean.getCloseShow())).append("&")
                         .append("amount").append("=").append(CommonUtils.encode(dataBean.getAmount())).append("&")
                         .append("count").append("=").append(CommonUtils.encode(dataBean.getCount())).append("&")
                         .append("vol").append("=").append(CommonUtils.encode(dataBean.getVol())).append("&")
@@ -113,11 +113,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter{
                         .append("exchangeAndSymbol").append("=").append(CommonUtils.encode(dataBean.getExchangeAndSymbol())).append("&")
                         .append("ucrid").append("=").append(dataBean.getUcrid()).append("&")
                         .append("chineseName").append("=").append(CommonUtils.encode(dataBean.getChineseName())).append("&")
-                        .append("openCny").append("=").append(CommonUtils.encode(dataBean.getOpenCny())).append("&")
+                        .append("openShow").append("=").append(CommonUtils.encode(dataBean.getOpenShow())).append("&")
                         .append("low").append("=").append(CommonUtils.encode(dataBean.getLow())).append("&")
                         .append("high").append("=").append(CommonUtils.encode(dataBean.getHigh())).append("&")
-                        .append("lowCny").append("=").append(CommonUtils.encode(dataBean.getLowCny())).append("&")
-                        .append("highCny").append("=").append(CommonUtils.encode(dataBean.getHighCny()));
+                        .append("lowShow").append("=").append(CommonUtils.encode(dataBean.getLowShow())).append("&")
+                        .append("highShow").append("=").append(CommonUtils.encode(dataBean.getHighShow()));
 
                 String web_url = stringBuilder.toString();
                 NativeDetailActivity.startNativeDetailActivity(v.getContext(),web_url);

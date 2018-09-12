@@ -1,6 +1,7 @@
 package com.coin.b8.ui.presenter;
 
 import com.coin.b8.http.B8Api;
+import com.coin.b8.model.LoginResponseInfo;
 import com.coin.b8.model.RegisterResponseInfo;
 import com.coin.b8.model.VerifycodeResponseModel;
 import com.coin.b8.ui.iView.IRegisterView;
@@ -107,6 +108,34 @@ public class RegisterPresenterImpl {
         B8Api.getRegisterInfo(disposableObserver,email,contact,password,code);
         mCompositeDisposable.add(disposableObserver);
     }
+
+
+    public void getLoginInfo(String contact,String password){
+        DisposableObserver<LoginResponseInfo> disposableObserver = new DisposableObserver<LoginResponseInfo>() {
+            @Override
+            public void onNext(LoginResponseInfo loginResponseInfo) {
+                if(mView != null){
+                    mView.onLoginSuccess(loginResponseInfo);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if(mView != null){
+                    mView.onLoinFailed();
+                }
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+
+        B8Api.getLoginInfo(disposableObserver,"",password,contact,"1");
+        mCompositeDisposable.add(disposableObserver);
+    }
+
 
     public void onDetach(){
         mView = null;

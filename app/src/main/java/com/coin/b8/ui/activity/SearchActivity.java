@@ -192,7 +192,7 @@ public class SearchActivity extends BaseActivity implements ISearchView{
                 if(dataBean.getIsSelect() == 1){
                     startDeleteSelf(dataBean.getUcrid());
                 }else {
-                    startAddSelf(dataBean.getExchangeName(),dataBean.getSymbol());
+                    startAddSelf(dataBean.getSymbolId());
                 }
 
             }
@@ -377,10 +377,10 @@ public class SearchActivity extends BaseActivity implements ISearchView{
         }
     }
 
-    private void startAddSelf(String exchangeName,String symbol){
+    private void startAddSelf(long id){
         showLoading();
         String uid = PreferenceHelper.getUid(this);
-        mSearchPresenter.addSelf(uid,exchangeName,symbol);
+        mSearchPresenter.addSelf(id);
     }
 
     private void startDeleteSelf(long ucrid){

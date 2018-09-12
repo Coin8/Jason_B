@@ -108,7 +108,7 @@ public class SelectCoinTypeListResponse {
 
             private String open;
             private String close;
-            private String closeCny;
+            private String closeShow;
             private String amount;
             private String count;
             private String vol;
@@ -125,11 +125,11 @@ public class SelectCoinTypeListResponse {
             private String exchangeAndSymbol;
             private long ucrid;
             private String chineseName;
-            private String openCny;
+            private String openShow;
             private String low;
             private String high;
-            private String lowCny;
-            private String highCny;
+            private String lowShow;
+            private String highShow;
 
             public int getViewType() {
                 return viewType;
@@ -156,12 +156,12 @@ public class SelectCoinTypeListResponse {
                 this.close = close;
             }
 
-            public String getCloseCny() {
-                return closeCny;
+            public String getCloseShow() {
+                return closeShow;
             }
 
-            public void setCloseCny(String closeCny) {
-                this.closeCny = closeCny;
+            public void setCloseShow(String closeCny) {
+                this.closeShow = closeCny;
             }
 
             public String getAmount() {
@@ -292,12 +292,12 @@ public class SelectCoinTypeListResponse {
                 this.chineseName = chineseName;
             }
 
-            public String getOpenCny() {
-                return openCny;
+            public String getOpenShow() {
+                return openShow;
             }
 
-            public void setOpenCny(String openCny) {
-                this.openCny = openCny;
+            public void setOpenShow(String openCny) {
+                this.openShow = openCny;
             }
 
             public String getLow() {
@@ -316,20 +316,20 @@ public class SelectCoinTypeListResponse {
                 this.high = high;
             }
 
-            public String getLowCny() {
-                return lowCny;
+            public String getLowShow() {
+                return lowShow;
             }
 
-            public void setLowCny(String lowCny) {
-                this.lowCny = lowCny;
+            public void setLowShow(String lowCny) {
+                this.lowShow = lowCny;
             }
 
-            public String getHighCny() {
-                return highCny;
+            public String getHighShow() {
+                return highShow;
             }
 
-            public void setHighCny(String highCny) {
-                this.highCny = highCny;
+            public void setHighShow(String highCny) {
+                this.highShow = highCny;
             }
         }
     }

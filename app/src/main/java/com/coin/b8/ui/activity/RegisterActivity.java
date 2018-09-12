@@ -1,5 +1,6 @@
 package com.coin.b8.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -17,11 +18,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.coin.b8.R;
+import com.coin.b8.model.LoginResponseInfo;
 import com.coin.b8.model.RegisterResponseInfo;
 import com.coin.b8.ui.dialog.LoadingDialog;
 import com.coin.b8.ui.iView.IRegisterView;
 import com.coin.b8.ui.presenter.RegisterPresenterImpl;
 import com.coin.b8.ui.view.EditTextClear;
+import com.coin.b8.utils.ActivityManagerUtil;
 import com.coin.b8.utils.CommonUtils;
 import com.coin.b8.utils.MyToast;
 
@@ -52,6 +55,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     private String mPhoneNumber;
     private String mPhoneVerifyCode;
+    private String mPassword;
 
     private static final int MESSAGE_DISMISS = 100;
     private static final int MESSAGE_DELAY_TIME = 2000;
@@ -282,6 +286,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     return;
                 }
                 showLoading("正在注册");
+                mPassword = password;
                 mRegisterPresenter.register(null,mPhoneNumber,password,mPhoneVerifyCode);
                 break;
 
@@ -298,7 +303,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void hideLoading(){
-        if(mLoadingDialog != null && mLoadingDialog.getDialog() != null && mLoadingDialog.getDialog().isShowing()){
+        if(mLoadingDialog != null){
             mLoadingDialog.dismiss();
         }
     }
@@ -335,12 +340,14 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onRegisterSuccess(RegisterResponseInfo registerResponseInfo) {
-        hideLoading();
+
         if(registerResponseInfo != null){
             if(registerResponseInfo.isResult()){
-                showToast("注册成功");
-                finish();
+//                showToast("注册成功");
+//                finish();
+                mRegisterPresenter.getLoginInfo(mPhoneNumber,mPassword);
             }else {
+                hideLoading();
                 showToast(registerResponseInfo.getMessage());
             }
         }
@@ -350,6 +357,32 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void onRegisterFail() {
         hideLoading();
         showToast("注册失败");
+    }
+
+    @Override
+    public void onLoginSuccess(LoginResponseInfo loginResponseInfo) {
+        hideLoading();
+        if(loginResponseInfo != null){
+
+            if(loginResponseInfo.isResult()){
+                showToast("注册成功");
+                Activity activity = ActivityManagerUtil.getSecTopActivity();
+                if(activity != null && activity instanceof LoginActivity){
+                    activity.finish();
+                }
+                finish();
+            }else {
+                showToast(loginResponseInfo.getMessage());
+            }
+
+
+        }
+    }
+
+    @Override
+    public void onLoinFailed() {
+        hideLoading();
+        showToast("登录失败");
     }
 
     @Override

@@ -82,7 +82,7 @@ public class SelectCoinTypeListAdapter extends RecyclerView.Adapter{
             if(normalViewHolder != null && itemsBean != null){
                 normalViewHolder.mSymbol.setText(itemsBean.getSymbol());
                 normalViewHolder.mChineseName.setText(itemsBean.getChineseName());
-                normalViewHolder.mPrice.setText("¥"+itemsBean.getCloseCny());
+                normalViewHolder.mPrice.setText("¥"+itemsBean.getCloseShow());
 
                 normalViewHolder.mVol.setText("¥"+itemsBean.getVol());
                 if(!TextUtils.isEmpty(itemsBean.getRateStr())){
@@ -113,7 +113,7 @@ public class SelectCoinTypeListAdapter extends RecyclerView.Adapter{
                         stringBuilder.append("&");
                         stringBuilder.append("open").append("=").append(CommonUtils.encode(itemsBean.getOpen())).append("&")
                                 .append("close").append("=").append(CommonUtils.encode(itemsBean.getClose())).append("&")
-                                .append("closeCny").append("=").append(CommonUtils.encode(itemsBean.getCloseCny())).append("&")
+                                .append("closeShow").append("=").append(CommonUtils.encode(itemsBean.getCloseShow())).append("&")
                                 .append("amount").append("=").append(CommonUtils.encode(itemsBean.getAmount())).append("&")
                                 .append("count").append("=").append(CommonUtils.encode(itemsBean.getCount())).append("&")
                                 .append("vol").append("=").append(CommonUtils.encode(itemsBean.getVol())).append("&")
@@ -130,11 +130,11 @@ public class SelectCoinTypeListAdapter extends RecyclerView.Adapter{
                                 .append("exchangeAndSymbol").append("=").append(CommonUtils.encode(itemsBean.getExchangeAndSymbol())).append("&")
                                 .append("ucrid").append("=").append(itemsBean.getUcrid()).append("&")
                                 .append("chineseName").append("=").append(CommonUtils.encode(itemsBean.getChineseName())).append("&")
-                                .append("openCny").append("=").append(CommonUtils.encode(itemsBean.getOpenCny())).append("&")
+                                .append("openShow").append("=").append(CommonUtils.encode(itemsBean.getOpenShow())).append("&")
                                 .append("low").append("=").append(CommonUtils.encode(itemsBean.getLow())).append("&")
                                 .append("high").append("=").append(CommonUtils.encode(itemsBean.getHigh())).append("&")
-                                .append("lowCny").append("=").append(CommonUtils.encode(itemsBean.getLowCny())).append("&")
-                                .append("highCny").append("=").append(CommonUtils.encode(itemsBean.getHighCny()));
+                                .append("lowShow").append("=").append(CommonUtils.encode(itemsBean.getLowShow())).append("&")
+                                .append("highShow").append("=").append(CommonUtils.encode(itemsBean.getHighShow()));
 
                         String web_url = stringBuilder.toString();
 //                        Log.e("zy","web_url = " +web_url );

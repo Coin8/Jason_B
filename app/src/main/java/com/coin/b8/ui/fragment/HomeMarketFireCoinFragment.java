@@ -61,7 +61,8 @@ public class HomeMarketFireCoinFragment extends BaseFragment implements IHomeMar
     private int mSortType = DEFAULT_SORT_TYPE;
 
     private int mLimit = 20;
-    private String mExchange = "火币Pro";
+//    private String mExchange = "火币Pro";
+    private String mExchange = "huobi";
 
     private static final int MESSAGE_UPDATE = 100;
     private static final int MESSAGE_DELAY_TIME = 5000;

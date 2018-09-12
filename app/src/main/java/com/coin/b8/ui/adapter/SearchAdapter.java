@@ -92,12 +92,12 @@ public class SearchAdapter extends RecyclerView.Adapter{
             case SEARCH_TYPE_NORMAL:{
                 ExchangeViewHolder exchangeViewHolder = (ExchangeViewHolder) holder;
                 if(exchangeViewHolder != null){
-                    exchangeViewHolder.mName.setText(dataBean.getKey());
-                    exchangeViewHolder.mRightDesc.setText(String.valueOf(dataBean.getValue()));
+                    exchangeViewHolder.mName.setText(dataBean.getName());
+                    exchangeViewHolder.mRightDesc.setText(String.valueOf(dataBean.getSymbolCount()));
                     exchangeViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            SearchOnExchangeActivity.startSearchOnExchangeActivity(v.getContext(),dataBean.getKey());
+                            SearchOnExchangeActivity.startSearchOnExchangeActivity(v.getContext(),dataBean.getName());
                         }
                     });
                 }
@@ -133,13 +133,15 @@ public class SearchAdapter extends RecyclerView.Adapter{
                 break;
             case SEARCH_TYPE_HOT_COIN:{
                 HotCoinViewHolder hotCoinViewHolder = (HotCoinViewHolder) holder;
-                if(hotCoinViewHolder != null && mHotCoinResponse != null){
-                    hotCoinViewHolder.mTagFlowLayout.setAdapter(new TagAdapter<String>(mHotCoinResponse.getData()) {
+                if(hotCoinViewHolder != null && mHotCoinResponse != null
+                        && mHotCoinResponse.getData() != null
+                        && mHotCoinResponse.getData().size() > 0){
+                    hotCoinViewHolder.mTagFlowLayout.setAdapter(new TagAdapter<HotCoinResponse.DataBean>(mHotCoinResponse.getData()) {
                         @Override
-                        public View getView(FlowLayout parent, int position, String o) {
+                        public View getView(FlowLayout parent, int position, HotCoinResponse.DataBean o) {
                             TextView tv = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.flow_layout_tv,
                                     parent, false);
-                            tv.setText(o);
+                            tv.setText(o.getName());
                             return tv;
                         }
                     });
@@ -147,7 +149,7 @@ public class SearchAdapter extends RecyclerView.Adapter{
                         @Override
                         public boolean onTagClick(View view, int position, FlowLayout parent) {
                             if(mOnBtnClickListen != null){
-                                mOnBtnClickListen.onBtnClick(mHotCoinResponse.getData().get(position));
+                                mOnBtnClickListen.onBtnClick(mHotCoinResponse.getData().get(position).getName());
                             }
                             return true;
                         }

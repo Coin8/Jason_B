@@ -122,9 +122,7 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView>{
     }
 
 
-    public void addSelf(String uid,
-                        String exchangeName,
-                        String symbol){
+    public void addSelf(long id){
         DisposableObserver<AddMarketSelfResponse> disposableObserver = new DisposableObserver<AddMarketSelfResponse>() {
             @Override
             public void onNext(AddMarketSelfResponse response) {
@@ -145,7 +143,7 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView>{
 
             }
         };
-        B8Api.addMarketSelfList(disposableObserver,uid,exchangeName,symbol);
+        B8Api.addMarketSelfList(disposableObserver,id);
         mCompositeDisposable.add(disposableObserver);
     }
 

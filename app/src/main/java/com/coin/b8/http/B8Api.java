@@ -432,16 +432,8 @@ public class B8Api {
 
 
     public static void addMarketSelfList(Observer<AddMarketSelfResponse> observer,
-                                         String uid,
-                                         String exchangeName,
-                                         String symbol){
-        AddMarketSelfParameter addMarketSelfParameter = new AddMarketSelfParameter();
-        addMarketSelfParameter.setExchangeName(exchangeName);
-        addMarketSelfParameter.setSymbol(symbol);
-        Gson gson = new Gson();
-        String data = gson.toJson(addMarketSelfParameter);
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), data);
-        BuildApi.getAPIService().addMarketSelf(uid,requestBody)
+                                         long id){
+        BuildApi.getAPIService().addMarketSelf(id)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
